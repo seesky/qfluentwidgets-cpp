@@ -93,11 +93,37 @@ namespace qfluentwidgets{
     class ColorValidator : public ConfigValidator<T>
     {
     public:
-        ColorValidator(Qt::GlobalColor value);
-        bool validate(Qt::GlobalColor value) override;
-        QColor correct(Qt::GlobalColor value) override;
+        ColorValidator(std::string value);
+        bool validate(std::string value) override;
+        QColor correct(std::string value) override;
     private:
         QColor defaultColor;
+    };
+
+
+    //Config serializer
+    template<typename T>
+    class ConfigSerializer {
+    public:
+        //serialize config value
+        std::string serialize(T value) {
+            return value;
+        }
+
+        //deserialize config from config file's value
+        T deserialize(T value) {
+            return value;
+        }
+    };
+
+    template<typename T>
+    class MapSerializer : public ConfigSerializer<T> {
+    public:
+        MapSerializer(std::map<std::string, std::string> value);
+        std::string serialize(std::map<std::string, std::string> value);
+        std::map<std::string, std::string> deserialize(std::string json);
+    private:
+        std::map<std::string, std::string> mapClass;
     };
 
 }

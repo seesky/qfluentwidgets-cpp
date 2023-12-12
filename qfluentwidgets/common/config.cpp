@@ -6,6 +6,7 @@
 #include <experimental/filesystem>
 #include <string>
 #include <QColor>
+#include "json/json.h"
 
 namespace qfluentwidgets{
 
@@ -136,14 +137,14 @@ namespace qfluentwidgets{
     }
 
     template<typename T>
-    ColorValidator<T>::ColorValidator(Qt::GlobalColor value)
+    ColorValidator<T>::ColorValidator(std::string value)
     {
         this->defaultColor = QColor(value);
     }
 
     
     template<typename T>
-    bool ColorValidator<T>::validate(Qt::GlobalColor value)
+    bool ColorValidator<T>::validate(std::string value)
     {
         try {
             return QColor(value).isValid();
@@ -153,7 +154,7 @@ namespace qfluentwidgets{
     }
 
     template<typename T>
-    QColor ColorValidator<T>::correct(Qt::GlobalColor value)
+    QColor ColorValidator<T>::correct(std::string value)
     {
         if(this->validate(value))
         {
@@ -163,4 +164,82 @@ namespace qfluentwidgets{
         }
     }
     
+    template<typename T>
+    MapSerializer<T>::MapSerializer(std::map<std::string, std::string> value)
+    {
+        this->mapClass = value;
+    }
+
+    template<typename T>
+    std::string MapSerializer<T>::serialize(std::map<std::string, std::string> value)
+    {
+        Json::Value jObject;
+        for(std::map<std::string, std::string>::const_iterator iter = value.begin(); iter != value.end(); ++iter)
+        {
+            jObject[iter->first] = iter->second;
+        }
+        return jObject.toStyledString();
+    }
+
+    std::string itoa_self(int i)
+    {
+        std::stringstream ss;
+        ss << i;
+        return ss.str();
+    }
+
+    template<typename T>
+    std::map<std::string, std::string> MapSerializer<T>::deserialize(std::string json)
+    {
+        Json::Reader reader;
+        Json::Value value;
+        std::map<std::string, std::string> maps;
+
+        if (json.length() > 0)
+        {
+            if (reader.parse(json, value))
+            {
+                Json::Value::Members members = value.getMemberNames();
+                for (Json::Value::Members::iterator it = members.begin(); it != members.end(); it++)
+                { 
+                    Json::ValueType vt = value[*it].type();
+                    switch (vt)
+                    {
+                    case Json::stringValue:
+                        {
+                            maps.insert(std::pair<std::string, std::string>(*it, value[*it].asString()));
+                            break;
+                        }
+                    case Json::intValue:
+                        {
+                            int intTmp = value[*it].asInt();
+                            maps.insert(std::pair<std::string, std::string>(*it, itoa_self(intTmp)));
+                            break;
+                        }
+                    case Json::arrayValue:
+                        {
+                            std::string strid;
+                            for (unsigned int i = 0; i < value[*it].size(); i++)
+                            {
+                                strid +=value[*it][i].asString();
+                                strid +=",";
+                            }
+                            if(!strid.empty())
+                            {
+                                strid = strid.substr(0,strid.size()-1);
+                            }
+                            maps.insert(std::pair<std::string, std::string>(*it, strid));
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                    }//end switch
+                }//end for
+            }//end if
+        }
+    
+        return maps;
+    }
 }
