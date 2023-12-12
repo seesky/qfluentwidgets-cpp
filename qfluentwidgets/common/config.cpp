@@ -66,4 +66,22 @@ namespace qfluentwidgets{
         }
     }
 
+    //脱裤子放屁
+    template<typename T>
+    BoolValidator<T>::BoolValidator()
+    {
+        this->options = {true, false};
+    }
+
+    template<typename T>
+    bool BoolValidator<T>::validate(bool value)
+    {
+        return true;
+    }
+
+    template<typename T>
+    bool BoolValidator<T>::correct(bool value)
+    {
+        return value;
+    }
 }

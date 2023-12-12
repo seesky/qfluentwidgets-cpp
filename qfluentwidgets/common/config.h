@@ -56,6 +56,18 @@ namespace qfluentwidgets{
     private:
         std::map<std::string, std::string> *options;
     };
+
+    template<typename T>
+    class BoolValidator : public ConfigValidator<T>
+    {
+    public:
+        BoolValidator();
+        ~BoolValidator();
+        bool validate(bool value) override;
+        bool correct(bool value) override;
+    private:
+        bool options[2];
+    };
 }
 
 
