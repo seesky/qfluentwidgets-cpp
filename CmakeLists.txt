@@ -28,7 +28,10 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 add_executable(
   test
   main.cpp
-  
+  qfluentwidgets/common/animation.h
+  qfluentwidgets/common/animation.cpp
+  qfluentwidgets/common/config.h
+  qfluentwidgets/common/config.cpp
 
 )
 
