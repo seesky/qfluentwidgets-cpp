@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <experimental/filesystem>
 #include <string>
+#include <QColor>
 
 namespace qfluentwidgets{
 
@@ -133,4 +134,33 @@ namespace qfluentwidgets{
         }
         return folders;
     }
+
+    template<typename T>
+    ColorValidator<T>::ColorValidator(Qt::GlobalColor value)
+    {
+        this->defaultColor = QColor(value);
+    }
+
+    
+    template<typename T>
+    bool ColorValidator<T>::validate(Qt::GlobalColor value)
+    {
+        try {
+            return QColor(value).isValid();
+        } catch (std::exception& e) {
+            return false;
+        }
+    }
+
+    template<typename T>
+    QColor ColorValidator<T>::correct(Qt::GlobalColor value)
+    {
+        if(this->validate(value))
+        {
+            return QColor(value);
+        }else{
+            return this->defaultColor;
+        }
+    }
+    
 }

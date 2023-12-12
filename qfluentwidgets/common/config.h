@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <QtGui/QColor>
 
 namespace qfluentwidgets{
 
@@ -86,6 +87,19 @@ namespace qfluentwidgets{
         bool validate(std::vector<std::string> value) override;
         std::vector<std::string> correct(std::vector<std::string> value) override;        
     };
+
+
+    template<typename T>
+    class ColorValidator : public ConfigValidator<T>
+    {
+    public:
+        ColorValidator(Qt::GlobalColor value);
+        bool validate(Qt::GlobalColor value) override;
+        QColor correct(Qt::GlobalColor value) override;
+    private:
+        QColor defaultColor;
+    };
+
 }
 
 
