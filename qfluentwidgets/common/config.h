@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace qfluentwidgets{
 
@@ -67,6 +68,23 @@ namespace qfluentwidgets{
         bool correct(bool value) override;
     private:
         bool options[2];
+    };
+
+
+    template<typename T>
+    class FolderValidator : public ConfigValidator<T>
+    {
+    public:
+        bool validate(std::string value) override;
+        std::string correct(std::string value) override;        
+    };
+
+    template<typename T>
+    class FolderListValidator : public ConfigValidator<T>
+    {
+    public:
+        bool validate(std::vector<std::string> value) override;
+        std::vector<std::string> correct(std::vector<std::string> value) override;        
     };
 }
 

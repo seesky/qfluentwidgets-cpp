@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
+#include <experimental/filesystem>
+#include <string>
 
 namespace qfluentwidgets{
 
@@ -83,5 +85,52 @@ namespace qfluentwidgets{
     bool BoolValidator<T>::correct(bool value)
     {
         return value;
+    }
+
+    template<typename T>
+    bool FolderValidator<T>::validate(std::string value)
+    {
+        std::experimental::filesystem::path filePath = value;
+        if (std::experimental::filesystem::exists(filePath)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    
+    template<typename T>
+    std::string FolderValidator<T>::correct(std::string value)
+    {
+        std::experimental::filesystem::path filePath = value;
+        std::experimental::filesystem::create_directories(filePath);
+        return filePath.string();
+    }
+    
+    template<typename T>
+    bool FolderListValidator<T>::validate(std::vector<std::string> value)
+    {
+        for (std::string path : value) {
+            std::experimental::filesystem::path filePath = path;
+            if (std::experimental::filesystem::exists(filePath)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    template<typename T>
+    std::vector<std::string> FolderListValidator<T>::correct(std::vector<std::string> value)
+    {
+        std::vector<std::string> folders;
+        for (std::string path : value) {
+            std::experimental::filesystem::path filePath = path;
+            if (std::experimental::filesystem::exists(filePath)) {
+                folders.push_back(path);
+            }
+        }
+        return folders;
     }
 }
