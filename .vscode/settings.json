@@ -64,6 +64,11 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "qobject": "cpp",
+        "qvariant": "cpp",
+        "complex": "cpp",
+        "source_location": "cpp",
+        "typeindex": "cpp"
     }
 }

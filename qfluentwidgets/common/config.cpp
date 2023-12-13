@@ -6,9 +6,10 @@
 #include <experimental/filesystem>
 #include <string>
 #include <QColor>
+#include <QVariant>
 #include "json/json.h"
 
-namespace qfluentwidgets{
+namespace Qfw{
 
     //Range validator
     template<typename T>
@@ -164,23 +165,32 @@ namespace qfluentwidgets{
         }
     }
     
-    template<typename T>
-    MapSerializer<T>::MapSerializer(std::map<std::string, std::string> value)
+    
+    MapSerializer::MapSerializer(std::map<std::string, std::string> value)
     {
         this->mapClass = value;
     }
 
-    template<typename T>
-    std::string MapSerializer<T>::serialize(std::map<std::string, std::string> value)
+    
+
+    
+    std::string MapSerializer::serialize(std::map<std::string, std::string> value)
     {
+        
         Json::Value jObject;
+        
         for(std::map<std::string, std::string>::const_iterator iter = value.begin(); iter != value.end(); ++iter)
         {
             jObject[iter->first] = iter->second;
         }
-        return jObject.toStyledString();
+        
+        std::string json_str = jObject.asString();
+        return json_str;
+
     }
 
+
+    
     std::string itoa_self(int i)
     {
         std::stringstream ss;
@@ -188,8 +198,8 @@ namespace qfluentwidgets{
         return ss.str();
     }
 
-    template<typename T>
-    std::map<std::string, std::string> MapSerializer<T>::deserialize(std::string json)
+    
+    std::map<std::string, std::string> MapSerializer::deserialize(std::string json)
     {
         Json::Reader reader;
         Json::Value value;
@@ -242,4 +252,86 @@ namespace qfluentwidgets{
     
         return maps;
     }
+
+
+    
+    std::string ColorSerializer::serialize(QColor value)
+    {
+        return value.name(QColor::HexArgb).toStdString();
+    }
+
+    
+    QColor ColorSerializer::deserialize(std::string value)
+    {
+        return QColor(value.c_str());
+    }
+
+    
+    /*
+    ConfigItem::ConfigItem(std::string group, std::string name, QVariant dValue, ConfigValidator<QVariant> validator, ConfigSerializer serializer, bool restart)
+    {
+        this->group = group;
+        this->name = name;
+        this->validator = validator;
+        this->serializer = serializer;
+        this->__value = dValue;
+        this->value = dValue;
+        this->restart = restart;
+        this->defaultValue = this->validator.correct(dValue);
+    }
+    
+
+    
+    QVariant ConfigItem::getValue()
+    {
+        return this->__value;
+    }
+
+    
+
+    void ConfigItem::setValue(QVariant value)
+    {
+        QVariant v = this->validator.correct(value);
+        QVariant ov = this->__value;
+        this->__value = v;
+        if(ov != v)
+        {
+            emit valueChanged(v);
+        }
+    }
+    
+    
+    std::string ConfigItem::key()
+    {
+        if(this->name != "")
+        {
+            return this->group + "." + this->name;
+        }else{
+            return this->group;
+        }
+    }
+
+    
+    std::string ConfigItem::getClassName() const
+    {
+        return typeid(*this).name();
+    }
+
+    
+    std::string ConfigItem::serialize()
+    {
+        return (this->serializer.serialize(this->value)).value<QString>().toStdString();
+    }
+
+    void ConfigItem::deserializeFrom(std::string value)
+    {
+        QString QStringValue = QString::fromStdString(value);
+        QVariant QVariantValue = QVariant::fromValue(QStringValue);
+        this->value = this->serializer.deserialize(QVariantValue);
+    }
+    */
+
+    
+    
+    
 }

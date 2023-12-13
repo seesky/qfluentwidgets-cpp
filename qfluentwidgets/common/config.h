@@ -1,11 +1,17 @@
 #pragma once
 
+
 #include <map>
 #include <string>
+#include <iostream>
 #include <vector>
 #include <QtGui/QColor>
+#include <QtCore/QString>
+#include <QtCore/QObject>
+#include <QVariant>
+#include <boost/any.hpp>
 
-namespace qfluentwidgets{
+namespace Qfw{
 
     const static std::map<std::string, std::string> ThemeOptionsMap = {
         {"LIGHT", "LIGHT"},
@@ -102,22 +108,20 @@ namespace qfluentwidgets{
 
 
     //Config serializer
-    template<typename T>
     class ConfigSerializer {
     public:
         //serialize config value
-        std::string serialize(T value) {
+        QVariant serialize(QVariant value) {
             return value;
         }
 
         //deserialize config from config file's value
-        T deserialize(T value) {
+        QVariant deserialize(QVariant value) {
             return value;
         }
     };
 
-    template<typename T>
-    class MapSerializer : public ConfigSerializer<T> {
+    class MapSerializer : public ConfigSerializer {
     public:
         MapSerializer(std::map<std::string, std::string> value);
         std::string serialize(std::map<std::string, std::string> value);
@@ -125,6 +129,47 @@ namespace qfluentwidgets{
     private:
         std::map<std::string, std::string> mapClass;
     };
+
+
+    class ColorSerializer : public ConfigSerializer {
+    public:
+        std::string serialize(QColor value);
+        QColor deserialize(std::string value);
+    };
+
+    
+
+    /*
+    class ConfigItem : public QObject
+    {
+        Q_OBJECT
+    public:
+        ConfigItem(std::string group, std::string name, QVariant dValue, ConfigValidator<QVariant> validator, ConfigSerializer serializer, bool restart);
+        QVariant getValue();
+        void setValue(QVariant v);
+        std::string key();
+        std::string serialize();
+        void deserializeFrom(std::string value);
+        std::string getClassName() const;
+        friend std::ostream& operator<<(std::ostream& os, const ConfigItem& obj) {
+            os << obj.getClassName() << "[value=" << obj.value.String << "]";
+            return os;
+        }
+    private:
+        std::string group;
+        std::string name;
+        ConfigValidator<QVariant> validator;
+        ConfigSerializer serializer;
+        QVariant __value;
+        QVariant value;
+        bool restart;
+        QVariant defaultValue;
+    signals:
+        void valueChanged(QVariant value);
+    };
+    */
+
+
 
 }
 
