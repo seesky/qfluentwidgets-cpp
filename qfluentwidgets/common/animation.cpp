@@ -1,5 +1,7 @@
 #include "animation.h"
 
+namespace Qfw{
+
 AnimationBase::AnimationBase(){}
 
 AnimationBase::AnimationBase(QWidget *parent)
@@ -214,4 +216,117 @@ void BackgroundColorObject::backgroundColor(QColor *color)
 {
     this->_backgroundColor = color;
     QWidget::update();
+}
+
+
+
+DropShadowAnimation::DropShadowAnimation(QWidget *parent, QColor *normalColor, QColor *hoverColor)
+{
+    this->parent = parent;
+    this->normalColor = normalColor;
+    this->hoverColor = hoverColor;
+    this->offset = new QPoint(0, 0);
+    this->blurRadius = 38;
+    this->isHover = false;
+    this->shadowEffect = new QGraphicsDropShadowEffect(this);
+    this->shadowEffect->setColor(*this->normalColor);
+    parent->installEventFilter(this);
+    
+}
+
+DropShadowAnimation::~DropShadowAnimation(){}
+
+void DropShadowAnimation::setBlurRadius(int radius)
+{
+    this->blurRadius = radius;
+}
+
+void DropShadowAnimation::setOffset(int dx, int dy)
+{
+    this->offset = new QPoint(dx, dy);
+}
+
+void DropShadowAnimation::setNormalColor(QColor *color)
+{
+    this->normalColor = color;
+}
+
+void DropShadowAnimation::setHoverColor(QColor *color)
+{
+    this->hoverColor = color;
+}
+
+void DropShadowAnimation::setColor(QColor *color){}
+
+QGraphicsDropShadowEffect * DropShadowAnimation::_createShadowEffect()
+{
+    this->shadowEffect = new QGraphicsDropShadowEffect(this);
+    this->shadowEffect->setOffset(*this->offset);
+    this->shadowEffect->setBlurRadius(this->blurRadius);
+    this->shadowEffect->setColor(*this->normalColor);
+    setTargetObject(this->shadowEffect);
+    setStartValue(this->shadowEffect->color());
+    setPropertyName("color");
+    setDuration(150);
+    return this->shadowEffect;
+}
+
+
+bool DropShadowAnimation::eventFilter(QObject *obj, QEvent *e)
+{
+    if(obj == this->parent && this->parent->isEnabled())
+    {
+        if(e->type() == QEvent::Enter)
+        {
+            this->isHover = true;
+
+            if(this->state() != QPropertyAnimation::State::Running)
+            {
+                this->parent->setGraphicsEffect(this->_createShadowEffect());
+            }
+
+            this->setEndValue(*this->hoverColor);
+            this->start();
+        }else if(e->type() == QEvent::Type::Leave || e->type() == QEvent::Type::MouseButtonPress){
+            this->isHover = false;
+            if(this->parent->graphicsEffect())
+            {
+                //TODO:self.finished.connect(self._onAniFinished)
+                connect(this, &QPropertyAnimation::finished, this, &DropShadowAnimation::_onAniFinished);
+                this->setEndValue(*this->normalColor);
+                this->start();
+            }
+        }
+    }
+}
+
+
+void DropShadowAnimation::_onAniFinished()
+{
+    this->finished();
+    this->shadowEffect = nullptr;
+    this->parent->setGraphicsEffect(nullptr);
+}
+
+
+/*
+template<typename T>
+void FluentAnimationProperObject::registerManager(FluentAnimationProperty propertyType)
+{
+    if (objects.find(propertyType) == objects.end()) {
+        //objects[propertyType] = propertyType;
+    }
+}
+
+void* FluentAnimationProperObject::create(FluentAnimationProperty propertyType)
+{
+    if(objects.find(propertyType) == objects.end()){
+        throw std::runtime_error("PropertyType has not been registered");
+    }
+    return this->objects.at(propertyType);
+}
+
+*/
+
+
 }
