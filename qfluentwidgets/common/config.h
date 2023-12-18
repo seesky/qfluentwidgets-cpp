@@ -11,7 +11,13 @@
 #include <QVariant>
 #include <boost/any.hpp>
 
-namespace Qfw{
+//namespace Qfw{
+
+    enum class Theme{
+        LIGHT,
+        DARK,
+        AUTO
+    };
 
     const static std::map<std::string, std::string> ThemeOptionsMap = {
         {"LIGHT", "LIGHT"},
@@ -169,9 +175,10 @@ namespace Qfw{
     };
     */
 
+   bool isDarkTheme();
 
 
-}
+//}
 
 
 

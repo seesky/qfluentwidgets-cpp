@@ -24,7 +24,7 @@ INCLUDE_DIRECTORIES(C://msys64//mingw64//include//c++//13.1.0//x86_64-w64-mingw3
 FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 
 
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets Svg Xml REQUIRED)
 add_executable(
   test
   main.cpp
@@ -32,7 +32,8 @@ add_executable(
   qfluentwidgets/common/animation.cpp
   qfluentwidgets/common/config.h
   qfluentwidgets/common/config.cpp
-
+  qfluentwidgets/common/icon.h
+  qfluentwidgets/common/icon.cpp
 )
 
 target_link_options(test PRIVATE "-Wl,--whole-archive")
@@ -43,5 +44,7 @@ target_link_libraries(
   Qt5::Widgets
   Qt5::Core
   Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
   jsoncpp
 )

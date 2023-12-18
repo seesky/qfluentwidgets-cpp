@@ -1,6 +1,6 @@
 #include "animation.h"
 
-namespace Qfw{
+//namespace Qfw{
 
 AnimationBase::AnimationBase(){}
 
@@ -329,4 +329,4 @@ void* FluentAnimationProperObject::create(FluentAnimationProperty propertyType)
 */
 
 
-}
+//}

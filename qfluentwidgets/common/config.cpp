@@ -9,7 +9,7 @@
 #include <QVariant>
 #include "json/json.h"
 
-namespace Qfw{
+//namespace Qfw{
 
     //Range validator
     template<typename T>
@@ -333,5 +333,10 @@ namespace Qfw{
 
     
     
+    bool isDarkTheme()
+    {
+        //TODO:return qconfig.theme == Theme.DARK
+        return false;
+    }
     
-}
+//}

@@ -69,6 +69,9 @@
         "qvariant": "cpp",
         "complex": "cpp",
         "source_location": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "qcolor": "cpp",
+        "stdfloat": "cpp",
+        "qsvgrenderer": "cpp"
     }
 }

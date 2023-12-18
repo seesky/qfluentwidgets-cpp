@@ -4,7 +4,7 @@
 #include <QtGui>
 #include <QtWidgets>
 
-namespace Qfw{
+//namespace Qfw{
 
 class AnimationBase : public QWidget
 {
@@ -150,4 +150,4 @@ private:
 };
 */
     
-}
+//}
