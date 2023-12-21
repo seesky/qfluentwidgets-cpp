@@ -19,7 +19,7 @@
         AUTO
     };
 
-    const static std::map<std::string, std::string> ThemeOptionsMap = {
+    const static std::map<QString, QString> ThemeOptionsMap = {
         {"LIGHT", "LIGHT"},
         {"DARK", "DARK"},
         {"AUTO", "AUTO"}

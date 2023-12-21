@@ -190,52 +190,59 @@ const static std::map<QString, QString> FluentIconMap = {
         {"EXPRESSIVE_INPUT_ENTRY", "ExpressiveInputEntry"}
 };
 
-class SvgIconEngine{
+class SvgIconEngine : public QIconEngine{
 public:
-    SvgIconEngine(QVariant *svg);
-    void paint(QPainter *painter, QRect *rect, QIcon::Mode mode, QIcon::State state);
-    SvgIconEngine *clone();
-    QPixmap *pixmap(QSize size, QIcon::Mode mode, QIcon::State state);
+    SvgIconEngine(QString svg);
+    void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
+    QIconEngine *clone() const override;
+    QPixmap pixmap(const QSize &size, QIcon::Mode mode, QIcon::State state);
 private:
-    QVariant *svg;
+    QString svg;
 };
 
 
 class FluentIconBase{
 public:
+    QIcon *_icon;
     QString path(Theme theme = Theme::AUTO);
     QIcon *icon(Theme theme = Theme::AUTO, QColor color = nullptr);
     QIcon *qicon(bool reverse);
-    void render(QPainter *painter, QRect *rect, Theme theme, int indexes, std::map<QString, QString> attributes);
+    void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes);
+private:
+    FluentIconBase *t = this;
 };
 
 Q_DECLARE_METATYPE(FluentIconBase)
 
 class FluentIcon : public FluentIconBase{
 public:
-    
-
     QString path(QString fluentIconName, Theme theme);
+private:
+    //std::map<QString, QString> FluentIconMap = FluentIconMap;
 };
 
 class Icon : public QIcon{
 public:
+    Icon();
     Icon(FluentIcon *fluentIcon);
-private:
     FluentIcon *fluentIcon;
+private:
+
 };
 
 Q_DECLARE_METATYPE(Icon)
 
 class FluentIconEngine : public QIconEngine{
 public:
-    FluentIconEngine(QIcon *icon, bool reverse);
-    void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state);
+
+    FluentIconEngine(QVariant *icon, bool reverse);
+    void paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state) override;
+    FluentIconEngine *clone() const override;
 private:
-    FluentIconBase *icon;
+    QVariant *icon; //QICon | Icon | FluentIconBase
+    QIcon *icon_QIcon;
     bool isThemeReversed;
 };
 
-
-
+QIcon toQIcon(QVariant *icon);
 //}

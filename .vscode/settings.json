@@ -72,6 +72,10 @@
         "typeindex": "cpp",
         "qcolor": "cpp",
         "stdfloat": "cpp",
-        "qsvgrenderer": "cpp"
+        "qsvgrenderer": "cpp",
+        "qiconengine": "cpp",
+        "qregexp": "cpp",
+        "regex": "cpp",
+        "qfile": "cpp"
     }
 }

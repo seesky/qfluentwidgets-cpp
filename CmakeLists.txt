@@ -34,6 +34,10 @@ add_executable(
   qfluentwidgets/common/config.cpp
   qfluentwidgets/common/icon.h
   qfluentwidgets/common/icon.cpp
+  qfluentwidgets/common/font.h
+  qfluentwidgets/common/font.cpp
+  qfluentwidgets/common/style_sheet.h
+  qfluentwidgets/common/style_sheet.cpp
 )
 
 target_link_options(test PRIVATE "-Wl,--whole-archive")
