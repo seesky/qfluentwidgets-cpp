@@ -13,63 +13,53 @@
 
 //namespace Qfw{
 
-    enum class Theme{
-        LIGHT,
-        DARK,
-        AUTO
-    };
+enum class Theme{
+    LIGHT,
+    DARK,
+    AUTO
+};
 
-    const static std::map<QString, QString> ThemeOptionsMap = {
-        {"LIGHT", "LIGHT"},
-        {"DARK", "DARK"},
-        {"AUTO", "AUTO"}
-    };
+const static QMap<QString, QString> ThemeOptionsMap = {
+    {"LIGHT", "LIGHT"},
+    {"DARK", "DARK"},
+    {"AUTO", "AUTO"}
+};
 
-    // Config validator
-    template<typename T>
-    class ConfigValidator {
-    public:
-        //Verify whether the value is legal
-        bool validate(T value) {
-            return true;
-        }
 
-        //correct illegal value
-        T correct(T value) {
-            return value;
-        }
-    };
+class ConfigValidator {
+public:
+    ConfigValidator(){};
+    bool validate(QVariant *value);
+    QVariant *correct(QVariant *value);
+private:
+    QVariant *value;
+};
 
-    //Range validator
-    template<typename T>
-    class RangeValidator : public ConfigValidator<T>
-    {
-    public:
-        RangeValidator(int min, int max);
-        ~RangeValidator();
-        bool validate(int value) override;
-        int correct(int value) override;
+class RangeValidator : public ConfigValidator
+{
+public:
+    RangeValidator(int min, int max);
+    bool validate(QVariant *value);
+    QVariant *correct(QVariant *value);
 
-    private:
-        int min_value;
-        int max_value;
-        int range_value[2];
-    };
+private:
+    int min_value;
+    int max_value;
+    int range_value[2];
+};
 
 
 
-    template<typename T>
-    class ThemeOptionValidator : public ConfigValidator<T>
-    {
-    public:
-        ThemeOptionValidator(std::map<std::string, std::string> *options);
-        ~ThemeOptionValidator();
-        bool validate(std::string value) override;
-        std::string correct(std::string value) override;
+class OptionsValidator : public ConfigValidator{
+public:
+    OptionsValidator(QVariant *options);
+    bool validate(QVariant *value);
+    QVariant *correct(QVariant *value);
+private:
+    QList<QVariant *> options;
+};
 
-    private:
-        std::map<std::string, std::string> *options;
-    };
+/*
 
     template<typename T>
     class BoolValidator : public ConfigValidator<T>
@@ -143,7 +133,7 @@
         QColor deserialize(std::string value);
     };
 
-    
+    */
 
     /*
     class ConfigItem : public QObject

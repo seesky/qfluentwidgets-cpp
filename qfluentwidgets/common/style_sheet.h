@@ -17,7 +17,7 @@ const static QMap<QString, QString> CustomStyleSheetMap = {
     {"LIGHT_QSS_KEY", "lightCustomQss"}
 };
 
-const static std::map<QString, QString> ThemeColorMap = {
+const static QMap<QString, QString> ThemeColorMap = {
     {"PRIMARY" , "ThemeColorPrimary"},
     {"DARK_1" , "ThemeColorDark1"},
     {"DARK_2" , "ThemeColorDark2"},
@@ -79,7 +79,7 @@ private:
 class QssTemplate{
 public:
     QssTemplate(QString qss);
-    QString safe_substitute(std::map<QString, QString> mapping);
+    QString safe_substitute(QMap<QString, QString> mapping);
 private:
     QString delimiter = "--";
     QString value;

@@ -9,32 +9,76 @@
 #include <QVariant>
 #include "json/json.h"
 
-//namespace Qfw{
+bool ConfigValidator::validate(QVariant *value)
+{
+    return true;
+}
 
-    //Range validator
-    template<typename T>
-    RangeValidator<T>::RangeValidator(int min, int max)
+QVariant *ConfigValidator::correct(QVariant *value){
+    return this->value;
+}
+
+
+RangeValidator::RangeValidator(int min, int max)
+{
+    this->min_value = min;
+    this->max_value = max;
+    this->range_value[0] = min;
+    this->range_value[1] = max;
+}
+
+bool RangeValidator::validate(QVariant *value)
+{
+    return (this->min_value <= value->toInt()) && (value->toInt() <= this->max_value);
+}
+
+
+QVariant * RangeValidator::correct(QVariant *value)
+{
+    QVariant c = QVariant::fromValue(std::min(std::max(this->min_value, value->toInt()), this->max_value));
+    return &c;
+}
+
+OptionsValidator::OptionsValidator(QVariant *options)
+{
+    if(!options)
     {
-        this->min_value = min;
-        this->max_value = max;
-        this->range_value[0] = min;
-        this->range_value[1] = max;
+        throw std::runtime_error("The `options` can't be empty.");
     }
 
-    template<typename T>
-    RangeValidator<T>::~RangeValidator(){}
-
-    template<typename T>
-    bool RangeValidator<T>::validate(int value)
+    if(options->canConvert<QMap<QString,QString>>())
     {
-        return (this->min_value <= value) && (value <= this->max_value);
+        QMap<QString,QString> q = options->value<QMap<QString,QString>>();
+        QMutableMapIterator<QString, QString> it(q);
+        while (it.hasNext()) {
+            it.next();
+            QVariant q = QVariant::fromValue(it.value());
+            this->options.append(&q);
+        }
     }
 
-    template<typename T>
-    int RangeValidator<T>::correct(int value)
+    if(options->canConvert<QList<QVariant *>>())
     {
-        return std::min(std::max(this->min_value, value), this->max_value);
+        //this->options = options->value<QList<QVariant *>>();
     }
+}
+
+bool OptionsValidator::validate(QVariant *value)
+{
+    for (const QVariant *item : this->options) {
+        if(value->canConvert<QString>())
+        {
+            if(item->canConvert<QString>()){
+                if(value->value<QString>() == item->value<QString>()){
+                    return true;
+                }
+            }
+        }
+    }
+
+}
+
+/*
 
 
     template<typename T>
@@ -265,7 +309,7 @@
     {
         return QColor(value.c_str());
     }
-
+    */
     
     /*
     ConfigItem::ConfigItem(std::string group, std::string name, QVariant dValue, ConfigValidator<QVariant> validator, ConfigSerializer serializer, bool restart)
@@ -338,5 +382,6 @@
         //TODO:return qconfig.theme == Theme.DARK
         return false;
     }
+    
     
 //}

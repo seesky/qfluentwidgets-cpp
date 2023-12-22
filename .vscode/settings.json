@@ -76,6 +76,8 @@
         "qiconengine": "cpp",
         "qregexp": "cpp",
         "regex": "cpp",
-        "qfile": "cpp"
+        "qfile": "cpp",
+        "qwidget": "cpp",
+        "bitset": "cpp"
     }
 }

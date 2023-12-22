@@ -1,4 +1,5 @@
 #include "style_sheet.h"
+#include "config.h"
 #include <regex>
 #include <QRegExp>
 #include <QFile>
@@ -67,7 +68,7 @@ QssTemplate::QssTemplate(QString qss)
     value = qss;
 }
 
-QString QssTemplate::safe_substitute(std::map<QString, QString> mapping)
+QString QssTemplate::safe_substitute(QMap<QString, QString> mapping)
 {
     QString result = QString(this->value);
     QRegularExpression regex(this->delimiter + "(\\w+)");
@@ -80,7 +81,7 @@ QString QssTemplate::safe_substitute(std::map<QString, QString> mapping)
         int capturedTextLength = match.capturedLength();
         if(mapping.find(capturedText) != mapping.end()){
             QRegularExpression regex_(capturedText);
-            result.replace(regex_, mapping.at(capturedText));
+            result.replace(regex_, mapping.key(capturedText));
         }
     }
     return result;
@@ -151,7 +152,12 @@ QString FluentStyleSheet::path(QString ThemeOptionsName, QString FluentStyleShee
         //TODO:theme = qconfig.theme if theme == Theme.AUTO else theme
         theme = Theme::LIGHT;
     }
-    return ":/qfluentwidgets/gss/" + ThemeOptionsMap.at(ThemeOptionsName) + "/" + ThemeColorMap.at(FluentStyleSheetName) + ".qss";
+    return ":/qfluentwidgets/gss/" + ThemeOptionsMap.key(ThemeOptionsName) + "/" + ThemeColorMap.key(FluentStyleSheetName) + ".qss";
+}
+
+void setCustomStyleSheet(QWidget *widget, QString lightQss, QString darkQss)
+{
+    CustomStyleSheet(widget).setCustomStyleSheet(lightQss, darkQss);
 }
 
 void addStyleSheet(QWidget *widget, QVariant *source, Theme theme = Theme::AUTO, bool register_ = true)
@@ -169,6 +175,26 @@ void addStyleSheet(QWidget *widget, QVariant *source, Theme theme = Theme::AUTO,
     {
         widget->setStyleSheet(qss);
     }
+}
+
+void updateStyleSheet()
+{
+    QList<QWidget *> removes;
+    QMutableMapIterator<QWidget*, StyleSheetBase*> it = styleSheetManager->items();
+    while (it.hasNext()) {
+        it.next();
+        try{
+            //TODO:setStyleSheet(widget, file, qconfig.theme)
+            setStyleSheet(it.key(), QVariant::fromValue(*(it.value())), Theme::LIGHT);
+        }catch(const std::exception& e){
+            removes.append(it.key());
+        }
+    }
+
+    for (QWidget *item : removes) {
+        styleSheetManager->deregister(item);
+    }
+    
 }
 
 bool CustomStyleSheetWatcher::eventFilter(QWidget *obj, QEvent *event)
@@ -270,4 +296,9 @@ QString CustomStyleSheet::content(Theme theme = Theme::AUTO)
         return this->lightStyleSheet();
     }
     return this->darkStyleSheet();
+}
+
+void setTheme(Theme theme, bool save)
+{
+    
 }
