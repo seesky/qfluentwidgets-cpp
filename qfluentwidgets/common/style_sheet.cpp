@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QWidget>
 #include <QMutableMapIterator>
+#include <math.h>
+#include "../components/widgets/button.h"
 
 static StyleSheetManager *styleSheetManager = new StyleSheetManager();
 
@@ -33,8 +35,21 @@ void StyleSheetManager::register_(QVariant source, QWidget *widget, bool reset =
     }
 
     if(this->widgets->find(widget) == this->widgets->end()){
-        connect(widget, SIGNAL(widget->destroyed()), SLOT(this->deregister()));
-        //widget->installEventFilter()
+        connect(widget, SIGNAL(QObject::destroyed), SLOT(this->deregister()));
+        installEventFilter(new CustomStyleSheetWatcher());
+        QList<StyleSheetBase> *list = new QList<StyleSheetBase>();
+        list->append(s);
+        list->append((StyleSheetBase)(CustomStyleSheet(widget)));
+        this->widgets->insert(widget, new StyleSheetCompose(list));
+    }
+
+    if(!reset){
+        ((StyleSheetCompose *)(this->source(widget)))->add(&s);
+    }else{
+        QList<StyleSheetBase> *list = new QList<StyleSheetBase>();
+        list->append(s);
+        list->append((StyleSheetBase)(CustomStyleSheet(widget)));
+        this->widgets->insert(widget, new StyleSheetCompose(list));
     }
 }
 
@@ -73,17 +88,25 @@ QString QssTemplate::safe_substitute(QMap<QString, QString> mapping)
     QString result = QString(this->value);
     QRegularExpression regex(this->delimiter + "(\\w+)");
     QRegularExpressionMatchIterator matchIterator = regex.globalMatch(this->value);
+    ThemeColor *themeColor = new ThemeColor();
     while (matchIterator.hasNext()) {
         QRegularExpressionMatch match = matchIterator.next();
         QString capturedText = match.captured(0);
+        QString _capturedText = QString(capturedText);
+        _capturedText.remove(0, this->delimiter.length());
+        //qDebug() << capturedText;
+        //qDebug() << _capturedText;
         int capturedTextStart = match.capturedStart();
         int capturedTextEnd = match.capturedEnd();
         int capturedTextLength = match.capturedLength();
-        if(mapping.find(capturedText) != mapping.end()){
+        if(mapping.find(_capturedText) != mapping.end()){
             QRegularExpression regex_(capturedText);
-            result.replace(regex_, mapping.key(capturedText));
+            //result.replace(regex_, mapping.value(_capturedText));
+            qDebug() << mapping.value(capturedText);
+            result.replace(regex_, themeColor->name(mapping.value(_capturedText)));
         }
     }
+    qDebug() << result;
     return result;
 }
 
@@ -105,19 +128,28 @@ QString StyleSheetBase::path(Theme theme=Theme::AUTO)
 
 QString getStyleSheetFromFile(QString file)
 {
+    
     QFile *f = new QFile(file);
 
     f->open(QFile::ReadOnly);
-    QString qss = QString(f->readAll());
+    //QString *qss = new QString(QString::fromUtf8(f->readAll()).replace("\r", "").replace("\n", ""));
+    QString *qss = new QString(QString::fromUtf8(f->readAll()));
     f->close();
-    return qss;
+    //qDebug() << qss;
+    return *qss;
 }
 
-QString getStyleSheet(QVariant *source, Theme theme = Theme::AUTO)
+QString getStyleSheet(QVariant *source, Theme theme = Theme::AUTO) //这个函数有问题，穿过来的source应该是支持多种类型的，由于c++不支持python的Enum结构，所以不能把Enum和Enum 方法直接传值
 {
     StyleSheetBase *s;
     if(source->canConvert<QString>()){
-        StyleSheetFile *f = new StyleSheetFile(source->value<QString>());
+        //qDebug() << source->value<QString>();
+
+        //TODO:这个地方需要实现根据自动获取系统Theme
+        
+        QString path = "qfluentwidgets/qss/" + ThemeOptionsMap.value("LIGHT") + "/" + source->value<QString>() + ".qss";
+        //qDebug() << path;
+        StyleSheetFile *f = new StyleSheetFile(path);
         s = f;
     }else if(source->canConvert<StyleSheetBase>()){
         StyleSheetBase sst = source->value<StyleSheetBase>();
@@ -131,18 +163,35 @@ void setStyleSheet(QWidget *widget, QVariant source, Theme theme = Theme::AUTO, 
     if(register_){
         styleSheetManager->register_(source, widget);
     }
+    
+    /*
+    if (widget->inherits("PrimaryPushButton")) {
+        qDebug() << "PrimaryPushButton";
+    }
+    
 
+    auto _widget = qobject_cast<QPushButton*>(widget);
+    if (nullptr != _widget){
+        auto _widget = qobject_cast<PrimaryPushButton*>(widget);
+        if (nullptr != _widget){
+            _widget->setStyleSheet(getStyleSheet(&source, theme));
+            return;
+        }
+        
+    }
+    */
     widget->setStyleSheet(getStyleSheet(&source, theme));
 }
 
 QString StyleSheetBase::content(Theme theme = Theme::AUTO)
 {
-    return getStyleSheetFromFile(this->path(theme));
+    return getStyleSheetFromFile(((StyleSheetFile *)this)->path(theme));
 }
 
-void StyleSheetBase::apply(QWidget *widget, Theme theme = Theme::AUTO)
+void StyleSheetBase::apply(QWidget *widget, QString fluentStyleSheet, Theme theme = Theme::AUTO)
 {
-    setStyleSheet(widget, QVariant::fromValue(*(this->self)), Theme::AUTO, true);
+    //qDebug() << fluentStyleSheet;
+    setStyleSheet(widget, QVariant::fromValue(fluentStyleSheet), Theme::AUTO, true);
 }
 
 
@@ -152,7 +201,7 @@ QString FluentStyleSheet::path(QString ThemeOptionsName, QString FluentStyleShee
         //TODO:theme = qconfig.theme if theme == Theme.AUTO else theme
         theme = Theme::LIGHT;
     }
-    return ":/qfluentwidgets/gss/" + ThemeOptionsMap.key(ThemeOptionsName) + "/" + ThemeColorMap.key(FluentStyleSheetName) + ".qss";
+    return "/qfluentwidgets/qss/" + ThemeOptionsMap.key(ThemeOptionsName) + "/" + ThemeColorMap.key(FluentStyleSheetName) + ".qss";
 }
 
 void setCustomStyleSheet(QWidget *widget, QString lightQss, QString darkQss)
@@ -300,5 +349,63 @@ QString CustomStyleSheet::content(Theme theme = Theme::AUTO)
 
 void setTheme(Theme theme, bool save)
 {
-    
+    //qconfig.set(qconfig->themeMode(), theme, save);
+}
+
+QString ThemeColor::name(QString themeColorValue)
+{
+    QString name = this->color(themeColorValue)->name();
+    qDebug() << name;
+    return name;
+}
+
+QColor *ThemeColor::color(QString themeColorValue)
+{
+    //QConfig *qconfig = new QConfig();
+    //QColor color = (qconfig->get(qconfig->themeColor))->value<QColor>();
+    QColor color = QColor("#009faa");
+    qreal h, s, v;
+    color.getHsvF(&h, &s, &v);
+
+    if(isDarkTheme())
+    {
+        s *= 0.84;
+        v = 1;
+        if(themeColorValue == "DARK_1"){
+            v *= 0.9;
+        }else if(themeColorValue == "DARK_2"){
+            s *= 0.977;
+            v *= 0.82;
+        }else if(themeColorValue == "DARK_3"){
+            s *= 0.95;
+            v *= 0.7;
+        }else if(themeColorValue == "LIGHT_1"){
+            s *= 0.92;
+        }else if(themeColorValue == "LIGHT_2"){
+            s *= 0.78;
+        }else if(themeColorValue == "LIGHT_3"){
+            s *= 0.65;
+        }
+    }else{
+        if(themeColorValue == "DARK_1"){
+            v *= 0.75;
+        }else if(themeColorValue == "DARK_2"){
+            s *= 1.05;
+            v *= 0.5;
+        }else if(themeColorValue == "DARK_3"){
+            s *= 1.1;
+            v *= 0.4;
+        }else if(themeColorValue == "LIGHT_1"){
+            s *= 1.05;
+        }else if(themeColorValue == "LIGHT_2"){
+            s *= 0.75;
+            v *= 1.05;
+        }else if(themeColorValue == "LIGHT_3"){
+            s *= 0.65;
+            v *= 1.05;
+        }
+    }
+
+    QColor *c = new QColor(QColor::fromHsvF(h, qMin(s, 1.00), qMin(v, 1.00)));
+    return c;
 }

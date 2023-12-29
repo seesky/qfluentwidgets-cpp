@@ -204,22 +204,29 @@ private:
 class FluentIconBase{
 public:
     QIcon *_icon;
-    QString path(Theme theme = Theme::AUTO);
-    QIcon *icon(Theme theme = Theme::AUTO, QColor color = nullptr);
+    QString path(Theme theme);
+    QIcon *icon(Theme theme, QColor color);
     QIcon *qicon(bool reverse);
-    void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes);
+    QString iconName;
+    void setIconName(QString iconName);
+    virtual void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes);
 private:
     FluentIconBase *t = this;
 };
 
 Q_DECLARE_METATYPE(FluentIconBase)
+Q_DECLARE_METATYPE(FluentIconBase *)
 
 class FluentIcon : public FluentIconBase{
 public:
-    QString path(QString fluentIconName, Theme theme);
+    QIcon *icon(Theme theme, QColor color);
+    QString path(Theme theme);
+    void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes) override;
 private:
     //std::map<QString, QString> FluentIconMap = FluentIconMap;
 };
+
+Q_DECLARE_METATYPE(FluentIcon)
 
 class Icon : public QIcon{
 public:
@@ -244,5 +251,10 @@ private:
     bool isThemeReversed;
 };
 
-QIcon toQIcon(QVariant *icon);
+class MIcon{
+public:
+    QIcon toQIcon(QVariant *icon);
+    void drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QString, QString> *attributes, QIcon::State state);
+};
+
 //}

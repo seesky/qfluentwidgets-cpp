@@ -1,11 +1,11 @@
 #include "font.h"
 
-void setFont(QWidget widget, int fontSize, QFont::Weight weight)
+void Font::setFont(QWidget *widget, int fontSize = 14, QFont::Weight weight = QFont::Normal)
 {
-    widget.setFont(getFont(fontSize, weight));
+    widget->setFont(getFont(fontSize, weight));
 }
 
-QFont getFont(int fontSize, QFont::Weight weight)
+QFont Font::getFont(int fontSize, QFont::Weight weight)
 {
     QFont font = QFont();
     QStringList list = QStringList() << "Segoe UI" << "Microsoft YaHei" << "PingFang SC";

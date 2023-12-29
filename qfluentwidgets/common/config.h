@@ -9,6 +9,7 @@
 #include <QtCore/QString>
 #include <QtCore/QObject>
 #include <QVariant>
+#include <QFile>
 #include <boost/any.hpp>
 
 //namespace Qfw{
@@ -20,9 +21,9 @@ enum class Theme{
 };
 
 const static QMap<QString, QString> ThemeOptionsMap = {
-    {"LIGHT", "LIGHT"},
-    {"DARK", "DARK"},
-    {"AUTO", "AUTO"}
+    {"LIGHT", "light"},
+    {"DARK", "dark"},
+    {"AUTO", "auto"}
 };
 
 
@@ -41,11 +42,11 @@ public:
     RangeValidator(int min, int max);
     bool validate(QVariant *value);
     QVariant *correct(QVariant *value);
-
-private:
     int min_value;
     int max_value;
     int range_value[2];
+private:
+
 };
 
 
@@ -55,117 +56,164 @@ public:
     OptionsValidator(QVariant *options);
     bool validate(QVariant *value);
     QVariant *correct(QVariant *value);
-private:
     QList<QVariant *> options;
+private:
+
 };
 
-/*
-
-    template<typename T>
-    class BoolValidator : public ConfigValidator<T>
-    {
-    public:
-        BoolValidator();
-        ~BoolValidator();
-        bool validate(bool value) override;
-        bool correct(bool value) override;
-    private:
-        bool options[2];
-    };
+Q_DECLARE_METATYPE(QVariant *)
 
 
-    template<typename T>
-    class FolderValidator : public ConfigValidator<T>
-    {
-    public:
-        bool validate(std::string value) override;
-        std::string correct(std::string value) override;        
-    };
-
-    template<typename T>
-    class FolderListValidator : public ConfigValidator<T>
-    {
-    public:
-        bool validate(std::vector<std::string> value) override;
-        std::vector<std::string> correct(std::vector<std::string> value) override;        
-    };
 
 
-    template<typename T>
-    class ColorValidator : public ConfigValidator<T>
-    {
-    public:
-        ColorValidator(std::string value);
-        bool validate(std::string value) override;
-        QColor correct(std::string value) override;
-    private:
-        QColor defaultColor;
-    };
+class BoolValidator : public ConfigValidator
+{
+public:
+    BoolValidator(){};
+    bool validate(QVariant *value);
+    bool correct(QVariant *value);
+private:
+    bool options[2] = {true, false};
+};
 
 
-    //Config serializer
-    class ConfigSerializer {
-    public:
-        //serialize config value
-        QVariant serialize(QVariant value) {
-            return value;
-        }
-
-        //deserialize config from config file's value
-        QVariant deserialize(QVariant value) {
-            return value;
-        }
-    };
-
-    class MapSerializer : public ConfigSerializer {
-    public:
-        MapSerializer(std::map<std::string, std::string> value);
-        std::string serialize(std::map<std::string, std::string> value);
-        std::map<std::string, std::string> deserialize(std::string json);
-    private:
-        std::map<std::string, std::string> mapClass;
-    };
+class FolderValidator : public ConfigValidator
+{
+public:
+    bool validate(QVariant *value);
+    QString correct(QVariant *value);        
+};
 
 
-    class ColorSerializer : public ConfigSerializer {
-    public:
-        std::string serialize(QColor value);
-        QColor deserialize(std::string value);
-    };
 
-    */
+class FolderListValidator : public ConfigValidator
+{
+public:
+    bool validate(QVariant *value);
+    QList<QString> correct(QVariant *value);        
+};
 
+
+
+class ColorValidator : public ConfigValidator
+{
+public:
+    ColorValidator(QVariant *default_);
+    bool validate(QVariant * value);
+    QColor* correct(QVariant * value);
+private:
+    QColor *default_;
+};
+
+class ConfigSerializer {
+public:
+    //serialize config value
+    QVariant *serialize(QVariant *value) {
+        return value;
+    }
+
+    //deserialize config from config file's value
+    QVariant *deserialize(QVariant *value) {
+        return value;
+    }
+};
+
+
+class MapSerializer : public ConfigSerializer {
+public:
+    MapSerializer(QMap<QString, QString> value);
+    QString serialize(QMap<QString, QString> value);
+    QMap<QString, QString> deserialize(QString json);
+private:
+    QMap<QString, QString> mapClass;
+};
+
+class ColorSerializer : public ConfigSerializer {
+public:
+    QString serialize(QColor value);
+    QColor deserialize(QString value);
+};
+
+class ConfigItem : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigItem(){};
+    ConfigItem(QString group, QString name, QVariant *default_, ConfigValidator *validator, ConfigSerializer *serializer, bool restart);
+    QVariant *getValue();
+    void setValue(QVariant *value);
+    QString key();
+    QString serialize();
+    void deserializeFrom(QString value);
+    QString getClassName() const;
+    friend std::ostream& operator<<(std::ostream& os, const ConfigItem& obj) {
+        os << obj.getClassName().toStdString() << "[value=" << obj.value->String << "]";
+        return os;
+    }
+
+    QString group;
+    QString name;
+    ConfigValidator *validator;
+    ConfigSerializer *serializer;
+    QVariant *__value;
+    QVariant *value;
+    bool restart;
+    QVariant *defaultValue;
+private:
+    
+signals:
+    void valueChanged(QVariant *value);
+};
+
+
+class RangeConfigItem : public ConfigItem{
+public:
+    int* range();
     /*
-    class ConfigItem : public QObject
-    {
-        Q_OBJECT
-    public:
-        ConfigItem(std::string group, std::string name, QVariant dValue, ConfigValidator<QVariant> validator, ConfigSerializer serializer, bool restart);
-        QVariant getValue();
-        void setValue(QVariant v);
-        std::string key();
-        std::string serialize();
-        void deserializeFrom(std::string value);
-        std::string getClassName() const;
-        friend std::ostream& operator<<(std::ostream& os, const ConfigItem& obj) {
-            os << obj.getClassName() << "[value=" << obj.value.String << "]";
-            return os;
-        }
-    private:
-        std::string group;
-        std::string name;
-        ConfigValidator<QVariant> validator;
-        ConfigSerializer serializer;
-        QVariant __value;
-        QVariant value;
-        bool restart;
-        QVariant defaultValue;
-    signals:
-        void valueChanged(QVariant value);
-    };
+    QString getClassName() const;
+    friend std::ostream& operator<<(std::ostream& os, const RangeConfigItem& obj) {
+        os << obj.getClassName().toStdString() << "[range=[" << obj.value->String << "]";
+        
+        return os;
+    }
     */
+private:
+};
 
-   bool isDarkTheme();
+class OptionsConfigItem : public ConfigItem{
+public:
+    OptionsConfigItem(QString group, QString name, QVariant *default_, bool restart);
+    QList<QVariant *> options();
+};
+
+
+class ColorConfigItem : public ConfigItem{
+public:
+    ColorConfigItem(QString group, QString name, QVariant *default_, bool restart);
+};
+
+class QConfig : public QObject{
+    Q_OBJECT
+public: 
+    OptionsConfigItem *themeMode; 
+    ColorConfigItem *themeColor;
+    QFile *file;
+    Theme _theme = Theme::LIGHT;
+    QConfig *_cfg;
+    QConfig();
+    QVariant *get(ConfigItem *item);
+    void set(ConfigItem *item, QVariant *value, bool save, bool copy);
+    QMap<QString, QString> *toDict(bool serialize);
+signals:
+    void appRestartSig();
+    void themeChanged(Theme theme);
+    void themeChangedFinished();
+    void themeColorChanged(QColor *color);
+};
+
+//static QConfig *qconfig = new QConfig();
+
+bool isDarkTheme();
 
 
 //}

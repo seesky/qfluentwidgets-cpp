@@ -18,16 +18,16 @@ const static QMap<QString, QString> CustomStyleSheetMap = {
 };
 
 const static QMap<QString, QString> ThemeColorMap = {
-    {"PRIMARY" , "ThemeColorPrimary"},
-    {"DARK_1" , "ThemeColorDark1"},
-    {"DARK_2" , "ThemeColorDark2"},
-    {"DARK_3" , "ThemeColorDark3"},
-    {"LIGHT_1" , "ThemeColorLight1"},
-    {"LIGHT_2" , "ThemeColorLight2"},
-    {"LIGHT_3" , "ThemeColorLight3"}
+    { "ThemeColorPrimary", "PRIMARY"},
+    {"ThemeColorDark1", "DARK_1"},
+    {"ThemeColorDark2", "DARK_2"},
+    {"ThemeColorDark3", "DARK_3"},
+    {"ThemeColorLight1", "LIGHT_1"},
+    {"ThemeColorLight2", "LIGHT_2"},
+    {"ThemeColorLight3", "LIGHT_3"}
 };
 
-const static std::map<QString, QString> FluentStyleSheetMap = {
+const static QMap<QString, QString> FluentStyleSheetMap = {
     {"MENU" , "menu"},
     {"LABEL" , "label"},
     {"PIVOT" , "pivot"},
@@ -90,7 +90,7 @@ public:
     StyleSheetBase();
     QString path(Theme theme);
     QString content(Theme theme);
-    void apply(QWidget *widget, Theme theme);
+    void apply(QWidget *widget, QString fluentStyleSheet, Theme theme);
     bool operator==(const StyleSheetBase& other) const {
         return *this == other;
     }
@@ -157,3 +157,11 @@ private:
 };
 
 Q_DECLARE_METATYPE(CustomStyleSheet)
+
+class ThemeColor{
+public:
+    QString name(QString themeColorValue);
+    QColor *color(QString themeColorValue);
+
+private:
+};

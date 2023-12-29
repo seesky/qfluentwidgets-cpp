@@ -1,6 +1,7 @@
 #include "icon.h"
 #include "config.h"
 #include <QFile>
+#include <QtCore>
 #include <QtXml/QDomDocument>
 
 //namespace Qfw{
@@ -81,25 +82,64 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
     return dom->toString();
 }
 
-void drawIcon(QVariant *icon, QPainter painter, QRect rect, std::map<QString, QString> *attributes, QIcon::State state = QIcon::State::Off)
+void MIcon::drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QString, QString> *attributes, QIcon::State state = QIcon::State::Off)
 {
-    if(icon->canConvert<FluentIconBase>())
+    if(icon->canConvert<FluentIcon>())
     {   
         //TODO: icon.render(painter, rect, **attributes)
-        icon->value<FluentIconBase>().render(&painter, rect, Theme::AUTO, 0, attributes);
+        icon->value<FluentIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
     }else if(icon->canConvert<Icon>()){
         //icon.value<Icon>().fluentIcon->render(&painter, &rect, Theme::AUTO, 0, attributes);
-        icon->value<Icon>().fluentIcon->render(&painter, rect, Theme::AUTO, 0, attributes);
+        icon->value<Icon>().fluentIcon->render(painter, rect, Theme::AUTO, 0, attributes);
+    }else if(icon->canConvert<QIcon>()){
+        QIcon icon_ = icon->value<QIcon>();
+        icon_.paint(painter, QRectF(rect).toRect(), Qt::AlignCenter, QIcon::Normal, state);
     }else{
         QIcon *icon_ = new QIcon(icon->value<QString>());
-        icon_->paint(&painter, QRectF(rect).toRect(), Qt::AlignCenter, QIcon::Normal, state);
+        icon_->paint(painter, QRectF(rect).toRect(), Qt::AlignCenter, QIcon::Normal, state);
     }
 }
 
-QString FluentIcon::path(QString fluentIconName, Theme theme = Theme::AUTO)
+QIcon *FluentIcon::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 {
-    return ":/qfluentwidgets/images/icons/" + FluentIconMap.at(fluentIconName) + "_" + getIconColor(theme) + ".svg";
+    QString path = this->path(theme);
+    if(!((path.endsWith(".svg") && color != nullptr)))
+    {
+        QIcon *i = new QIcon(this->path(theme));
+        return i;
+    }
+    color = (new QColor(color))->name();
+    std::map<QString, QString> attributes = {
+        {"fill", color.name()}
+    };
+    SvgIconEngine *sie = new SvgIconEngine(writeSvg(path, 0, attributes));
+    return new QIcon(sie);
 }
+
+
+QString FluentIcon::path(Theme theme = Theme::AUTO)
+{
+    QString path = QString("qfluentwidgets/images/icons/" + FluentIconMap.at(this->iconName) + "_" + getIconColor(theme) + ".svg");
+    qDebug() << path;
+    return path;
+}
+
+void FluentIcon::render(QPainter *painter, QRect rect, Theme theme = Theme::AUTO, int indexes = 0, std::map<QString, QString> *attributes = nullptr)
+{
+    QString iconStr = this->path(theme);
+    QIcon *icon;
+    if(iconStr.endsWith(".svg")){
+        if(attributes){
+            iconStr = writeSvg(iconStr, indexes, *attributes);
+        }
+        drawSvgIcon(iconStr, painter, rect);
+    }else{
+        icon = new QIcon(iconStr);
+        rect = QRectF(rect).toRect();
+        painter->drawPixmap(rect, icon->pixmap(QRectF(rect).toRect().size()));
+    }
+}
+
 
 SvgIconEngine::SvgIconEngine(QString svg)
 {
@@ -127,12 +167,17 @@ QPixmap SvgIconEngine::pixmap(const QSize &size, QIcon::Mode mode, QIcon::State 
     return pixmap;
 }
 
-QString FluentIconBase::path(Theme theme)
+void FluentIconBase::setIconName(QString iconName)
+{
+    this->iconName = iconName;
+}
+
+QString FluentIconBase::path(Theme theme = Theme::AUTO)
 {  
     throw std::runtime_error("NotImplementedError");
 }
 
-QIcon *FluentIconBase::icon(Theme theme, QColor color)
+QIcon *FluentIconBase::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 {
     QString path = this->path(theme);
     if(!(path.endsWith(".svg") && color != nullptr))
@@ -155,7 +200,7 @@ QIcon *FluentIconBase::qicon(bool reverse)
 }
 
 //TODO:这个函数逻辑有问题，实际调试时需要确认
-void FluentIconBase::render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes)
+void FluentIconBase::render(QPainter *painter, QRect rect, Theme theme = Theme::AUTO, int indexes = 0, std::map<QString, QString> *attributes = nullptr)
 {
     QString iconStr = this->path(theme);
     QIcon *icon;
@@ -242,14 +287,20 @@ FluentIconEngine *FluentIconEngine::clone() const
 }
 
 
-QIcon toQIcon(QVariant *icon)
+QIcon MIcon::toQIcon(QVariant *icon)
 {
     if(icon->canConvert<QString>()){
         return QIcon(icon->value<QString>());
     }
 
+    /*
     if(icon->canConvert<FluentIconBase>()){
         return *(icon->value<FluentIconBase>().icon());
+    }
+    */
+
+    if(icon->canConvert<FluentIcon>()){
+        return *(icon->value<FluentIcon>().icon());
     }
 
     return icon->value<QIcon>();
