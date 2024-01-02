@@ -7,20 +7,18 @@
 
 void PushButton::initialize(QWidget *parent = nullptr)
 {   
-
     FluentStyleSheet().apply(this, FluentStyleSheetMap.value("BUTTON"), Theme::AUTO);
     this->isPressed = false;
     this->isHover = false;
     setIconSize(QSize(16, 16));
     Font().setFont(this, 13, QFont::Normal);
-    this->_postInit();
+    //this->_postInit();
 }
 
 PushButton::PushButton(QString text, QWidget *parent = nullptr, QVariant *icon = nullptr) : QPushButton(parent)
 {
-
-    //this->_postInit();
     this->initialize(parent);
+    //this->_postInit();
     this->setText(text);
     this->setIcon(icon);
 }
@@ -190,4 +188,108 @@ void ToggleButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIco
     }
     PrimaryPushButton *p = new PrimaryPushButton();
     p->_drawIcon(icon, painter, rect, QIcon::State::On);
+}
+
+void HyperlinkButton::initialize(QWidget *parent)
+{
+    PushButton::initialize(parent);
+    this->_url = new QUrl();
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("BUTTON"), Theme::AUTO);
+    this->setCursor(Qt::PointingHandCursor);
+    Font().setFont(this, 14, QFont::Normal);
+    connect(this, &QPushButton::clicked, this, &HyperlinkButton::_onClicked);
+}
+
+HyperlinkButton::HyperlinkButton(QVariant *url, QString text, QWidget *parent, QVariant *icon)
+{
+    this->initialize(parent);
+    setText(text);
+    setUrl(url);
+    setIcon(icon);
+}
+
+HyperlinkButton::HyperlinkButton(QIcon *icon, QVariant *url, QString text, QWidget *parent)
+{
+    this->initialize(parent);
+    setText(text);
+    setUrl(url);
+    QVariant _icon = QVariant::fromValue<QIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+HyperlinkButton::HyperlinkButton(FluentIcon *icon, QVariant *url, QString text, QWidget *parent)
+{
+    this->initialize(parent);
+    setText(text);
+    setUrl(url);
+    QVariant *_icon = new QVariant();
+    _icon->setValue<FluentIcon>(*icon);
+    this->setIcon(_icon);
+}
+
+QUrl *HyperlinkButton::getUrl()
+{
+    return this->_url;
+}
+
+void HyperlinkButton::setUrl(QVariant *url)
+{
+    if(url->canConvert<QString>()){
+        QString s = url->value<QString>();
+        this->_url = new QUrl(s);
+    }else if(url->canConvert<QUrl>()){
+        QUrl qu = url->value<QUrl>();
+        this->_url = new QUrl(qu);
+    }
+}
+
+void HyperlinkButton::_onClicked()
+{
+    if(this->getUrl()->isValid())
+    {
+        QDesktopServices::openUrl(*(this->getUrl()));
+    }
+}
+
+void HyperlinkButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state = QIcon::State::Off)
+{
+    QVariant qi;
+
+    if(icon->canConvert<FluentIcon>() && isEnabled()) 
+    {
+        ThemeColor *t = new ThemeColor();
+        FluentIcon i = icon->value<FluentIcon>();
+        qi = QVariant::fromValue<QIcon>(*(i.icon(Theme::AUTO, *(t->themeColor()))));
+    }else if(!isEnabled()){
+        painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
+        if(icon->canConvert<FluentIcon>()){
+            FluentIcon i = icon->value<FluentIcon>();
+            qi = QVariant::fromValue<QIcon *>(i.icon(Theme::DARK, nullptr));
+        }
+    }else{
+        qi = *icon;
+    }
+    //PushButton::_drawIcon(&qi, painter, rect, state);
+    //(new MIcon())->drawIcon(&qi, painter, rect, nullptr, QIcon::State::Off);
+    MIcon().drawIcon(&qi, painter, rect, nullptr, state);
+    /*
+    QVariant qi;
+
+    if(icon->canConvert<FluentIcon>() && isEnabled()) 
+    {
+        ThemeColor *t = new ThemeColor();
+        FluentIcon i = icon->value<FluentIcon>();
+        QIcon *icon = i.icon(Theme::AUTO, *(t->themeColor()));
+        qi = QVariant::fromValue<QIcon>(*icon);
+    }else if(!isEnabled()){
+        painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
+        if(icon->canConvert<FluentIcon>()){
+            FluentIcon i = icon->value<FluentIcon>();
+            qi = QVariant::fromValue<QIcon *>(i.icon(Theme::DARK, nullptr));
+        }
+    }else{
+        qi = *icon;
+    }
+    PushButton::_drawIcon(&qi, painter, rect, state);
+    */
 }

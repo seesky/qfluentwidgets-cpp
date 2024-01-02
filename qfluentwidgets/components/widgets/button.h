@@ -36,6 +36,7 @@ public:
     PrimaryPushButton(){};
     PrimaryPushButton(QString text, QWidget *parent, QVariant *icon);
     PrimaryPushButton(FluentIcon *icon, QString text, QWidget *parent);
+    void _postInit() override {};
     void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
 };
 
@@ -45,14 +46,42 @@ public:
     TransparentPushButton(){};
     TransparentPushButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon) {};
     TransparentPushButton(FluentIcon *icon, QString text, QWidget *parent) : PushButton(icon, text, parent){};
+    void _postInit() override {};
 };
 
 class ToggleButton : public PushButton{
     Q_OBJECT
 public:
     ToggleButton(){};
-    ToggleButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon){};
-    ToggleButton(FluentIcon *icon, QString text, QWidget *parent) : PushButton(icon, text, parent){};
+    ToggleButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon){
+        this->_postInit();
+    };
+    ToggleButton(FluentIcon *icon, QString text, QWidget *parent) : PushButton(icon, text, parent){
+        this->_postInit();
+    };
     void _postInit() override;
     void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+};
+
+class TransparentTogglePushButton : public ToggleButton{
+    Q_OBJECT
+public:
+    TransparentTogglePushButton(){};
+    TransparentTogglePushButton(QString text, QWidget *parent, QVariant *icon) : ToggleButton(text, parent, icon){};
+    TransparentTogglePushButton(FluentIcon *icon, QString text, QWidget *parent) : ToggleButton(icon, text, parent){};
+};
+
+class HyperlinkButton : public PushButton{
+    Q_OBJECT
+public:
+    void initialize(QWidget *parent);
+    HyperlinkButton(QVariant *url, QString text, QWidget *parent, QVariant *icon);
+    HyperlinkButton(QIcon *icon, QVariant *url, QString text, QWidget *parent);
+    HyperlinkButton(FluentIcon *icon, QVariant *url, QString text, QWidget *parent);
+    QUrl *getUrl();
+    void setUrl(QVariant *url);
+    void _onClicked();
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+    QUrl *_url;
+private:
 };

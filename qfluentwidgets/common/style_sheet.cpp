@@ -101,12 +101,9 @@ QString QssTemplate::safe_substitute(QMap<QString, QString> mapping)
         int capturedTextLength = match.capturedLength();
         if(mapping.find(_capturedText) != mapping.end()){
             QRegularExpression regex_(capturedText);
-            //result.replace(regex_, mapping.value(_capturedText));
-            qDebug() << mapping.value(capturedText);
             result.replace(regex_, themeColor->name(mapping.value(_capturedText)));
         }
     }
-    qDebug() << result;
     return result;
 }
 
@@ -355,7 +352,6 @@ void setTheme(Theme theme, bool save)
 QString ThemeColor::name(QString themeColorValue)
 {
     QString name = this->color(themeColorValue)->name();
-    qDebug() << name;
     return name;
 }
 
@@ -408,4 +404,9 @@ QColor *ThemeColor::color(QString themeColorValue)
 
     QColor *c = new QColor(QColor::fromHsvF(h, qMin(s, 1.00), qMin(v, 1.00)));
     return c;
+}
+
+QColor *ThemeColor::themeColor()
+{
+    return this->color("");
 }

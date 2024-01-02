@@ -8,7 +8,7 @@
 
 void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect)
 {   
-    QSvgRenderer *renderer = new QSvgRenderer(icon);
+    QSvgRenderer *renderer = new QSvgRenderer(icon.toUtf8());
     renderer->render(painter, QRectF(rect));
     /*
     if(icon->canConvert<QString>())
@@ -59,7 +59,7 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
     {
         return "";
     }
-
+    qDebug() << iconPath;
     QFile *f = new QFile(iconPath);
     f->open(QFile::ReadOnly);
 
@@ -120,7 +120,6 @@ QIcon *FluentIcon::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 QString FluentIcon::path(Theme theme = Theme::AUTO)
 {
     QString path = QString("qfluentwidgets/images/icons/" + FluentIconMap.at(this->iconName) + "_" + getIconColor(theme) + ".svg");
-    qDebug() << path;
     return path;
 }
 

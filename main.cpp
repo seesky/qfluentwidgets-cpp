@@ -20,9 +20,16 @@ public:
     TransparentPushButton *transparentPushButton2;
     ToggleButton *ToggleButton1;
     ToggleButton *ToggleButton2;
+    TransparentTogglePushButton *transparentTogglePushButton1;
+    TransparentTogglePushButton *transparentTogglePushButton2;
+    HyperlinkButton *hyperlinkButton1;
+    HyperlinkButton *hyperlinkButton2;
     QGridLayout *gridLayout;
     PushButtonDemo(){
-        
+
+        gridLayout = new QGridLayout();
+
+        ///*
         //push button
         pushButton1 = new PushButton(QString("Standard push button"), nullptr, nullptr);
         FluentIcon *pushButton2Icon = new FluentIcon();
@@ -40,16 +47,36 @@ public:
         transparentPushButton2 = new TransparentPushButton(transparentPushButton2Icon, "Transparent push button", this);
         //toggle button
         ToggleButton1 = new ToggleButton("Toggle push button", this, nullptr);
+        FluentIcon *ToggleButton2Icon = new FluentIcon();
+        ToggleButton2Icon->setIconName("SEND");
+        ToggleButton2 = new ToggleButton(ToggleButton2Icon, "Toggle push button", this);
+        //transparent toggle push button
+        transparentTogglePushButton1 = new TransparentTogglePushButton("Transparent toggle button", this, nullptr);
+        FluentIcon *transparentTogglePushButton2Icon = new FluentIcon();
+        transparentTogglePushButton2Icon->setIconName("BOOK_SHELF");
+        transparentTogglePushButton2 = new TransparentTogglePushButton(transparentTogglePushButton2Icon, "Transparent toggle button", this);
+
+        //hyperlink button
+        QVariant url = QVariant::fromValue<QString>(QString("http://www.usable-programming.com"));
+        hyperlinkButton1 = new HyperlinkButton(&url, "Hyper link button", this, nullptr);
+        FluentIcon *hyperlinkButton2Icon = new FluentIcon();
+        hyperlinkButton2Icon->setIconName("LINK");
+        hyperlinkButton2 = new HyperlinkButton(hyperlinkButton2Icon, &url, "Hyper link button", this);
 
 
-        gridLayout = new QGridLayout();
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
         gridLayout->addWidget(primaryButton1, 1, 0);
         gridLayout->addWidget(primaryButton2, 1, 1);
         gridLayout->addWidget(transparentPushButton1, 2, 0);
         gridLayout->addWidget(transparentPushButton2, 2, 1);
+        //*/
         gridLayout->addWidget(ToggleButton1, 3, 0);
+        gridLayout->addWidget(ToggleButton2, 3, 1);
+        gridLayout->addWidget(transparentTogglePushButton1, 4, 0);
+        gridLayout->addWidget(transparentTogglePushButton2, 4, 1);
+        gridLayout->addWidget(hyperlinkButton1, 5, 0);
+        gridLayout->addWidget(hyperlinkButton2, 5, 1);
         setLayout(gridLayout);
         resize(600, 700);
     }

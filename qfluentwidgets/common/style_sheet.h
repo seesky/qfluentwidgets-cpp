@@ -162,6 +162,6 @@ class ThemeColor{
 public:
     QString name(QString themeColorValue);
     QColor *color(QString themeColorValue);
-
+    QColor *themeColor();
 private:
 };
