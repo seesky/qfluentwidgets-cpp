@@ -8,6 +8,22 @@
 
 void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect)
 {   
+    QSvgRenderer *renderer = new QSvgRenderer(icon);
+    renderer->render(painter, QRectF(rect));
+    /*
+    if(icon->canConvert<QString>())
+    {
+        QSvgRenderer *renderer = new QSvgRenderer(icon->value<QString>());
+        renderer->render(painter, QRectF(rect));
+    }else if(icon->canConvert<QByteArray>()){
+        QSvgRenderer *renderer = new QSvgRenderer(icon->value<QByteArray>());
+        renderer->render(painter, QRectF(rect));
+    }
+    */
+}
+
+void drawSvgIcon2engine(QString icon, QPainter *painter, const QRect &rect)
+{   
     QSvgRenderer *renderer = new QSvgRenderer(icon.toUtf8());
     renderer->render(painter, QRectF(rect));
     /*
@@ -147,7 +163,7 @@ SvgIconEngine::SvgIconEngine(QString svg)
 
 void SvgIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mode, QIcon::State state)
 {
-    drawSvgIcon(this->svg, painter, rect);
+    drawSvgIcon2engine(this->svg, painter, rect);
 }
 
 QIconEngine *SvgIconEngine::clone() const
