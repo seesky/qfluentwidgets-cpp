@@ -1,6 +1,8 @@
 #pragma once
 #include "../../common/icon.h"
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QRadioButton>
 #include <QVariant>
 
 class PushButton : public QPushButton{
@@ -84,4 +86,59 @@ public:
     void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
     QUrl *_url;
 private:
+};
+
+
+class RadioButton : public QRadioButton{
+    Q_OBJECT
+public:
+    void initialize(QWidget *parent);
+    RadioButton(QString text, QWidget *parent);
+private:
+};
+
+
+class ToolButton : public QToolButton{
+    Q_OBJECT
+public:
+    void initialize(QWidget *parent);
+    ToolButton(FluentIcon *icon, QWidget *parent);
+    ToolButton(QIcon *icon, QWidget *parent);
+    ToolButton(QString icon, QWidget *parent);
+    virtual void _postInit();
+    void setIcon(QVariant *icon);
+    QIcon icon();
+    bool setProperty(QString name, QVariant *value);
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    virtual void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state);
+
+    bool isPressed;
+    bool isHover;
+    QVariant *_icon;
+private:
+};
+
+
+class TransparentToolButton : public ToolButton{
+    Q_OBJECT
+public:
+    TransparentToolButton(FluentIcon *icon, QWidget *parent);
+    TransparentToolButton(QIcon *icon, QWidget *parent);
+    TransparentToolButton(QString icon, QWidget *parent);
+private:
+};
+
+
+class PrimaryToolButton : public ToolButton{
+    Q_OBJECT
+public:
+    PrimaryToolButton(FluentIcon *icon, QWidget *parent);
+    PrimaryToolButton(QIcon *icon, QWidget *parent);
+    PrimaryToolButton(QString icon, QWidget *parent);
+    void _postInit() override {};
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
 };

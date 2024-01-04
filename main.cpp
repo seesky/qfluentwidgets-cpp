@@ -24,6 +24,11 @@ public:
     TransparentTogglePushButton *transparentTogglePushButton2;
     HyperlinkButton *hyperlinkButton1;
     HyperlinkButton *hyperlinkButton2;
+    RadioButton *radioButton1;
+    RadioButton *radioButton2;
+    ToolButton *toolButton;
+    TransparentToolButton *tranparentToolButton;
+    PrimaryToolButton *primaryToolButton;
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
@@ -63,6 +68,20 @@ public:
         hyperlinkButton2Icon->setIconName("LINK");
         hyperlinkButton2 = new HyperlinkButton(hyperlinkButton2Icon, &url, "Hyper link button", this);
 
+        //radio button
+        radioButton1 = new RadioButton("Option 1", this);
+        radioButton2 = new RadioButton("Option 2", this);
+
+        //tool button
+        FluentIcon *toolbuttonIcon = new FluentIcon();
+        toolbuttonIcon->setIconName("SETTING");
+        toolButton = new ToolButton(toolbuttonIcon, this);
+
+        FluentIcon *tranparentToolButtonIcon = new FluentIcon();
+        tranparentToolButtonIcon->setIconName("SETTING");
+        tranparentToolButton = new TransparentToolButton(tranparentToolButtonIcon, this);
+
+        primaryToolButton = new PrimaryToolButton(toolbuttonIcon, this);
 
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
@@ -77,6 +96,11 @@ public:
         gridLayout->addWidget(transparentTogglePushButton2, 4, 1);
         gridLayout->addWidget(hyperlinkButton1, 5, 0);
         gridLayout->addWidget(hyperlinkButton2, 5, 1);
+        gridLayout->addWidget(radioButton1, 6, 0);
+        gridLayout->addWidget(radioButton2, 6, 1);
+        gridLayout->addWidget(toolButton, 7, 0);
+        gridLayout->addWidget(tranparentToolButton, 7, 1);
+        gridLayout->addWidget(primaryToolButton, 7, 2);
         setLayout(gridLayout);
         resize(600, 700);
     }
