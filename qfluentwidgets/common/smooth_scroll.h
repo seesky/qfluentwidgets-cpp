@@ -22,13 +22,13 @@ enum class SmoothMode {
 
 class SmoothScroll{
 public:
-    SmoothScroll(QScrollArea *widget, Qt::Orientation orient);
+    SmoothScroll(QAbstractScrollArea *widget, Qt::Orientation orient);
     void setSmoothMode(SmoothMode smoothMode);
     void wheelEvent(QWheelEvent *e);
     void __smoothMove();
     float __subDelta(float delta, float stepsLeft);
 
-    QScrollArea *widget;
+    QAbstractScrollArea *widget;
     Qt::Orientation orient;
     int fps;
     int duration;

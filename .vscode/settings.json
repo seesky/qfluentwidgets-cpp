@@ -78,6 +78,16 @@
         "regex": "cpp",
         "qfile": "cpp",
         "qwidget": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "qevent": "cpp",
+        "qt": "cpp",
+        "qpainter": "cpp",
+        "qmouseevent": "cpp",
+        "qeasingcurve": "cpp",
+        "qabstractscrollarea": "cpp",
+        "qgraphicsopacityeffect": "cpp",
+        "qabstractitemview": "cpp",
+        "qvboxlayout": "cpp",
+        "qlistview": "cpp"
     }
 }

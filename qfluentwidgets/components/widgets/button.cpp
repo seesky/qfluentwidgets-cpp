@@ -435,3 +435,30 @@ void PrimaryToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect,
     }
     ToolButton::_drawIcon(&qi, painter, rect, state);
 }
+
+ToggleToolButton::ToggleToolButton(FluentIcon *icon, QWidget *parent) : ToolButton(icon, parent){
+    this->_postInit();
+}
+
+ToggleToolButton::ToggleToolButton(QIcon *icon, QWidget *parent) : ToolButton(icon, parent){
+    this->_postInit();
+}
+
+ToggleToolButton::ToggleToolButton(QString icon, QWidget *parent) : ToolButton(icon, parent){
+    this->_postInit();
+}
+
+void ToggleToolButton::_postInit()
+{
+    setCheckable(true);
+    setChecked(false);
+}
+
+void ToggleToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state = QIcon::State::Off)
+{
+    if(!isChecked()){
+        return ToolButton::_drawIcon(icon, painter, rect);
+    }
+    PrimaryToolButton *p = new PrimaryToolButton();
+    p->_drawIcon(icon, painter, rect, QIcon::State::On);
+}

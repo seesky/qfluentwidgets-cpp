@@ -29,6 +29,8 @@ public:
     ToolButton *toolButton;
     TransparentToolButton *tranparentToolButton;
     PrimaryToolButton *primaryToolButton;
+    ToggleToolButton *toggleToolButton;
+    TransparentToggleToolButton *transparentToggleToolButton;
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
@@ -83,6 +85,15 @@ public:
 
         primaryToolButton = new PrimaryToolButton(toolbuttonIcon, this);
 
+        FluentIcon *toggleToolButtonIcon = new FluentIcon();
+        toggleToolButtonIcon->setIconName("SETTING");
+        toggleToolButton = new ToggleToolButton(toggleToolButtonIcon, this);
+        connect(toggleToolButton, &ToggleToolButton::toggled, this, &PushButtonDemo::toggleToolButtonPrint);
+
+        FluentIcon *transparentToggleToolButtonIcon = new FluentIcon();
+        transparentToggleToolButtonIcon->setIconName("SETTING");
+        transparentToggleToolButton = new TransparentToggleToolButton(transparentToggleToolButtonIcon, this);
+
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
         gridLayout->addWidget(primaryButton1, 1, 0);
@@ -101,8 +112,16 @@ public:
         gridLayout->addWidget(toolButton, 7, 0);
         gridLayout->addWidget(tranparentToolButton, 7, 1);
         gridLayout->addWidget(primaryToolButton, 7, 2);
+        gridLayout->addWidget(toggleToolButton, 8, 0);
+        gridLayout->addWidget(transparentToggleToolButton, 8, 1);
         setLayout(gridLayout);
         resize(600, 700);
+    }
+
+public slots:
+    void toggleToolButtonPrint()
+    {
+        qDebug() << "toogle tool button print...";
     }
 };
 

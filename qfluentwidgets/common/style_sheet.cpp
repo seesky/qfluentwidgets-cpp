@@ -36,6 +36,7 @@ void StyleSheetManager::register_(QVariant source, QWidget *widget, bool reset =
 
     if(this->widgets->find(widget) == this->widgets->end()){
         connect(widget, SIGNAL(QObject::destroyed), SLOT(this->deregister()));
+        //connect(widget, &QObject::destroyed, this, &StyleSheetManager::deregister);
         installEventFilter(new CustomStyleSheetWatcher());
         QList<StyleSheetBase> *list = new QList<StyleSheetBase>();
         list->append(s);

@@ -1,6 +1,6 @@
 #include "smooth_scroll.h"
 
-SmoothScroll::SmoothScroll(QScrollArea *widget, Qt::Orientation orient)
+SmoothScroll::SmoothScroll(QAbstractScrollArea *widget, Qt::Orientation orient)
 {
     this->widget = widget;
     this->orient = orient;
@@ -15,6 +15,7 @@ SmoothScroll::SmoothScroll(QScrollArea *widget, Qt::Orientation orient)
     this->smoothMoveTimer = new QTimer(widget);
     this->smoothMode = SmoothMode::LINEAR;
     this->smoothMoveTimer->connect(this->smoothMoveTimer, SIGNAL(QTimer::timeout), SLOT(this->__smoothMove));
+    //this->smoothMoveTimer->connect(this->smoothMoveTimer, &QTimer::timeout, this->smoothMoveTimer, &SmoothScroll::__smoothMove); //TODO:特别关注
 }
 
 void SmoothScroll::setSmoothMode(SmoothMode smoothMode)
@@ -33,6 +34,8 @@ void SmoothScroll::wheelEvent(QWheelEvent *e)
     
     if((this->smoothMode == SmoothMode::NO_SMOOTH) || ((abs(delta) % 120) != 0)){
         //TODO:QAbstractScrollArea.wheelEvent(self.widget, e)
+        //QAbstractScrollArea *asa = new QAbstractScrollArea(this->widget);
+        //asa->wheelEvent(e);
         return;
     }
 

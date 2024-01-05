@@ -102,6 +102,7 @@ class ToolButton : public QToolButton{
     Q_OBJECT
 public:
     void initialize(QWidget *parent);
+    ToolButton(){};
     ToolButton(FluentIcon *icon, QWidget *parent);
     ToolButton(QIcon *icon, QWidget *parent);
     ToolButton(QString icon, QWidget *parent);
@@ -136,9 +137,29 @@ private:
 class PrimaryToolButton : public ToolButton{
     Q_OBJECT
 public:
+    PrimaryToolButton(){};
     PrimaryToolButton(FluentIcon *icon, QWidget *parent);
     PrimaryToolButton(QIcon *icon, QWidget *parent);
     PrimaryToolButton(QString icon, QWidget *parent);
     void _postInit() override {};
     void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+};
+
+class ToggleToolButton : public ToolButton{
+    Q_OBJECT
+public:
+    ToggleToolButton(FluentIcon *icon, QWidget *parent);
+    ToggleToolButton(QIcon *icon, QWidget *parent);
+    ToggleToolButton(QString icon, QWidget *parent);
+    void _postInit() override;
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+private:
+};
+
+class TransparentToggleToolButton : public ToggleToolButton{
+    Q_OBJECT
+public:
+    TransparentToggleToolButton(FluentIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
+    TransparentToggleToolButton(QIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
+    TransparentToggleToolButton(QString icon, QWidget *parent) : ToggleToolButton(icon, parent){};
 };
