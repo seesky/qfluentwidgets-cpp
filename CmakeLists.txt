@@ -46,6 +46,20 @@ add_executable(
   qfluentwidgets/components/widgets/button.cpp
   qfluentwidgets/components/widgets/scroll_bar.h
   qfluentwidgets/components/widgets/scroll_bar.cpp
+
+  qfluentwidgets/qframelesswindow/utils/win32_utils.h
+  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
+
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
+
+  qfluentwidgets/qframelesswindow/windows/window_effect.h
+  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
+  qfluentwidgets/qframelesswindow/windows/swcadef.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
 )
 
 target_link_options(test PRIVATE "-Wl,--whole-archive")
@@ -59,4 +73,5 @@ target_link_libraries(
   Qt5::Svg
   Qt5::Xml
   jsoncpp
+  Dwmapi
 )

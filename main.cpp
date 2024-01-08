@@ -1,7 +1,9 @@
 #include <iostream>
 #include <QtCore>
 #include <QtWidgets>
+#include <QtCore/Qt>
 #include "./qfluentwidgets/components/widgets/button.h"
+#include "./qfluentwidgets/qframelesswindow/windows/qframe_less_window.h"
 
 class ButtonView : public QWidget{
 public:
@@ -34,6 +36,7 @@ public:
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
+        //WId win = this->winId();
         gridLayout = new QGridLayout();
 
         ///*
@@ -125,6 +128,42 @@ public slots:
     }
 };
 
+class CustomTitleBar : public StandardTitleBar{
+public:
+    CustomTitleBar(QWidget *parent) : StandardTitleBar(parent){
+        this->minBtn->setHoverColor(new QColor(Qt::white));
+        this->minBtn->setHoverBackgroundColor(new QColor(0, 100, 182));
+        this->minBtn->setPressedColor(new QColor(Qt::white));
+        this->minBtn->setPressedBackgroundColor(new QColor(54, 57, 65));
+
+        this->maxBtn->setStyleSheet(QString("TitleBarButton {qproperty-hoverColor: white;qproperty-hoverBackgroundColor: rgb(0, 100, 182);qproperty-pressedColor: white;qproperty-pressedBackgroundColor: rgb(54, 57, 65);}"));
+    };
+private:
+};
+
+class Window : public WindowsFramelessWindow{
+public:
+    Window(QWidget *parent) : WindowsFramelessWindow(parent){
+        this->setTitleBar(new CustomTitleBar(this));
+        this->label = new QLabel(this);
+        this->label->setScaledContents(true);
+        this->label->setPixmap(QPixmap("screenshot/shoko.png"));
+        this->setWindowIcon(QIcon("screenshot/logo.png"));
+        this->setWindowTitle(QString("Frameless Window"));
+        this->setStyleSheet(QString("background:white"));
+        this->titleBar->raise();
+    };
+    void resizeEvent(QResizeEvent *event){
+        WindowsFramelessWindow::resizeEvent(event);
+        int length = qMin(this->width(), this->height());
+        this->label->resize(length, length);
+        this->label->move(this->width() / 2 - length / 2, this->height() / 2 - length / 2);
+    };
+
+    QLabel *label;
+private:
+};
+
 int main(int argc, char *argv[])
 {
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
@@ -134,5 +173,7 @@ int main(int argc, char *argv[])
     QApplication *app = new QApplication(argc, argv);
     PushButtonDemo *w = new PushButtonDemo();
     w->show();
+    //Window *demo = new Window(nullptr);
+    //demo->show();
     return app->exec();
 }

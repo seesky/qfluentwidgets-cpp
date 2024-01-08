@@ -88,6 +88,13 @@
         "qgraphicsopacityeffect": "cpp",
         "qabstractitemview": "cpp",
         "qvboxlayout": "cpp",
-        "qlistview": "cpp"
+        "qlistview": "cpp",
+        "qoperatingsystemversion": "cpp",
+        "qabstractbutton": "cpp",
+        "qhboxlayout": "cpp",
+        "qlabel": "cpp",
+        "qtcore": "cpp",
+        "qdialog": "cpp",
+        "qdebug": "cpp"
     }
 }
