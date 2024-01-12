@@ -3,23 +3,30 @@
 bool _isMaximized(HWND hWnd)
 {
     struct tagWINDOWPLACEMENT t;
-    t.length = sizeof(WINDOWPLACEMENT);
+    t.length = sizeof(tagWINDOWPLACEMENT);
     GetWindowPlacement(hWnd, &t);
     return t.showCmd == SW_MAXIMIZE;
 }
 
-bool getMonitorInfo(HWND hWnd, int dwFlags, LPMONITORINFO lpmi)
+bool getMonitorInfo(HWND hWnd, int dwFlags, MONITORINFO *lpmi)
 {
-    HMONITOR hMonitor = MonitorFromWindow(hWnd, dwFlags);
+    HMONITOR hMonitor;
+    hMonitor = MonitorFromWindow(hWnd, dwFlags);
     if(hMonitor == nullptr)
     {
         return false;
     }
+    MONITORINFO mi = {0};
+    mi.cbSize = sizeof(MONITORINFO);
+    GetMonitorInfo(hMonitor, &mi);
+    return GetMonitorInfo(hMonitor, lpmi);
+    /*
     if(GetMonitorInfo(hMonitor,lpmi)){
         return true;
     }else{
         return false;
     }
+    */
 }
 
 bool _isFullScreen(HWND hWnd)
@@ -28,13 +35,14 @@ bool _isFullScreen(HWND hWnd)
         return false;
     }
 
-    RECT rect;
+    RECT rect = {0};
     if(!GetWindowRect(hWnd,  &rect))
     {
         return false;
     }
 
-    MONITORINFO monitorInfo;
+    MONITORINFO monitorInfo = {0};
+    monitorInfo.cbSize = sizeof(MONITORINFO);
     if(!getMonitorInfo(hWnd, MONITOR_DEFAULTTOPRIMARY, &monitorInfo))
     {
         return false;

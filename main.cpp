@@ -144,21 +144,26 @@ private:
 class Window : public WindowsFramelessWindow{
 public:
     Window(QWidget *parent) : WindowsFramelessWindow(parent){
+        WId win = this->winId();
         this->setTitleBar(new CustomTitleBar(this));
         this->label = new QLabel(this);
         this->label->setScaledContents(true);
-        this->label->setPixmap(QPixmap("screenshot/shoko.png"));
-        this->setWindowIcon(QIcon("screenshot/logo.png"));
+        this->label->setPixmap(QPixmap("/qfluentwidgets/images/screenshot/shoko.png"));
+        this->setWindowIcon(QIcon("/qfluentwidgets/images/screenshot/logo.png"));
         this->setWindowTitle(QString("Frameless Window"));
         this->setStyleSheet(QString("background:white"));
         this->titleBar->raise();
-    };
+        qDebug() << win;
+    }
+    
+
     void resizeEvent(QResizeEvent *event){
         WindowsFramelessWindow::resizeEvent(event);
         int length = qMin(this->width(), this->height());
         this->label->resize(length, length);
         this->label->move(this->width() / 2 - length / 2, this->height() / 2 - length / 2);
     };
+    
 
     QLabel *label;
 private:
@@ -171,9 +176,9 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     
     QApplication *app = new QApplication(argc, argv);
-    PushButtonDemo *w = new PushButtonDemo();
-    w->show();
-    //Window *demo = new Window(nullptr);
-    //demo->show();
+    //PushButtonDemo *w = new PushButtonDemo();
+    //w->show();
+    Window *demo = new Window(nullptr);
+    demo->show();
     return app->exec();
 }

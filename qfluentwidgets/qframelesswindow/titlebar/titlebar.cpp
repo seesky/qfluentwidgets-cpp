@@ -85,7 +85,7 @@ bool TitleBarBase::_isDragRegion(QPoint *pos)
             width += value->width();
         }
     }
-    return pos->x() > 0 && pos->x() < (this->width() - width);
+    return (pos->x() > 0) && (pos->x() < (this->width() - width));
 }
 
 bool TitleBarBase::_hasButtonPressed()
@@ -93,10 +93,10 @@ bool TitleBarBase::_hasButtonPressed()
     QList<TitleBarButton *> list = this->findChildren<TitleBarButton *>();
     for(TitleBarButton *value : list){
         if(value->isPressed()){
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 bool TitleBarBase::canDrag(QPoint *pos)
@@ -129,20 +129,21 @@ StandardTitleBar::StandardTitleBar(QWidget *parent) : TitleBar(parent)
     this->iconLabel->setFixedSize(20, 20);
     this->hBoxLayout->insertSpacing(0, 10);
     this->hBoxLayout->insertWidget(1, this->iconLabel, 0, Qt::AlignLeft);
-    connect(window(), SIGNAL(&QWidget::windowIconChanged), this, SLOT(&StandardTitleBar::setIcon));
+    connect(window(), &QWidget::windowIconChanged, this, &StandardTitleBar::setIcon);
 
     this->titleLabel = new QLabel(this);
     this->hBoxLayout->insertWidget(2, this->titleLabel, 0, Qt::AlignLeft);
     this->titleLabel->setStyleSheet("QLabel{background: transparent;font: 13px 'Segoe UI';padding: 0 4px}");
-    connect(window(), SIGNAL(&QWidget::windowTitleChanged), this, SLOT(&StandardTitleBar::setTitle));
+    connect(window(), &QWidget::windowTitleChanged, this, &StandardTitleBar::setTitle);
 }
 
 void StandardTitleBar::setTitle(QString title)
 {
     this->titleLabel->setText(title);
-    this->titleLabel->adjustSize();
+    this->titleLabel->adjustSize(); //TODO
 }
 
+/*
 void StandardTitleBar::setIcon(QVariant *icon)
 {
     if(icon->canConvert<QIcon>()){
@@ -156,4 +157,12 @@ void StandardTitleBar::setIcon(QVariant *icon)
         this->iconLabel->setPixmap(QIcon(i).pixmap(20, 20));
     }
     
+}
+*/
+
+void StandardTitleBar::setIcon(QIcon icon)
+{
+
+    this->iconLabel->setPixmap(icon.pixmap(20, 20));
+
 }

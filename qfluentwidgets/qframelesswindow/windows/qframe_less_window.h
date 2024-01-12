@@ -7,7 +7,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QMainWindow>
-
+#include <QScreen>
 #include "../titlebar/titlebar.h"
 #include "../utils/win32_utils.h"
 #include "window_effect.h"
@@ -21,14 +21,16 @@ public:
     void setResizeEnabled(bool isEnabled);
     void resizeEvent(QResizeEvent *event);
     bool nativeEvent(const QByteArray &eventType, void *message, long *result);
-    void __onScreenChanged();
-
     int BORDER_WIDTH = 5;
-    WindowsWindowEffect *windowEffect;
+
     TitleBar *titleBar;
+    WindowsWindowEffect *windowEffect;
     bool _isResizeEnabled;
 private:
+public slots:
+    void __onScreenChanged();
 };
+
 
 class AcrylicWindow : public WindowsFramelessWindow{
     Q_OBJECT
@@ -41,6 +43,7 @@ public:
     bool __closeByKey;
 private:
 };
+
 
 class FramelessDialog : public QDialog, public WindowsFramelessWindow{
 public:

@@ -127,6 +127,10 @@ void SvgTitleBarButton::paintEvent(QPaintEvent *e)
         QDomElement element = pathNodes.at(i).toElement();
         element.setAttribute("stroke", color_name);
     }
+
+    QSvgRenderer *renderer = new QSvgRenderer(this->_svgDom->toByteArray());
+    renderer->render(painter, QRectF(this->rect()));
+    painter->end();
 }
 
 
@@ -146,6 +150,7 @@ void MinimizeButton::paintEvent(QPaintEvent *e)
     pen->setCosmetic(true);
     painter->setPen(*pen);
     painter->drawLine(18, 16, 28, 16);
+    painter->end();
 }
 
 MaximizeButton::MaximizeButton(QWidget *parent) : TitleBarButton(parent)
@@ -194,6 +199,7 @@ void MaximizeButton::paintEvent(QPaintEvent *e)
         path.lineTo(x0+8*r-dw, y0-dw+8*r);
         painter->drawPath(path);
     }
+    painter->end();
 
 }
 

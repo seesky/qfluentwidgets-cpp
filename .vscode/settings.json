@@ -95,6 +95,8 @@
         "qlabel": "cpp",
         "qtcore": "cpp",
         "qdialog": "cpp",
-        "qdebug": "cpp"
+        "qdebug": "cpp",
+        "qcloseevent": "cpp",
+        "qscreen": "cpp"
     }
 }

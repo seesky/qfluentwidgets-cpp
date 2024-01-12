@@ -44,10 +44,14 @@ class StandardTitleBar : public TitleBar{
     Q_OBJECT
 public:
     StandardTitleBar(QWidget *parent);
-    void setTitle(QString title);
-    void setIcon(QVariant *icon);
+
 
     QLabel *iconLabel;
     QLabel *titleLabel;
+
 private:
+public slots:
+    void setTitle(QString title);
+    //void setIcon(QVariant *icon);
+    void setIcon(QIcon icon);
 };

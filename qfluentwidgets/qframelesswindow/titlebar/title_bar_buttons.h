@@ -38,9 +38,9 @@ public:
     void setNormalBackgroundColor(QColor *color);
     void setHoverBackgroundColor(QColor *color);
     void setPressedBackgroundColor(QColor *color);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
     std::tuple<QColor*, QColor*> _getColors();
 
     TitleBarButtonState _state;
