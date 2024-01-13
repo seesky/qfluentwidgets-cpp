@@ -59,7 +59,7 @@ bool _isFullScreen(HWND hWnd)
 bool isCompositionEnabled()
 {
     WINBOOL pfEnabled;
-    if(DwmIsCompositionEnabled(&pfEnabled)){
+    if(DwmIsCompositionEnabled(&pfEnabled) == S_OK){
         return pfEnabled;
     }else{
         return false;
@@ -128,7 +128,8 @@ int getResizeBorderThickness(HWND hWnd, bool horizontal)
 
 bool isGreaterEqualVersion(QOperatingSystemVersion version)
 {
-    return QOperatingSystemVersion::current() >= version;
+    QOperatingSystemVersion currentVersion = QOperatingSystemVersion::current();
+    return currentVersion >= version;
 }
 
 bool isGreaterEqualWin8_1()
@@ -154,7 +155,8 @@ bool isGreaterEqualWin11()
 
 bool isWin7()
 {
-    return isGreaterEqualVersion(QOperatingSystemVersion::Windows7);
+    QOperatingSystemVersion currentVersion = QOperatingSystemVersion::current();
+    return QOperatingSystemVersion::Windows7.majorVersion() == currentVersion.majorVersion();
 }
 
 bool Taskbar::isAutoHide()

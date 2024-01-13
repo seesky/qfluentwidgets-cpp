@@ -168,6 +168,15 @@ public:
 private:
 };
 
+class Window2 : public AcrylicWindow{
+public:
+    Window2(QWidget *parent) : AcrylicWindow(parent){
+        this->setWindowTitle(QString("Acrylic Window"));
+        this->titleBar->raise();
+    }
+private:
+};
+
 int main(int argc, char *argv[])
 {
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
@@ -179,5 +188,7 @@ int main(int argc, char *argv[])
     //w->show();
     Window *demo = new Window(nullptr);
     demo->show();
+    //Window2 *demo2 = new Window2(nullptr);
+    //demo2->show();
     return app->exec();
 }

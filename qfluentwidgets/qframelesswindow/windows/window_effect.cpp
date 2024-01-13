@@ -21,8 +21,10 @@ void WindowsWindowEffect::setAcrylicEffect(HWND hWnd, QString gradientColor = QS
     for (int i = 6; i >= -1; i -= 2) {
         _gradientColor += gradientColor.mid(i, 2);
     }
+    qDebug() << _gradientColor;
     bool ok;
     DWORD __gradientColor = DWORD(_gradientColor.toUInt(&ok, 16));
+    qDebug() << __gradientColor;
     DWORD _animationId = DWORD(animationId);
     DWORD accentFlags = enableShadow ? DWORD(0x20 | 0x40 | 0x80 | 0x100) : DWORD(0);
     this->accentPolicy.AccentState = ACCENT_STATE::ACCENT_ENABLE_ACRYLICBLURBEHIND;
@@ -30,7 +32,7 @@ void WindowsWindowEffect::setAcrylicEffect(HWND hWnd, QString gradientColor = QS
     this->accentPolicy.AccentFlags = accentFlags;
     this->accentPolicy.AnimationId = animationId;
     this->winCompAttrData.Attrib = WINDOWCOMPOSITIONATTRIB::WCA_ACCENT_POLICY;
-    DwmSetWindowAttribute(hWnd, this->winCompAttrData.Attrib, this->winCompAttrData.pvData, this->winCompAttrData.cbData);
+    HRESULT hr = DwmSetWindowAttribute(hWnd, this->winCompAttrData.Attrib, this->winCompAttrData.pvData, this->winCompAttrData.cbData);
 }
 
 void WindowsWindowEffect::setMicaEffect(HWND hWnd, bool isDarkMode, bool isAlt)
@@ -130,10 +132,37 @@ void WindowsWindowEffect::removeMenuShadowEffect(HWND hWnd)
     SetClassLong(hWnd, GCL_STYLE, style);
 }
 
+void PrintLastError() {
+    // 获取错误代码
+    DWORD error = GetLastError();
+
+    // 将错误代码转换为可读的文本形式
+    LPVOID errorMessage;
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,
+        error,
+        0, // 默认语言
+        (LPSTR)&errorMessage,
+        0,
+        NULL
+    );
+
+    // 打印错误信息
+    qDebug() << L"Error Code: " << error;
+    qDebug() << L"Error Message: " << static_cast<LPCWSTR>(errorMessage);
+
+    // 释放分配的内存
+    LocalFree(errorMessage);
+}
+
 void WindowsWindowEffect::addWindowAnimation(HWND hWnd)
 {
-    DWORD style = GetWindowLong(hWnd, GWL_STYLE);
-    SetClassLong(hWnd, GWL_STYLE, style | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | CS_DBLCLKS | WS_THICKFRAME);
+    LONG style = GetWindowLongA(hWnd, GWL_STYLE);
+    DWORD _ok = SetWindowLongA(hWnd, GWL_STYLE, style | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | CS_DBLCLKS | WS_THICKFRAME);
+    qDebug() << "WindowsWindowEffect::addWindowAnimation:" << _ok;
+
+    //PrintLastError();
 }
 
 void WindowsWindowEffect::disableMaximizeButton(HWND hWnd)
@@ -144,6 +173,10 @@ void WindowsWindowEffect::disableMaximizeButton(HWND hWnd)
 
 void WindowsWindowEffect::enableBlurBehindWindow(HWND hWnd)
 {
-    DWM_BLURBEHIND blurBehind = {1, true, 0, false};
-    DwmEnableBlurBehindWindow(hWnd, &blurBehind);
+    DWM_BLURBEHIND blurBehind = {0}; // = {1, true, 0, false};
+    blurBehind.dwFlags = DWM_BB_ENABLE;
+    blurBehind.fEnable = true;
+    blurBehind.fTransitionOnMaximized = false;
+    blurBehind.hRgnBlur = 0;
+    HRESULT hr = DwmEnableBlurBehindWindow(hWnd, &blurBehind);
 }

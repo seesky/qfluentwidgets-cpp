@@ -16,6 +16,7 @@ WindowsFramelessWindow::WindowsFramelessWindow(QWidget *parent)
 
 void WindowsFramelessWindow::updateFrameless()
 {
+
     if(!isWin7())
     {
         this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
@@ -26,10 +27,10 @@ void WindowsFramelessWindow::updateFrameless()
     }
 
 
-    HWND id = (HWND)this->winId();
-    this->windowEffect->addWindowAnimation(HWND(this->winId()));    
+    HWND id = (HWND)(this->winId());
+    this->windowEffect->addWindowAnimation(id);    
     
-    if(dynamic_cast<AcrylicWindow*>(this) != nullptr){
+    if(dynamic_cast<AcrylicWindow*>(this) == nullptr){
         this->windowEffect->addShadowEffect(HWND(this->winId()));
     }
     
@@ -186,6 +187,16 @@ void WindowsFramelessWindow::__onScreenChanged()
 
 AcrylicWindow::AcrylicWindow(QWidget *parent) : WindowsFramelessWindow(parent)
 {
+
+    //this->windowEffect = new WindowsWindowEffect(this);
+    //this->titleBar = new TitleBar(this);
+    //this->_isResizeEnabled = true;
+    //WId id = this->winId();
+    this->updateFrameless();
+    //connect(this->windowHandle(), &QWindow::screenChanged, this, &WindowsFramelessWindow::__onScreenChanged);
+    //resize(500, 500);
+    //this->titleBar->raise();
+
     this->__closeByKey = false;
     setStyleSheet(QString("AcrylicWindow{background:transparent}"));
 }
