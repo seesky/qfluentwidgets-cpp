@@ -20,13 +20,7 @@ bool getMonitorInfo(HWND hWnd, int dwFlags, MONITORINFO *lpmi)
     mi.cbSize = sizeof(MONITORINFO);
     GetMonitorInfo(hMonitor, &mi);
     return GetMonitorInfo(hMonitor, lpmi);
-    /*
-    if(GetMonitorInfo(hMonitor,lpmi)){
-        return true;
-    }else{
-        return false;
-    }
-    */
+
 }
 
 bool _isFullScreen(HWND hWnd)
