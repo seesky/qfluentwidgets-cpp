@@ -246,6 +246,7 @@ TASKBAR Taskbar::getPosition(HWND hWnd)
 
 void WindowsMoveResize::startSystemMove(QWindow *window, QPoint globalPos)
 {
-    ReleaseCapture();
-    SendMessage((HWND)(window->winId()), WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+    bool _ok = ReleaseCapture();
+    HWND hWnd = (HWND)(window->winId());
+    SendMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
 }
