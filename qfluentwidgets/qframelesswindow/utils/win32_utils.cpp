@@ -238,9 +238,10 @@ TASKBAR Taskbar::getPosition(HWND hWnd)
     return TASKBAR::NO_POSITION;
 }
 
-void WindowsMoveResize::startSystemMove(QWindow *window, QPoint globalPos)
+void WindowsMoveResize::startSystemMove(QWidget *window, QPoint globalPos)
 {
-    bool _ok = ReleaseCapture();
+    int _ok = ReleaseCapture();
+    qDebug() << _ok;
     HWND hWnd = (HWND)(window->winId());
     SendMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
 }

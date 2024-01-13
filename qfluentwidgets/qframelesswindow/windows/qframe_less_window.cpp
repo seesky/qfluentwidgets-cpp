@@ -59,7 +59,6 @@ bool WindowsFramelessWindow::nativeEvent(const QByteArray &eventType, void *mess
 {
     
     MSG *msg = reinterpret_cast<MSG *>(message);
-    qDebug() << msg->message;
     if(!msg->hwnd){
         return QWidget::nativeEvent(eventType, message, result);
     }

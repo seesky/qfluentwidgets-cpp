@@ -55,7 +55,7 @@ void TitleBarBase::mouseMoveEvent(QMouseEvent *event)
     if(!this->canDrag(&p))
         return;
     
-    WindowsMoveResize().startSystemMove((QWindow *)window(), event->globalPos());
+    WindowsMoveResize().startSystemMove(this->window(), event->globalPos());
 }
 
 void TitleBarBase::mousePressEvent(QMouseEvent *event)
@@ -64,7 +64,7 @@ void TitleBarBase::mousePressEvent(QMouseEvent *event)
     if(!this->canDrag(&p))
         return;
     
-    WindowsMoveResize().startSystemMove((QWindow *)window(), event->globalPos());
+    WindowsMoveResize().startSystemMove(this->window(), event->globalPos());
 }
 
 void TitleBarBase::__toggleMaxState()

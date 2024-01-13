@@ -153,7 +153,6 @@ public:
         this->setWindowTitle(QString("Frameless Window"));
         this->setStyleSheet(QString("background:white"));
         this->titleBar->raise();
-        qDebug() << win;
     }
     
 

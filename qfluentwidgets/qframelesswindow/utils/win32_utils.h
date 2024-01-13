@@ -1,12 +1,22 @@
+/*
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: Xuelong Ba
+ * @Date: 2024-01-13 08:31:04
+ * @LastEditors: Xuelong Ba
+ * @LastEditTime: 2024-01-13 09:54:23
+ */
 #pragma once
 
 #include <windows.h>
 #include <winuser.h>
 #include <dwmapi.h>
 #include <QtCore/Qt>
+#include <QtCore/QDebug>
 #include <QtCore/QOperatingSystemVersion>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QWindow>
+#include <QtWidgets/QWidget>
 #include <QtGui/QWindowList>
 
 
@@ -42,7 +52,7 @@ private:
 
 class WindowsMoveResize{
 public:
-    static void startSystemMove(QWindow *window, QPoint globalPos);
+    static void startSystemMove(QWidget *window, QPoint globalPos);
     void startSystemResize(QWindow *window, QPoint globalPos, Qt::Edges edges){}
 private:
 };

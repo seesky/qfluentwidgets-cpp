@@ -75,7 +75,6 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
     {
         return "";
     }
-    qDebug() << iconPath;
     QFile *f = new QFile(iconPath);
     f->open(QFile::ReadOnly);
 
