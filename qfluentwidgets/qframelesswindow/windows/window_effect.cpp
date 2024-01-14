@@ -173,7 +173,7 @@ void WindowsWindowEffect::disableMaximizeButton(HWND hWnd)
 
 void WindowsWindowEffect::enableBlurBehindWindow(HWND hWnd)
 {
-    DWM_BLURBEHIND blurBehind = {0}; // = {1, true, 0, false};
+    DWM_BLURBEHIND blurBehind = {0};
     blurBehind.dwFlags = DWM_BB_ENABLE;
     blurBehind.fEnable = true;
     blurBehind.fTransitionOnMaximized = false;

@@ -46,6 +46,8 @@ add_executable(
   qfluentwidgets/components/widgets/button.cpp
   qfluentwidgets/components/widgets/scroll_bar.h
   qfluentwidgets/components/widgets/scroll_bar.cpp
+  qfluentwidgets/components/widgets/menu.h
+  qfluentwidgets/components/widgets/menu.cpp
 
   qfluentwidgets/qframelesswindow/utils/win32_utils.h
   qfluentwidgets/qframelesswindow/utils/win32_utils.cpp

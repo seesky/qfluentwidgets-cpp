@@ -614,7 +614,7 @@ void SmoothScrollBar::setScrollAnimation(int duration, QEasingCurve easing)
     this->ani->setEasingCurve(easing);
 }
 
-SmoothScrollDelegate::SmoothScrollDelegate(QAbstractScrollArea *parent, bool useAni) :  QObject(parent)
+SmoothScrollDelegate::SmoothScrollDelegate(QAbstractScrollArea *parent, bool useAni = false) :  QObject(parent)
 {
     this->useAni = useAni;
     this->vScrollBar = new SmoothScrollBar(Qt::Vertical, parent);

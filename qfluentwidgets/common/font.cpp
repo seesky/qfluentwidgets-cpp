@@ -5,7 +5,7 @@ void Font::setFont(QWidget *widget, int fontSize = 14, QFont::Weight weight = QF
     widget->setFont(getFont(fontSize, weight));
 }
 
-QFont Font::getFont(int fontSize, QFont::Weight weight)
+QFont Font::getFont(int fontSize, QFont::Weight weight = QFont::Normal)
 {
     QFont font = QFont();
     QStringList list = QStringList() << "Segoe UI" << "Microsoft YaHei" << "PingFang SC";
