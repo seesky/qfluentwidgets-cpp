@@ -51,6 +51,8 @@
 #include <QtWidgets/QStyledItemDelegate>
 #include <QtWidgets/QStyleOptionViewItem>
 
+Q_DECLARE_METATYPE(QListWidgetItem *)
+
 enum class MenuAnimationType{
     NONE = 0,
     DROP_DOWN = 1,
@@ -182,28 +184,24 @@ public:
     bool _hasItemIcon();
     int _adjustItemText(QListWidgetItem *item, QAction *action);
     int _longestShortcutWidth();
-    QIcon *_createItemIcon(QAction *w);
+    QIcon *_createItemIcon(QVariant *w);
     void insertAction(QAction *before, QAction *action);
-    void addActions(QList<QAction *> *action);
+    void addActions(QList<QAction *> *actions);
     void insertActions(QAction *before, QList<QAction *> *actions);
     void removeAction(QAction *action);
     void setDefaultAction(QAction *action);
     void addMenu(RoundMenu *menu);
     void insertMenu(QAction *before, RoundMenu *menu);
     std::tuple<QListWidgetItem *, SubMenuItemWidget*> _createSubMenuItem(RoundMenu *menu);
-    void _showSubMenu(QListWidgetItem *item);
-    void _onShowMenuTimeOut();
     void addSeparator();
-    void _onItemClicked(QListWidgetItem *item);
     void _closeParentMenu();
-    void _onItemEntered(QListWidgetItem *item);
     void _hideMenu(bool isHideBySystem);
     void hideEvent(QHideEvent *e);
     void closeEvent(QCloseEvent *e);
-    QAction *menuActions();
+    QList<QAction *> *menuActions();
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
-    void _onActionChanged();
+    void exec(QPoint *pos, bool ani, MenuAnimationType aniType);
     void exec_(QPoint *pos, bool ani, MenuAnimationType aniType);
     void adjustPosition();
     void paintEvent(QPaintEvent *e);
@@ -228,12 +226,170 @@ private:
 
 signals:
     void closedSignal();
+
+public slots:
+    void _showSubMenu(QListWidgetItem *item);
+    void _onActionChanged();
+    void _onItemClicked(QListWidgetItem *item);
+    void _onItemEntered(QListWidgetItem *item);
+    void _onShowMenuTimeOut();
 };
 
 
 class MenuAnimationManager : public QObject{
     Q_OBJECT
 public:
+    MenuAnimationManager() : QObject(){};
+    MenuAnimationManager(RoundMenu *menu);
+    
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+    QPoint *_endPosition(QPoint *pos);
+    std::tuple<int, int> _menuSize();
+    void exec(QPoint *pos){};
+    MenuAnimationManager *make(MenuAnimationType aniType, RoundMenu *menu);
 
+    QMap<MenuAnimationType, QString> *managers;
+    RoundMenu *menu;
+    QPropertyAnimation *ani;
 private:
+
+public slots:
+    void _onValueChanged(){};
+    void _updateMenuViewport();
+};
+
+class DummyMenuAnimationManager : public MenuAnimationManager{
+    Q_OBJECT
+public:
+    DummyMenuAnimationManager(RoundMenu *menu) : MenuAnimationManager(menu){};
+    void exec(QPoint *pos);
+private:
+};
+
+
+class DropDownMenuAnimationManager : public MenuAnimationManager{
+    Q_OBJECT
+public:
+    DropDownMenuAnimationManager(RoundMenu *menu) : MenuAnimationManager(menu){};
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+
+public slots:
+    void _onValueChanged();
+};
+
+
+class PullUpMenuAnimationManager : public MenuAnimationManager{
+    Q_OBJECT
+public:
+    PullUpMenuAnimationManager(RoundMenu *menu) : MenuAnimationManager(menu){}
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+    QPoint *_endPosition(QPoint *pos);
+public slots:
+    void _onValueChanged();
+};
+
+class FadeInDropDownMenuAnimationManager : public MenuAnimationManager{
+    Q_OBJECT
+public:
+    FadeInDropDownMenuAnimationManager(RoundMenu *menu);
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+
+    QPropertyAnimation *opacityAni;
+    QParallelAnimationGroup *aniGroup;
+};
+
+
+class FadeInPullUpMenuAnimationManager : public MenuAnimationManager{
+    Q_OBJECT
+public:
+    FadeInPullUpMenuAnimationManager(RoundMenu *menu);
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+    QPoint *_endPosition(QPoint *pos);
+
+    QPropertyAnimation *opacityAni;
+    QParallelAnimationGroup *aniGroup;
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////
+class MenuActionListAnimationManager : public QObject{
+    Q_OBJECT
+public:
+    MenuActionListAnimationManager() : QObject(){};
+    MenuActionListAnimationManager(MenuActionListWidget *menu);
+    
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+    QPoint *_endPosition(QPoint *pos);
+    //std::tuple<int, int> _menuSize();
+    void exec(QPoint *pos){};
+    MenuActionListAnimationManager *make(MenuAnimationType aniType, MenuActionListWidget *menu);
+
+    QMap<MenuAnimationType, QString> *managers;
+    MenuActionListWidget *menu;
+    QPropertyAnimation *ani;
+private:
+
+public slots:
+    //void _onValueChanged(){};
+    //void _updateMenuViewport();
+};
+
+
+class DummyMenuActionListAnimationManager : public MenuActionListAnimationManager{
+    Q_OBJECT
+public:
+    DummyMenuActionListAnimationManager(MenuActionListWidget *menu) : MenuActionListAnimationManager(menu){};
+    void exec(QPoint *pos);
+private:
+};
+
+
+class DropDownMenuActionListAnimationManager : public MenuActionListAnimationManager{
+    Q_OBJECT
+public:
+    DropDownMenuActionListAnimationManager(MenuActionListWidget *menu) : MenuActionListAnimationManager(menu){};
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+
+public slots:
+    //void _onValueChanged();
+};
+
+
+class PullUpMenuActionListAnimationManager : public MenuActionListAnimationManager{
+    Q_OBJECT
+public:
+    PullUpMenuActionListAnimationManager(MenuActionListWidget *menu) : MenuActionListAnimationManager(menu){}
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+    QPoint *_endPosition(QPoint *pos);
+public slots:
+    //void _onValueChanged();
+};
+
+class FadeInDropDownMenuActionListAnimationManager : public MenuActionListAnimationManager{
+    Q_OBJECT
+public:
+    FadeInDropDownMenuActionListAnimationManager(MenuActionListWidget *menu);
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+
+    QPropertyAnimation *opacityAni;
+    QParallelAnimationGroup *aniGroup;
+};
+
+
+class FadeInPullUpMenuActionListAnimationManager : public MenuActionListAnimationManager{
+    Q_OBJECT
+public:
+    FadeInPullUpMenuActionListAnimationManager(MenuActionListWidget *menu);
+    void exec(QPoint *pos);
+    std::tuple<int, int> availableViewSize(QPoint *pos);
+    QPoint *_endPosition(QPoint *pos);
+
+    QPropertyAnimation *opacityAni;
+    QParallelAnimationGroup *aniGroup;
 };

@@ -232,7 +232,7 @@ void FluentIconBase::render(QPainter *painter, QRect rect, Theme theme = Theme::
 
 Icon::Icon(){}
 
-Icon::Icon(FluentIcon *fluentIcon)
+Icon::Icon(FluentIcon *fluentIcon) : QIcon(fluentIcon->path())
 {
     this->fluentIcon = fluentIcon;
 }
@@ -244,7 +244,7 @@ QString Icon::path(Theme theme = Theme::AUTO)
 }
 */
 
-FluentIconEngine::FluentIconEngine(QVariant *icon, bool reverse)
+FluentIconEngine::FluentIconEngine(QVariant *icon, bool reverse = false)
 {
     this->icon = icon;
     this->isThemeReversed = reverse;
@@ -282,8 +282,16 @@ void FluentIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode m
             tmp_rect = rect.adjusted(-1, 0, 0, 0);
         }
         icon_QIcon->paint(painter, tmp_rect, Qt::AlignCenter, QIcon::Normal, state);
-    }else if(icon->canConvert<FluentIconBase>()){
-        icon_QIcon = icon->value<FluentIconBase>().icon(theme);
+    }else if(icon->canConvert<FluentIcon>()){
+        icon_QIcon = icon->value<FluentIcon>().icon(theme);
+        QRect tmp_rect;
+        if(rect.x() == 19){
+            tmp_rect = rect.adjusted(-1, 0, 0, 0);
+        }
+        icon_QIcon->paint(painter, tmp_rect, Qt::AlignCenter, QIcon::Normal, state);
+    }else if(icon->canConvert<QIcon>())
+    {
+        *icon_QIcon = icon->value<QIcon>();
         QRect tmp_rect;
         if(rect.x() == 19){
             tmp_rect = rect.adjusted(-1, 0, 0, 0);
