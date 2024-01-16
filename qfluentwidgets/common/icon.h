@@ -6,6 +6,7 @@
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>
 #include <QVariant>
+#include <QtWidgets/QAction>
 #include <QMetaType>
 #include "config.h"
 
@@ -257,4 +258,16 @@ public:
     void drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QString, QString> *attributes, QIcon::State state);
 };
 
-//}
+class Action : public QAction{
+    Q_OBJECT
+public:
+    Action(QObject *parent);
+    Action(QString text, QObject *parent);
+    Action(QIcon *icon, QString text, QObject *parent);
+    Action(FluentIcon *icon, QString text, QObject *parent);
+    QIcon *icon();
+    void setIcon(QVariant *icon);
+
+    FluentIcon *fluentIcon;
+private:
+};

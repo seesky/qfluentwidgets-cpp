@@ -538,7 +538,7 @@ SmoothScrollBar::SmoothScrollBar(Qt::Orientation orient, QAbstractScrollArea *pa
     this->duration = 500;
     this->ani = new QPropertyAnimation();
     this->ani->setTargetObject(this);
-    this->ani->setPropertyName("val");
+    this->ani->setPropertyName(QString("val").toUtf8());
     this->ani->setEasingCurve(QEasingCurve::OutCubic);
     this->ani->setDuration(this->duration);
 

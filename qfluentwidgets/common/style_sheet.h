@@ -69,11 +69,13 @@ class StyleSheetManager : public QObject{
 public:
     StyleSheetManager();
     void register_(QVariant source, QWidget *widget, bool reset);
-    void deregister(QWidget *widget);
     QMutableMapIterator<QWidget*, StyleSheetBase*> items();
     StyleSheetBase *source(QWidget *widget);
+    void deregister(QWidget *widget);
 private:
     QMap<QWidget*, StyleSheetBase*> *widgets;
+public slots:
+    void deregisterWrapper(QObject* obj);
 };
 
 class QssTemplate{

@@ -50,6 +50,7 @@ void SubMenuItemWidget::paintEvent(QPaintEvent *event)
     FluentIcon *icon = new FluentIcon();
     icon->setIconName("CHEVRON_RIGHT");
     icon->render(painter, QRect(this->width()-10, this->height()/2-9/2, 9, 9), Theme::AUTO, 0, nullptr); //TODO:特殊关注
+    painter->end();
 }
 
 bool MenuItemDelegate::_isSeparator(QModelIndex index)
@@ -260,7 +261,9 @@ QListWidgetItem *RoundMenu::_createActionItem(QAction *action, QAction *before)
     }
 
     QVariant iconQVariant = QVariant::fromValue<QAction *>(action);
-    QListWidgetItem *item = new QListWidgetItem(*(this->_createItemIcon(&iconQVariant)), action->text());
+    QIcon *icon__ = this->_createItemIcon(&iconQVariant);
+    QString atext = action->text();
+    QListWidgetItem *item = new QListWidgetItem(*icon__, atext);
     this->_adjustItemText(item, action);
 
     if(!action->isEnabled())
@@ -362,6 +365,8 @@ QIcon *RoundMenu::_createItemIcon(QVariant *w)
             resultIcon = new QIcon(pixmap);
         }else if(!hasIcon){
             resultIcon = new QIcon();
+        }else{ 
+            resultIcon = icon;
         }
     }else if(w->canConvert<RoundMenu *>()){
         RoundMenu *qvRoundMenu = w->value<RoundMenu *>();
@@ -381,6 +386,8 @@ QIcon *RoundMenu::_createItemIcon(QVariant *w)
             resultIcon = new QIcon(pixmap);
         }else if(!hasIcon){
             resultIcon = new QIcon();
+        }else{
+            resultIcon = icon;
         }
     }
 
@@ -526,7 +533,7 @@ void RoundMenu::_onShowMenuTimeOut()
 void RoundMenu::addSeparator()
 {
     auto asa = qobject_cast<QAbstractScrollArea*>(this->view);
-    QMargins m = QMargins(0, 6, 0, 6);
+    QMargins m = QMargins(0, 20, 0, 20);
     
     int w = this->view->width() - m.left() - m.right();
 
@@ -630,7 +637,7 @@ void RoundMenu::mouseMoveEvent(QMouseEvent *e)
     MenuActionListWidget *view = this->parentMenu->view;
 
     //QMargins margin = view->viewportMargins();
-    QMargins margin = QMargins(0, 6, 0, 6);
+    QMargins margin = QMargins(0, 20, 0, 10);
     QRect rect = view->visualItemRect(this->menuItem).translated(view->mapToGlobal(QPoint()));
     rect = rect.translated(margin.left(), margin.top() + 2);
     if(this->parentMenu->geometry().contains(pos) && !rect.contains(pos) && !this->geometry().contains(pos)){
@@ -1229,3 +1236,58 @@ std::tuple<int, int> FadeInPullUpMenuActionListAnimationManager::availableViewSi
     QRect ss = QApplication::screenAt(QCursor::pos())->availableGeometry();
     return std::tuple<int, int>(ss.width() - 100, pos->y() - 28);
 }
+
+/*
+void EditMenu::createActions()
+{
+    FluentIcon *iconCut = new FluentIcon();
+    iconCut->setIconName("Cut");
+    this->cutAct = new QAction(*(iconCut->icon(Theme::AUTO, nullptr)), this->tr("Cut"), this);
+    this->cutAct->setShortcut(QKeySequence("Ctrl+X"));
+    connect(this->cutAct, &QAction::triggered, this, &RoundMenu::cut);
+
+    FluentIcon *iconCopy = new FluentIcon();
+    iconCopy->setIconName("Copy");
+    this->copyAct = new QAction(*(iconCopy->icon(Theme::AUTO, nullptr)), this->tr("Copy"), this);
+    this->copyAct->setShortcut(QKeySequence("Ctrl+C"));
+    connect(this->copyAct, &QAction::triggered, this, &RoundMenu::copy);
+
+    FluentIcon *iconPaste = new FluentIcon();
+    iconPaste->setIconName("Paste");
+    this->pasteAct = new QAction(*(iconPaste->icon(Theme::AUTO, nullptr)), this->tr("Paste"), this);
+    this->pasteAct->setShortcut(QKeySequence("Ctrl+V"));
+    connect(this->pasteAct, &QAction::triggered, this, &RoundMenu::paste);
+
+    FluentIcon *iconCancel = new FluentIcon();
+    iconCancel->setIconName("Cancel");
+    this->cancelAct = new QAction(*(iconCancel->icon(Theme::AUTO, nullptr)), this->tr("Cancel"), this);
+    this->cancelAct->setShortcut(QKeySequence("Ctrl+Z"));
+    connect(this->cancelAct, &QAction::triggered, this, &RoundMenu::undo);
+
+    this->selectAllAct = new QAction(this->tr("Select all"), this);
+    this->selectAllAct->setShortcut(QKeySequence("Ctrl+A"));
+    connect(this->selectAllAct, &QAction::triggered, this, &RoundMenu::selectAll);
+
+    this->action_list.append(this->cutAct);
+    this->action_list.append(this->copyAct);
+    this->action_list.append(this->pasteAct);
+    this->action_list.append(this->cancelAct);
+    this->action_list.append(this->selectAllAct);
+}
+
+void EditMenu::exec(QPoint *pos, bool ani, MenuAnimationType aniType)
+{
+    this->clear();
+    this->createActions();
+
+    if(QApplication::clipboard()->mimeData()->hasText()){
+        if(this->_parentText()){
+            if(this->_parentSelectedText()){
+                if(this->parent()){
+
+                }
+            }
+        }
+    }
+}
+*/

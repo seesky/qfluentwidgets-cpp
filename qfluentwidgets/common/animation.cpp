@@ -39,7 +39,7 @@ bool AnimationBase::eventFilter(QObject *obj, QEvent *e)
 }
 
 
-TranslateYAnimation::TranslateYAnimation(QWidget *parent, int offset)
+TranslateYAnimation::TranslateYAnimation(QWidget *parent, int offset = 2)
 {
     this->_y = 0;
     this->maxOffset = offset;

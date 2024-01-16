@@ -1,5 +1,7 @@
 #pragma once
 #include "../../common/icon.h"
+#include "../../common/animation.h"
+#include "menu.h"
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QRadioButton>
@@ -162,4 +164,34 @@ public:
     TransparentToggleToolButton(FluentIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
     TransparentToggleToolButton(QIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
     TransparentToggleToolButton(QString icon, QWidget *parent) : ToggleToolButton(icon, parent){};
+};
+
+
+class DropDownButtonBase : public PushButton{
+    Q_OBJECT
+public:
+    DropDownButtonBase(QString text, QWidget *parent, QVariant *icon);
+    DropDownButtonBase(FluentIcon *icon, QString text, QWidget *parent);
+    void setMenu(RoundMenu *menu);
+    RoundMenu *menu();
+    void _showMenu();
+    void _hideMenu();
+    void _drawDropDownIcon(QPainter *painter, QRect rect);
+    void paintEvent(QPaintEvent *event);
+
+    RoundMenu *_menu;
+    TranslateYAnimation *arrowAni;
+    bool isHover;
+    bool isPressed;
+private:
+};
+
+
+class DropDownPushButton : public DropDownButtonBase{
+public:
+    DropDownPushButton(QString text, QWidget *parent, QVariant *icon) : DropDownButtonBase(text, parent, icon){};
+    DropDownPushButton(FluentIcon *icon, QString text, QWidget *parent) : DropDownButtonBase(icon, text, parent){};
+    void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *event);
+private:
 };

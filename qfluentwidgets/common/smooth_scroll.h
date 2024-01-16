@@ -20,12 +20,13 @@ enum class SmoothMode {
     COSINE
 };
 
-class SmoothScroll{
+class SmoothScroll : public QObject{
+    Q_OBJECT
 public:
     SmoothScroll(QAbstractScrollArea *widget, Qt::Orientation orient);
     void setSmoothMode(SmoothMode smoothMode);
     void wheelEvent(QWheelEvent *e);
-    void __smoothMove();
+    
     float __subDelta(float delta, float stepsLeft);
 
     QAbstractScrollArea *widget;
@@ -41,4 +42,6 @@ public:
     QTimer *smoothMoveTimer;
     SmoothMode smoothMode;
 private:
+public slots:
+    void __smoothMove();
 };

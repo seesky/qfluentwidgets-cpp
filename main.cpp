@@ -2,6 +2,7 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <QtCore/Qt>
+#include "./qfluentwidgets/components/widgets/menu.h"
 #include "./qfluentwidgets/components/widgets/button.h"
 #include "./qfluentwidgets/qframelesswindow/windows/qframe_less_window.h"
 
@@ -83,11 +84,30 @@ public:
     PrimaryToolButton *primaryToolButton;
     ToggleToolButton *toggleToolButton;
     TransparentToggleToolButton *transparentToggleToolButton;
+
+
+    RoundMenu *menu;
+    DropDownPushButton *dropDownPushButton1;
+    DropDownPushButton *dropDownPushButton2;
+
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
         //WId win = this->winId();
         gridLayout = new QGridLayout();
+
+        FluentIcon *menuActionIcon1 = new FluentIcon();
+        menuActionIcon1->setIconName("BASKETBALL");
+        // FluentIcon *menuActionIcon2 = new FluentIcon();
+        // menuActionIcon2->setIconName("ALBUM");
+        // FluentIcon *menuActionIcon3 = new FluentIcon();
+        // menuActionIcon3->setIconName("MUSIC");
+        this->menu = new RoundMenu(QString(""), nullptr);
+        Action *a = new Action(menuActionIcon1->icon(Theme::AUTO, nullptr), QString("Basketball"), nullptr);
+        menu->addAction(a);
+        //menu->addAction(new Action(menuActionIcon2, QString("Sing"), nullptr));
+        //menu->addAction(new Action(menuActionIcon3, QString("Music"), nullptr));
+
 
         ///*
         //push button
@@ -147,13 +167,20 @@ public:
         transparentToggleToolButtonIcon->setIconName("SETTING");
         transparentToggleToolButton = new TransparentToggleToolButton(transparentToggleToolButtonIcon, this);
 
+        //FluentIcon *dropDownPushButton2ButtonIcon = new FluentIcon();
+        //dropDownPushButton2ButtonIcon->setIconName("EMAIL");
+        //dropDownPushButton1 = new DropDownPushButton(QString("Email"), this, nullptr);
+        //dropDownPushButton2 = new DropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
+
+
+
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
         gridLayout->addWidget(primaryButton1, 1, 0);
         gridLayout->addWidget(primaryButton2, 1, 1);
         gridLayout->addWidget(transparentPushButton1, 2, 0);
         gridLayout->addWidget(transparentPushButton2, 2, 1);
-        //*/
+        
         gridLayout->addWidget(ToggleButton1, 3, 0);
         gridLayout->addWidget(ToggleButton2, 3, 1);
         gridLayout->addWidget(transparentTogglePushButton1, 4, 0);
@@ -167,6 +194,16 @@ public:
         gridLayout->addWidget(primaryToolButton, 7, 2);
         gridLayout->addWidget(toggleToolButton, 8, 0);
         gridLayout->addWidget(transparentToggleToolButton, 8, 1);
+        //*/
+        //gridLayout->addWidget(dropDownPushButton1, 9, 0);
+
+
+        //FluentIcon *dropDownPushButton2ButtonIcon = new FluentIcon();
+        //dropDownPushButton2ButtonIcon->setIconName("EMAIL");
+        dropDownPushButton1 = new DropDownPushButton(QString("Email"), this, nullptr);
+        dropDownPushButton1->setMenu(this->menu);
+        //dropDownPushButton2 = new DropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
+        gridLayout->addWidget(dropDownPushButton1, 9, 0);
         setLayout(gridLayout);
         resize(600, 700);
     }

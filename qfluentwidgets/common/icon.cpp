@@ -8,6 +8,7 @@
 
 void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect)
 {   
+    qDebug() << icon;
     QSvgRenderer *renderer = new QSvgRenderer(icon);
     renderer->render(painter, QRectF(rect));
     /*
@@ -76,6 +77,7 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
         return "";
     }
     QFile *f = new QFile(iconPath);
+    qDebug() << iconPath;
     f->open(QFile::ReadOnly);
 
     QDomDocument *dom = new QDomDocument();
@@ -135,6 +137,7 @@ QIcon *FluentIcon::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 QString FluentIcon::path(Theme theme = Theme::AUTO)
 {
     QString path = QString("qfluentwidgets/images/icons/" + FluentIconMap.at(this->iconName) + "_" + getIconColor(theme) + ".svg");
+    qDebug() << path;
     return path;
 }
 
@@ -145,8 +148,10 @@ void FluentIcon::render(QPainter *painter, QRect rect, Theme theme = Theme::AUTO
     if(iconStr.endsWith(".svg")){
         if(attributes){
             iconStr = writeSvg(iconStr, indexes, *attributes);
+            drawSvgIcon2engine(iconStr, painter, rect);
+        }else{
+            drawSvgIcon(iconStr, painter, rect);
         }
-        drawSvgIcon(iconStr, painter, rect);
     }else{
         icon = new QIcon(iconStr);
         rect = QRectF(rect).toRect();
@@ -326,4 +331,48 @@ QIcon MIcon::toQIcon(QVariant *icon)
     }
 
     return icon->value<QIcon>();
+}
+
+Action::Action(QObject *parent) : QAction(parent)
+{
+    this->fluentIcon = nullptr;
+}
+
+
+Action::Action(QString text, QObject *parent) : QAction(text, parent)
+{
+    this->fluentIcon = nullptr;
+}
+
+Action::Action(QIcon *icon, QString text, QObject *parent) : QAction(*icon, text, parent)
+{
+    this->fluentIcon = nullptr;
+}
+
+Action::Action(FluentIcon *icon, QString text, QObject *parent) : QAction(*(icon->icon()), text, parent)
+{
+    this->fluentIcon = icon;
+}
+
+QIcon *Action::icon()
+{
+    if(this->fluentIcon){
+        Icon *icon = new Icon(this->fluentIcon);
+        return (QIcon *)icon;
+    }
+
+    return Action::icon();
+}
+
+void Action::setIcon(QVariant *icon)
+{
+    QIcon *_icon;
+    if(icon->canConvert<FluentIcon>()){
+        FluentIcon fi = icon->value<FluentIcon>();
+        this->fluentIcon = &fi;
+        _icon = icon->value<FluentIcon>().icon();
+        QAction::setIcon(*_icon);
+    }else if(icon->canConvert<QIcon>()){
+        QAction::setIcon(icon->value<QIcon>());
+    }
 }

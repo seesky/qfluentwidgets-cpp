@@ -206,6 +206,13 @@ public:
     void adjustPosition();
     void paintEvent(QPaintEvent *e);
 
+    void cut(){};
+    void copy(){};
+    void paste(){};
+    void undo(){};
+    void selectAll(){};
+
+
     QString _title;
     QVariant *_icon;
     QList<QAction *> *_actions;
@@ -393,3 +400,22 @@ public:
     QPropertyAnimation *opacityAni;
     QParallelAnimationGroup *aniGroup;
 };
+
+/*
+class EditMenu : public RoundMenu{
+    Q_OBJECT
+public:
+    void createActions();
+    void _parentText(){};
+    void _parentSelectedText(){};
+    void exec(QPoint *pos, bool ani, MenuAnimationType aniType);
+
+    QAction *cutAct;
+    QAction *copyAct;
+    QAction *pasteAct;
+    QAction *cancelAct;
+    QAction *selectAllAct;
+    QList<QAction *> action_list;
+private:
+};
+*/

@@ -14,7 +14,7 @@ SmoothScroll::SmoothScroll(QAbstractScrollArea *widget, Qt::Orientation orient)
     this->stepsLeftQueue = new QList<float *>();
     this->smoothMoveTimer = new QTimer(widget);
     this->smoothMode = SmoothMode::LINEAR;
-    this->smoothMoveTimer->connect(this->smoothMoveTimer, SIGNAL(QTimer::timeout), SLOT(this->__smoothMove));
+    connect(this->smoothMoveTimer, &QTimer::timeout, this, &SmoothScroll::__smoothMove);
     //this->smoothMoveTimer->connect(this->smoothMoveTimer, &QTimer::timeout, this->smoothMoveTimer, &SmoothScroll::__smoothMove); //TODO:特别关注
 }
 
