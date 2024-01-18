@@ -44,19 +44,19 @@ PushButton::PushButton(FluentIcon *icon, QString text, QWidget *parent) : QPushB
 void PushButton::setIcon(QVariant *icon)
 {
     if(icon != nullptr){
-        QVariant hasIcon = QVariant::fromValue<bool>(true);
-        this->setProperty("hasIcon", &hasIcon);
+        QVariant *hasIcon = new QVariant(QVariant::fromValue<bool>(true));
+        this->setProperty("hasIcon", hasIcon);
     }else{
-        QVariant hasIcon = QVariant::fromValue<bool>(false);
-        this->setProperty("hasIcon", &hasIcon);
+        QVariant *hasIcon = new QVariant(QVariant::fromValue<bool>(false));
+        this->setProperty("hasIcon", hasIcon);
     }
     setStyle(QApplication::style());
     if(icon != nullptr)
     {
-        this->_icon = icon;
+        this->_icon = new QVariant(*icon);
     }else{
-        QVariant icon = QVariant::fromValue<QIcon>(QIcon());
-        this->_icon = &icon;
+        QVariant *icon = new QVariant(QVariant::fromValue<QIcon>(QIcon()));
+        this->_icon = icon;
     }
     QPushButton::update();
 }

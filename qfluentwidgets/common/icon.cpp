@@ -137,6 +137,7 @@ QIcon *FluentIcon::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 
 QString FluentIcon::path(Theme theme = Theme::AUTO)
 {
+    qDebug() << this->iconName;
     QString path = QString("qfluentwidgets/images/icons/" + FluentIconMap.at(this->iconName) + "_" + getIconColor(theme) + ".svg");
     qDebug() << path;
     return path;
