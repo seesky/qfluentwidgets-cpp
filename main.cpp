@@ -98,18 +98,22 @@ public:
 
         FluentIcon *menuActionIcon1 = new FluentIcon();
         menuActionIcon1->setIconName("BASKETBALL");
-        // FluentIcon *menuActionIcon2 = new FluentIcon();
-        // menuActionIcon2->setIconName("ALBUM");
+        FluentIcon *menuActionIcon2 = new FluentIcon();
+        menuActionIcon2->setIconName("ALBUM");
         // FluentIcon *menuActionIcon3 = new FluentIcon();
         // menuActionIcon3->setIconName("MUSIC");
         this->menu = new RoundMenu(QString(""), nullptr);
-        Action *a = new Action(menuActionIcon1->icon(Theme::AUTO, nullptr), QString("Basketball"), nullptr);
+        //QIcon *iii = menuActionIcon1->icon(Theme::AUTO, nullptr);
+        //Action *a = new Action(*iii, QString("Basketball"), nullptr);
+        Action *a = new Action(menuActionIcon1, QString("Basketball"), nullptr);
+        Action *b = new Action(menuActionIcon2, QString("Album"), nullptr);
         menu->addAction(a);
+        menu->addAction(b);
         //menu->addAction(new Action(menuActionIcon2, QString("Sing"), nullptr));
         //menu->addAction(new Action(menuActionIcon3, QString("Music"), nullptr));
 
 
-        ///*
+        /*
         //push button
         pushButton1 = new PushButton(QString("Standard push button"), nullptr, nullptr);
         FluentIcon *pushButton2Icon = new FluentIcon();
@@ -194,7 +198,7 @@ public:
         gridLayout->addWidget(primaryToolButton, 7, 2);
         gridLayout->addWidget(toggleToolButton, 8, 0);
         gridLayout->addWidget(transparentToggleToolButton, 8, 1);
-        //*/
+        */
         //gridLayout->addWidget(dropDownPushButton1, 9, 0);
 
 
@@ -203,7 +207,7 @@ public:
         dropDownPushButton1 = new DropDownPushButton(QString("Email"), this, nullptr);
         dropDownPushButton1->setMenu(this->menu);
         //dropDownPushButton2 = new DropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
-        gridLayout->addWidget(dropDownPushButton1, 9, 0);
+        gridLayout->addWidget(dropDownPushButton1, 0, 0);
         setLayout(gridLayout);
         resize(600, 700);
     }

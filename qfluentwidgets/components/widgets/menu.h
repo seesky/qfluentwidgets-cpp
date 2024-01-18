@@ -229,6 +229,7 @@ public:
     MenuAnimationManager *aniManager;
     QTimer *timer;
     QGraphicsDropShadowEffect *shadowEffect;
+    FluentIconEngine *fie;
 private:
 
 signals:

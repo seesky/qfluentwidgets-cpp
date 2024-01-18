@@ -263,7 +263,7 @@ class Action : public QAction{
 public:
     Action(QObject *parent);
     Action(QString text, QObject *parent);
-    Action(QIcon *icon, QString text, QObject *parent);
+    Action(QIcon icon, QString text, QObject *parent);
     Action(FluentIcon *icon, QString text, QObject *parent);
     QIcon *icon();
     void setIcon(QVariant *icon);

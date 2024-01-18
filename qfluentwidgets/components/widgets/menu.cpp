@@ -221,6 +221,8 @@ void RoundMenu::setIcon(QVariant *icon)
 
 void RoundMenu::addAction(QAction *action)
 {
+
+    qDebug() << action->icon().isNull();
     QListWidgetItem *item = this->_createActionItem(action, nullptr);
     this->view->addItem(item);
     this->adjustSize();
@@ -263,6 +265,7 @@ QListWidgetItem *RoundMenu::_createActionItem(QAction *action, QAction *before)
     QVariant iconQVariant = QVariant::fromValue<QAction *>(action);
     QIcon *icon__ = this->_createItemIcon(&iconQVariant);
     QString atext = action->text();
+    qDebug() << atext;
     QListWidgetItem *item = new QListWidgetItem(*icon__, atext);
     this->_adjustItemText(item, action);
 
@@ -353,13 +356,24 @@ QIcon *RoundMenu::_createItemIcon(QVariant *w)
 {
     bool hasIcon = this->_hasItemIcon();
     QIcon *resultIcon;
-    FluentIconEngine *fie;
     if(w->canConvert<QAction *>()){
         QAction *qvQaction = w->value<QAction *>();
-        QVariant qvIcon = QVariant::fromValue<QIcon>(qvQaction->icon());
-        fie = new FluentIconEngine(&qvIcon, false);
+
+        auto ac = qobject_cast<Action *>(qvQaction);
+        if(ac != nullptr){
+            Icon *iii= (Icon *)(ac->icon());
+            QVariant qvIcon = QVariant::fromValue<Icon>(*iii);
+            qDebug() << qvIcon.typeName();
+            this->fie = new FluentIconEngine(&qvIcon, false);
+        }else{
+            QIcon iii= qvQaction->icon();
+            QVariant qvQIcon = QVariant::fromValue<QIcon>(iii);
+            qDebug() << qvQIcon.typeName();
+            this->fie = new FluentIconEngine(&qvQIcon, false);
+        }
+
         QIcon *icon = new QIcon(fie);
-        if(hasIcon && qvQaction->icon().isNull()){
+        if(hasIcon && ac->icon()->isNull()){
             QPixmap pixmap = QPixmap(this->view->iconSize());
             pixmap.fill(Qt::transparent);
             resultIcon = new QIcon(pixmap);
@@ -533,9 +547,9 @@ void RoundMenu::_onShowMenuTimeOut()
 void RoundMenu::addSeparator()
 {
     auto asa = qobject_cast<QAbstractScrollArea*>(this->view);
-    QMargins m = QMargins(0, 20, 0, 20);
+    //QMargins m = QMargins(0, 20, 0, 20);
     
-    int w = this->view->width() - m.left() - m.right();
+    int w = this->view->width() - this->view->viewport()->contentsMargins().left() - this->view->viewport()->contentsMargins().right();
 
     QListWidgetItem item = QListWidgetItem();
     item.setFlags(Qt::NoItemFlags);
@@ -637,9 +651,10 @@ void RoundMenu::mouseMoveEvent(QMouseEvent *e)
     MenuActionListWidget *view = this->parentMenu->view;
 
     //QMargins margin = view->viewportMargins();
-    QMargins margin = QMargins(0, 20, 0, 10);
+    view->viewport()->contentsMargins();
+    //QMargins margin = QMargins(0, 20, 0, 10);
     QRect rect = view->visualItemRect(this->menuItem).translated(view->mapToGlobal(QPoint()));
-    rect = rect.translated(margin.left(), margin.top() + 2);
+    rect = rect.translated(view->viewport()->contentsMargins().left(), view->viewport()->contentsMargins().top() + 2);
     if(this->parentMenu->geometry().contains(pos) && !rect.contains(pos) && !this->geometry().contains(pos)){
         view->clearSelection();
         this->_hideMenu(false);
