@@ -207,7 +207,7 @@ public:
         dropDownPushButton1 = new DropDownPushButton(QString("Email"), this, nullptr);
         dropDownPushButton1->setMenu(this->menu);
         //dropDownPushButton2 = new DropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
-        gridLayout->addWidget(dropDownPushButton1, 0, 0);
+        gridLayout->addWidget(dropDownPushButton1, 0, 0, Qt::AlignLeft);
         setLayout(gridLayout);
         resize(600, 700);
     }

@@ -221,8 +221,6 @@ void RoundMenu::setIcon(QVariant *icon)
 
 void RoundMenu::addAction(QAction *action)
 {
-
-    qDebug() << action->icon().isNull();
     QListWidgetItem *item = this->_createActionItem(action, nullptr);
     this->view->addItem(item);
     this->adjustSize();
@@ -265,7 +263,6 @@ QListWidgetItem *RoundMenu::_createActionItem(QAction *action, QAction *before)
     QVariant iconQVariant = QVariant::fromValue<QAction *>(action);
     QIcon *icon__ = this->_createItemIcon(&iconQVariant);
     QString atext = action->text();
-    qDebug() << atext;
     QListWidgetItem *item = new QListWidgetItem(*icon__, atext);
     this->_adjustItemText(item, action);
 
@@ -302,9 +299,9 @@ bool RoundMenu::_hasItemIcon()
             }
         }
         */
-       if(value->icon()->isNull()){
-        return true;
-       }
+        if(value->icon()->isNull()){
+            return true;
+        }
     }
 
     return false;
@@ -363,12 +360,10 @@ QIcon *RoundMenu::_createItemIcon(QVariant *w)
         if(ac != nullptr){
             Icon *iii= (Icon *)(ac->icon());
             QVariant qvIcon = QVariant::fromValue<Icon>(*iii);
-            qDebug() << qvIcon.typeName();
             this->fie = new FluentIconEngine(&qvIcon, false);
         }else{
             QIcon iii= qvQaction->icon();
             QVariant qvQIcon = QVariant::fromValue<QIcon>(iii);
-            qDebug() << qvQIcon.typeName();
             this->fie = new FluentIconEngine(&qvQIcon, false);
         }
 
@@ -542,6 +537,10 @@ void RoundMenu::_onShowMenuTimeOut()
 
     //TODO:没有实现
     //QMenu *w = (QMenu *)(this->view->itemWidget(this->lastHoverSubMenuItem));
+
+    //auto w = qobject_cast<RoundMenu *>(this->view->itemWidget(this->lastHoverSubMenuItem));
+    //w->parentMenu
+    
 }
 
 void RoundMenu::addSeparator()
@@ -683,7 +682,17 @@ void RoundMenu::_onActionChanged()
 void RoundMenu::exec(QPoint *pos, bool ani = true, MenuAnimationType aniType = MenuAnimationType::DROP_DOWN)
 {
     this->aniManager = MenuAnimationManager().make(aniType, this);
+
+    /*
+    auto am = qobject_cast<DropDownMenuAnimationManager *>(this->aniManager);
+    if(am != nullptr){
+        am->exec(pos);
+    }else{
+        this->aniManager->exec(pos);
+    }
+    */
     this->aniManager->exec(pos);
+    
     this->show();
     if(this->isSubMenu){
         this->menuItem->setSelected(true);
@@ -814,8 +823,10 @@ int MenuActionListWidget::heightForAnimation(QPoint *pos, MenuAnimationType aniT
 int MenuActionListWidget::itemsHeight()
 {
     int N = this->maxVisibleItems() ? this->count() : qMin(this->maxVisibleItems(), this->count());
-    int h;
+    int h = 0;
     for(int i = 0; i < N; i++){
+        //QListWidgetItem *item = this->item(i);
+
         h += this->item(i)->sizeHint().height();
     }
     QMargins m = this->viewportMargins();
@@ -916,7 +927,7 @@ void DropDownMenuAnimationManager::_onValueChanged()
     std::tuple<int, int> size = this->_menuSize();
     int w = std::get<0>(size);
     int h = std::get<1>(size);
-    int y = this->ani->endValue().value<QRect>().y() - this->ani->currentValue().value<QRect>().y();
+    int y = this->ani->endValue().value<QPoint>().y() - this->ani->currentValue().value<QPoint>().y();
     this->menu->setMask(QRegion(0, y, w, h));
 }
 
@@ -954,7 +965,7 @@ void PullUpMenuAnimationManager::_onValueChanged()
     std::tuple<int, int> size = this->_menuSize();
     int w = std::get<0>(size);
     int h = std::get<1>(size);
-    int y = this->ani->endValue().value<QRect>().y() - this->ani->currentValue().value<QRect>().y();
+    int y = this->ani->endValue().value<QPoint>().y() - this->ani->currentValue().value<QPoint>().y();
     this->menu->setMask(QRegion(0, y, w, h - 28));
 }
 

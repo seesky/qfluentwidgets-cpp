@@ -250,10 +250,10 @@ public:
     MenuAnimationManager() : QObject(){};
     MenuAnimationManager(RoundMenu *menu);
     
-    std::tuple<int, int> availableViewSize(QPoint *pos);
-    QPoint *_endPosition(QPoint *pos);
-    std::tuple<int, int> _menuSize();
-    void exec(QPoint *pos){};
+    virtual std::tuple<int, int> availableViewSize(QPoint *pos);
+    virtual QPoint *_endPosition(QPoint *pos);
+    virtual std::tuple<int, int> _menuSize();
+    virtual void exec(QPoint *pos){};
     MenuAnimationManager *make(MenuAnimationType aniType, RoundMenu *menu);
 
     QMap<MenuAnimationType, QString> *managers;
@@ -262,15 +262,15 @@ public:
 private:
 
 public slots:
-    void _onValueChanged(){};
-    void _updateMenuViewport();
+    virtual void _onValueChanged(){};
+    virtual void _updateMenuViewport();
 };
 
 class DummyMenuAnimationManager : public MenuAnimationManager{
     Q_OBJECT
 public:
     DummyMenuAnimationManager(RoundMenu *menu) : MenuAnimationManager(menu){};
-    void exec(QPoint *pos);
+    void exec(QPoint *pos) override;
 private:
 };
 
@@ -279,11 +279,11 @@ class DropDownMenuAnimationManager : public MenuAnimationManager{
     Q_OBJECT
 public:
     DropDownMenuAnimationManager(RoundMenu *menu) : MenuAnimationManager(menu){};
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
+    void exec(QPoint *pos)  override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
 
 public slots:
-    void _onValueChanged();
+    void _onValueChanged() override;
 };
 
 
@@ -291,19 +291,19 @@ class PullUpMenuAnimationManager : public MenuAnimationManager{
     Q_OBJECT
 public:
     PullUpMenuAnimationManager(RoundMenu *menu) : MenuAnimationManager(menu){}
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
-    QPoint *_endPosition(QPoint *pos);
+    void exec(QPoint *pos)  override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
+    QPoint *_endPosition(QPoint *pos) override;
 public slots:
-    void _onValueChanged();
+    void _onValueChanged() override;
 };
 
 class FadeInDropDownMenuAnimationManager : public MenuAnimationManager{
     Q_OBJECT
 public:
     FadeInDropDownMenuAnimationManager(RoundMenu *menu);
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
+    void exec(QPoint *pos)  override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
 
     QPropertyAnimation *opacityAni;
     QParallelAnimationGroup *aniGroup;
@@ -314,9 +314,9 @@ class FadeInPullUpMenuAnimationManager : public MenuAnimationManager{
     Q_OBJECT
 public:
     FadeInPullUpMenuAnimationManager(RoundMenu *menu);
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
-    QPoint *_endPosition(QPoint *pos);
+    void exec(QPoint *pos)  override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
+    QPoint *_endPosition(QPoint *pos) override;
 
     QPropertyAnimation *opacityAni;
     QParallelAnimationGroup *aniGroup;
@@ -329,10 +329,10 @@ public:
     MenuActionListAnimationManager() : QObject(){};
     MenuActionListAnimationManager(MenuActionListWidget *menu);
     
-    std::tuple<int, int> availableViewSize(QPoint *pos);
-    QPoint *_endPosition(QPoint *pos);
+    virtual std::tuple<int, int> availableViewSize(QPoint *pos);
+    virtual QPoint *_endPosition(QPoint *pos);
     //std::tuple<int, int> _menuSize();
-    void exec(QPoint *pos){};
+    virtual void exec(QPoint *pos){};
     MenuActionListAnimationManager *make(MenuAnimationType aniType, MenuActionListWidget *menu);
 
     QMap<MenuAnimationType, QString> *managers;
@@ -350,7 +350,7 @@ class DummyMenuActionListAnimationManager : public MenuActionListAnimationManage
     Q_OBJECT
 public:
     DummyMenuActionListAnimationManager(MenuActionListWidget *menu) : MenuActionListAnimationManager(menu){};
-    void exec(QPoint *pos);
+    void exec(QPoint *pos) override;
 private:
 };
 
@@ -359,8 +359,8 @@ class DropDownMenuActionListAnimationManager : public MenuActionListAnimationMan
     Q_OBJECT
 public:
     DropDownMenuActionListAnimationManager(MenuActionListWidget *menu) : MenuActionListAnimationManager(menu){};
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
+    void exec(QPoint *pos) override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
 
 public slots:
     //void _onValueChanged();
@@ -371,9 +371,9 @@ class PullUpMenuActionListAnimationManager : public MenuActionListAnimationManag
     Q_OBJECT
 public:
     PullUpMenuActionListAnimationManager(MenuActionListWidget *menu) : MenuActionListAnimationManager(menu){}
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
-    QPoint *_endPosition(QPoint *pos);
+    void exec(QPoint *pos) override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
+    QPoint *_endPosition(QPoint *pos) override;
 public slots:
     //void _onValueChanged();
 };
@@ -382,8 +382,8 @@ class FadeInDropDownMenuActionListAnimationManager : public MenuActionListAnimat
     Q_OBJECT
 public:
     FadeInDropDownMenuActionListAnimationManager(MenuActionListWidget *menu);
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
+    void exec(QPoint *pos) override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
 
     QPropertyAnimation *opacityAni;
     QParallelAnimationGroup *aniGroup;
@@ -394,9 +394,9 @@ class FadeInPullUpMenuActionListAnimationManager : public MenuActionListAnimatio
     Q_OBJECT
 public:
     FadeInPullUpMenuActionListAnimationManager(MenuActionListWidget *menu);
-    void exec(QPoint *pos);
-    std::tuple<int, int> availableViewSize(QPoint *pos);
-    QPoint *_endPosition(QPoint *pos);
+    void exec(QPoint *pos) override;
+    std::tuple<int, int> availableViewSize(QPoint *pos) override;
+    QPoint *_endPosition(QPoint *pos) override;
 
     QPropertyAnimation *opacityAni;
     QParallelAnimationGroup *aniGroup;
