@@ -95,12 +95,21 @@ public:
     DropDownToolButton *dropDownToolButton;
     TransparentDropDownToolButton *transparentDropDownToolButton;
 
+    PrimaryDropDownPushButton *primaryDropDownPushButton1;
+    PrimaryDropDownPushButton *primaryDropDownPushButton2;
+
+    PrimaryDropDownToolButton *primaryDropDownToolButton;
+
+    SplitPushButton *splitPushButton1;
+    SplitPushButton *splitPushButton2;
+
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
         //WId win = this->winId();
         gridLayout = new QGridLayout();
 
+        
         FluentIcon *menuActionIcon1 = new FluentIcon();
         menuActionIcon1->setIconName("BASKETBALL");
         FluentIcon *menuActionIcon2 = new FluentIcon();
@@ -113,8 +122,8 @@ public:
         menu->addAction(a);
         menu->addAction(b);
 
-
         ///*
+        
         //push button
         pushButton1 = new PushButton(QString("Standard push button"), nullptr, nullptr);
         FluentIcon *pushButton2Icon = new FluentIcon();
@@ -190,6 +199,24 @@ public:
         transparentDropDownToolButton = new TransparentDropDownToolButton(dropDownPushButton2ButtonIcon, this);
         transparentDropDownToolButton->setMenu(this->menu);
 
+        primaryDropDownPushButton1 = new PrimaryDropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
+        primaryDropDownPushButton1->setMenu(this->menu);
+
+        primaryDropDownToolButton = new PrimaryDropDownToolButton(dropDownPushButton2ButtonIcon, this);
+        primaryDropDownToolButton->setMenu(this->menu);
+
+        splitPushButton1 = new SplitPushButton(QString("Split push button"), this, nullptr);
+        splitPushButton1->setFlyout(this->menu); 
+        FluentIcon *splitPushButton1ButtonIcon = new FluentIcon();
+        splitPushButton1ButtonIcon->setIconName("SEND_FILL");
+        QVariant qvSplitPushButton1ButtonIcon = QVariant::fromValue<FluentIcon>(*splitPushButton1ButtonIcon);
+        splitPushButton1->setDropIcon(&qvSplitPushButton1ButtonIcon);
+        //splitPushButton1->setDropIconSize(new QSize(14,14));
+
+        FluentIcon *splitPushButton2ButtonIcon = new FluentIcon();
+        splitPushButton2ButtonIcon->setIconName("GITHUB");
+        splitPushButton2 = new SplitPushButton(splitPushButton2ButtonIcon, QString("Split push button"), this);
+        splitPushButton2->setFlyout(this->menu);
 
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
@@ -221,16 +248,18 @@ public:
 
         gridLayout->addWidget(dropDownToolButton, 11, 0);
         gridLayout->addWidget(transparentDropDownToolButton, 11, 1);
-        
+        gridLayout->addWidget(primaryDropDownPushButton1, 11, 2);
+        gridLayout->addWidget(primaryDropDownToolButton, 11, 3);
+
+
+        gridLayout->addWidget(splitPushButton1, 12, 0);
+        gridLayout->addWidget(splitPushButton2, 12, 1);
         //*/
         
-        //FluentIcon *dropDownPushButton2ButtonIcon = new FluentIcon();
-        //dropDownPushButton2ButtonIcon->setIconName("MAIL");
-        // dropDownPushButton1 = new DropDownPushButton(QString("Email"), this, nullptr);
-        // dropDownPushButton1->setMenu(this->menu);
-        //dropDownToolButton = new DropDownToolButton(dropDownPushButton2ButtonIcon,  this);
-        //dropDownToolButton->setMenu(this->menu);
-        //gridLayout->addWidget(dropDownPushButton1, 0, 0);
+        //QVariant qvEmptyIcon = QVariant::fromValue<QIcon>(QIcon());
+        //splitPushButton1 = new SplitPushButton(QString("Split push button"), this, nullptr);
+        //splitPushButton1->setFlyout(this->menu);
+        //gridLayout->addWidget(splitPushButton1, 0, 0);
 
         
 

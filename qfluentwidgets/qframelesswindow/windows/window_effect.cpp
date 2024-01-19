@@ -21,10 +21,10 @@ void WindowsWindowEffect::setAcrylicEffect(HWND hWnd, QString gradientColor = QS
     for (int i = 6; i >= -1; i -= 2) {
         _gradientColor += gradientColor.mid(i, 2);
     }
-    qDebug() << _gradientColor;
+    //qDebug() << _gradientColor;
     bool ok;
     DWORD __gradientColor = DWORD(_gradientColor.toUInt(&ok, 16));
-    qDebug() << __gradientColor;
+    //qDebug() << __gradientColor;
     DWORD _animationId = DWORD(animationId);
     DWORD accentFlags = enableShadow ? DWORD(0x20 | 0x40 | 0x80 | 0x100) : DWORD(0);
     this->accentPolicy.AccentState = ACCENT_STATE::ACCENT_ENABLE_ACRYLICBLURBEHIND;
@@ -160,7 +160,7 @@ void WindowsWindowEffect::addWindowAnimation(HWND hWnd)
 {
     LONG style = GetWindowLongA(hWnd, GWL_STYLE);
     DWORD _ok = SetWindowLongA(hWnd, GWL_STYLE, style | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | CS_DBLCLKS | WS_THICKFRAME);
-    qDebug() << "WindowsWindowEffect::addWindowAnimation:" << _ok;
+    //qDebug() << "WindowsWindowEffect::addWindowAnimation:" << _ok;
 
     //PrintLastError();
 }

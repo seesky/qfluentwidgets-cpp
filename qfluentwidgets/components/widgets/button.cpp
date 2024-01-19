@@ -11,14 +11,19 @@ void PushButton::initialize(QWidget *parent = nullptr)
     this->isPressed = false;
     this->isHover = false;
     setIconSize(QSize(16, 16));
-    Font().setFont(this, 13, QFont::Normal);
-    //this->_postInit();
+    Font().setFont(this, 14, QFont::Normal);
+    this->_postInit();
+}
+
+PushButton::PushButton(QWidget *parent = nullptr) : QPushButton(parent)
+{
+    this->initialize(parent);
 }
 
 PushButton::PushButton(QString text, QWidget *parent = nullptr, QVariant *icon = nullptr) : QPushButton(parent)
 {
     this->initialize(parent);
-    //this->_postInit();
+    this->_postInit();
     this->setText(text);
     this->setIcon(icon);
 }
@@ -200,7 +205,7 @@ void HyperlinkButton::initialize(QWidget *parent)
     connect(this, &QPushButton::clicked, this, &HyperlinkButton::_onClicked);
 }
 
-HyperlinkButton::HyperlinkButton(QVariant *url, QString text, QWidget *parent, QVariant *icon)
+HyperlinkButton::HyperlinkButton(QVariant *url, QString text, QWidget *parent, QVariant *icon) : PushButton(parent)
 {
     this->initialize(parent);
     setText(text);
@@ -208,7 +213,7 @@ HyperlinkButton::HyperlinkButton(QVariant *url, QString text, QWidget *parent, Q
     setIcon(icon);
 }
 
-HyperlinkButton::HyperlinkButton(QIcon *icon, QVariant *url, QString text, QWidget *parent)
+HyperlinkButton::HyperlinkButton(QIcon *icon, QVariant *url, QString text, QWidget *parent): PushButton(parent)
 {
     this->initialize(parent);
     setText(text);
@@ -217,7 +222,7 @@ HyperlinkButton::HyperlinkButton(QIcon *icon, QVariant *url, QString text, QWidg
     this->setIcon(&_icon);
 }
 
-HyperlinkButton::HyperlinkButton(FluentIcon *icon, QVariant *url, QString text, QWidget *parent)
+HyperlinkButton::HyperlinkButton(FluentIcon *icon, QVariant *url, QString text, QWidget *parent): PushButton(parent)
 {
     this->initialize(parent);
     setText(text);
@@ -297,6 +302,18 @@ void ToolButton::initialize(QWidget *parent)
     this->_postInit();
 }
 
+ToolButton::ToolButton(QWidget *parent) : QToolButton(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("BUTTON"), Theme::AUTO);
+    this->isPressed = false;
+    this->isHover = false;
+    setIconSize(QSize(16, 16));
+    QVariant _icon = QVariant::fromValue<QIcon>(QIcon());
+    this->setIcon(&_icon);
+    Font().setFont(this, 14, QFont::Normal);
+    this->_postInit();
+}
+
 ToolButton::ToolButton(FluentIcon *icon, QWidget *parent) : QToolButton(parent)
 {
     this->initialize(parent);
@@ -323,7 +340,7 @@ void ToolButton::_postInit(){}
 
 void ToolButton::setIcon(QVariant *icon)
 {
-    this->_icon = icon;
+    this->_icon = new QVariant(*icon);
     this->update();
 }
 
@@ -459,7 +476,7 @@ void ToggleToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, 
     if(!isChecked()){
         return ToolButton::_drawIcon(icon, painter, rect);
     }
-    PrimaryToolButton *p = new PrimaryToolButton();
+    PrimaryToolButton *p = new PrimaryToolButton(this);
     p->_drawIcon(icon, painter, rect, QIcon::State::On);
 }
 
@@ -744,3 +761,454 @@ void DropDownToolButton::_drawDropDownIcon(QPainter *painter, QRect rect)
     }
 }
 
+
+
+
+
+////////////////////////////////////////////////////////
+void PrimaryDropDownPushButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    PrimaryPushButton::mouseReleaseEvent(e);
+    this->_showMenu();
+}
+
+void PrimaryDropDownPushButton::paintEvent(QPaintEvent *event)
+{
+    PrimaryPushButton::paintEvent(event);
+    QPainter *painter = new QPainter((QWidget *)this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(this->isHover){
+        painter->setOpacity(0.8);
+    }else if(this->isPressed){
+        painter->setOpacity(0.7);
+    }
+
+    QRect rect = QRect(((QWidget *)this)->width() - 22, ((QWidget *)this)->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
+    this->_drawDropDownIcon(painter, rect);
+    painter->end();
+}
+
+
+void PrimaryDropDownPushButton::setMenu(RoundMenu *menu)
+{
+    this->_menu = menu;
+}
+
+RoundMenu *PrimaryDropDownPushButton::menu()
+{
+    return this->_menu;
+}
+
+void PrimaryDropDownPushButton::_showMenu()
+{
+    if(!this->menu()){
+        return;
+    }
+
+    RoundMenu *menu = this->menu();
+    menu->view->setMinimumWidth(this->width());
+    menu->view->adjustSize(nullptr, MenuAnimationType::NONE);
+    menu->adjustSize();
+
+    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + this->width() / 2;
+    QPoint pd = this->mapToGlobal(QPoint(x, this->height()));
+    int hd = menu->view->heightForAnimation(&pd, MenuAnimationType::DROP_DOWN);
+
+    QPoint pu = this->mapToGlobal(QPoint(x, 0));
+    int hu = menu->view->heightForAnimation(&pu, MenuAnimationType::PULL_UP);
+
+    if(hd >= hu){
+        menu->view->adjustSize(&pd, MenuAnimationType::DROP_DOWN);
+        menu->exec(&pd, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        menu->view->adjustSize(&pu, MenuAnimationType::PULL_UP);
+        menu->exec(&pu, true, MenuAnimationType::PULL_UP);
+    }
+}
+
+void PrimaryDropDownPushButton::_hideMenu()
+{
+    if(this->menu())
+        this->menu()->hide();
+}
+
+void PrimaryDropDownPushButton::_drawDropDownIcon(QPainter *painter, QRect rect)
+{
+    Theme theme = !isDarkTheme() ? Theme::DARK : Theme::LIGHT;
+    FluentIcon *icon = new FluentIcon();
+    icon->setIconName(QString("ARROW_DOWN"));
+    icon->render(painter, rect, theme, 0, nullptr);
+}
+
+
+////////////////////////////////////////////////////////
+void PrimaryDropDownToolButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    PrimaryToolButton::mouseReleaseEvent(e);
+    this->_showMenu();
+}
+
+void PrimaryDropDownToolButton::paintEvent(QPaintEvent *event)
+{
+    PrimaryToolButton::paintEvent(event);
+    QPainter *painter = new QPainter((QWidget *)this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(this->isHover){
+        painter->setOpacity(0.8);
+    }else if(this->isPressed){
+        painter->setOpacity(0.7);
+    }
+
+    QRect rect = QRect(((QWidget *)this)->width() - 22, ((QWidget *)this)->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
+    this->_drawDropDownIcon(painter, rect);
+    painter->end();
+}
+
+
+void PrimaryDropDownToolButton::setMenu(RoundMenu *menu)
+{
+    this->_menu = menu;
+}
+
+RoundMenu *PrimaryDropDownToolButton::menu()
+{
+    return this->_menu;
+}
+
+void PrimaryDropDownToolButton::_showMenu()
+{
+    if(!this->menu()){
+        return;
+    }
+
+    RoundMenu *menu = this->menu();
+    menu->view->setMinimumWidth(this->width());
+    menu->view->adjustSize(nullptr, MenuAnimationType::NONE);
+    menu->adjustSize();
+
+    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + this->width() / 2;
+    QPoint pd = this->mapToGlobal(QPoint(x, this->height()));
+    int hd = menu->view->heightForAnimation(&pd, MenuAnimationType::DROP_DOWN);
+
+    QPoint pu = this->mapToGlobal(QPoint(x, 0));
+    int hu = menu->view->heightForAnimation(&pu, MenuAnimationType::PULL_UP);
+
+    if(hd >= hu){
+        menu->view->adjustSize(&pd, MenuAnimationType::DROP_DOWN);
+        menu->exec(&pd, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        menu->view->adjustSize(&pu, MenuAnimationType::PULL_UP);
+        menu->exec(&pu, true, MenuAnimationType::PULL_UP);
+    }
+}
+
+void PrimaryDropDownToolButton::_hideMenu()
+{
+    if(this->menu())
+        this->menu()->hide();
+}
+
+void PrimaryDropDownToolButton::_drawDropDownIcon(QPainter *painter, QRect rect)
+{
+    Theme theme = !isDarkTheme() ? Theme::DARK : Theme::LIGHT;
+    FluentIcon *icon = new FluentIcon();
+    icon->setIconName(QString("ARROW_DOWN"));
+    icon->render(painter, rect, theme, 0, nullptr);
+}
+
+
+void PrimaryDropDownToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state)
+{
+    QRect *r = new QRect(rect);
+    r->moveLeft(12);
+    return PrimaryToolButton::_drawIcon(icon, painter, *r);
+}
+
+
+void SplitDropButton::_postInit()
+{
+    this->arrowAni = new TranslateYAnimation(this, 2);
+    FluentIcon *icon = new FluentIcon();
+    icon->setIconName(QString("ARROW_DOWN"));
+    QVariant __icon = QVariant::fromValue<FluentIcon>(*icon);
+    this->setIcon(&__icon);
+}
+
+void SplitDropButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state)
+{
+    rect.translate(0, this->arrowAni->y());
+    if(this->isPressed){
+        painter->setOpacity(0.5);
+    }else if(this->isHover){
+        painter->setOpacity(1);
+    }else{
+        painter->setOpacity(0.63);
+    }
+    ToolButton::_drawIcon(icon, painter, rect);
+}
+
+
+
+/////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+void PrimarySplitDropButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    PrimaryToolButton::mouseReleaseEvent(e);
+    this->_showMenu();
+}
+
+void PrimarySplitDropButton::paintEvent(QPaintEvent *event)
+{
+    PrimaryToolButton::paintEvent(event);
+    QPainter *painter = new QPainter((QWidget *)this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(this->isHover){
+        painter->setOpacity(0.8);
+    }else if(this->isPressed){
+        painter->setOpacity(0.7);
+    }
+
+    QRect rect = QRect(((QWidget *)this)->width() - 22, ((QWidget *)this)->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
+    this->_drawDropDownIcon(painter, rect);
+    painter->end();
+}
+
+
+void PrimarySplitDropButton::setMenu(RoundMenu *menu)
+{
+    this->_menu = menu;
+}
+
+RoundMenu *PrimarySplitDropButton::menu()
+{
+    return this->_menu;
+}
+
+void PrimarySplitDropButton::_showMenu()
+{
+    if(!this->menu()){
+        return;
+    }
+
+    RoundMenu *menu = this->menu();
+    menu->view->setMinimumWidth(this->width());
+    menu->view->adjustSize(nullptr, MenuAnimationType::NONE);
+    menu->adjustSize();
+
+    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + this->width() / 2;
+    QPoint pd = this->mapToGlobal(QPoint(x, this->height()));
+    int hd = menu->view->heightForAnimation(&pd, MenuAnimationType::DROP_DOWN);
+
+    QPoint pu = this->mapToGlobal(QPoint(x, 0));
+    int hu = menu->view->heightForAnimation(&pu, MenuAnimationType::PULL_UP);
+
+    if(hd >= hu){
+        menu->view->adjustSize(&pd, MenuAnimationType::DROP_DOWN);
+        menu->exec(&pd, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        menu->view->adjustSize(&pu, MenuAnimationType::PULL_UP);
+        menu->exec(&pu, true, MenuAnimationType::PULL_UP);
+    }
+}
+
+void PrimarySplitDropButton::_hideMenu()
+{
+    if(this->menu())
+        this->menu()->hide();
+}
+
+void PrimarySplitDropButton::_drawDropDownIcon(QPainter *painter, QRect rect)
+{
+    Theme theme = !isDarkTheme() ? Theme::DARK : Theme::LIGHT;
+    FluentIcon *icon = new FluentIcon();
+    icon->setIconName(QString("ARROW_DOWN"));
+    icon->render(painter, rect, theme, 0, nullptr);
+}
+
+
+void PrimarySplitDropButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state)
+{
+    rect.translate(0, this->arrowAni->y());
+    if(this->isPressed){
+        painter->setOpacity(0.7);
+    }else if(this->isHover){
+        painter->setOpacity(0.9);
+    }else{
+        painter->setOpacity(1);
+    }
+
+    QVariant *__icon;
+    if(icon->canConvert<FluentIcon>()){
+        QIcon *temp_icon = icon->value<FluentIcon>().icon(!isDarkTheme() ? Theme::DARK : Theme::LIGHT, nullptr);
+        __icon == new QVariant(QVariant::fromValue<QIcon>(*temp_icon));
+    }else{
+        __icon = icon;
+    }
+
+    PrimaryToolButton::_drawIcon(__icon, painter, rect);
+}
+
+void PrimarySplitDropButton::_postInit()
+{
+    this->arrowAni = new TranslateYAnimation(this, 2);
+    FluentIcon *icon = new FluentIcon();
+    icon->setIconName(QString("ARROW_DOWN"));
+    QVariant __icon = QVariant::fromValue<FluentIcon>(*icon);
+    this->setIcon(&__icon);
+    this->setIconSize(QSize(10, 10));
+    this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+}
+
+
+SplitWidgetBase::SplitWidgetBase(QWidget *parent) : QWidget(parent)
+{
+    
+    this->flyout = nullptr;
+    this->dropButton = new SplitDropButton(this);
+
+    this->hBoxLayout = new QHBoxLayout(this);
+    this->hBoxLayout->setSpacing(0);
+    this->hBoxLayout->setContentsMargins(0, 0, 0, 0);
+    this->hBoxLayout->addWidget(this->dropButton);
+
+    connect(this->dropButton, &SplitDropButton::clicked, this, &SplitWidgetBase::dropDownClicked);
+    connect(this->dropButton, &SplitDropButton::clicked, this, &SplitWidgetBase::showFlyout);
+
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    
+}
+
+void SplitWidgetBase::setWidget(QWidget *widget)
+{
+    this->hBoxLayout->insertWidget(0, widget, 1, Qt::AlignLeft);
+}
+
+void SplitWidgetBase::setDropButton(SplitDropButton *button)
+{
+    this->hBoxLayout->removeWidget(this->dropButton);
+    this->dropButton->deleteLater();
+
+    this->dropButton = button;
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->hBoxLayout->addWidget(button);
+}
+
+void SplitWidgetBase::setDropIcon(QVariant *icon)
+{
+    this->dropButton->setIcon(icon);
+    this->dropButton->removeEventFilter(this->dropButton->arrowAni);
+}
+
+void SplitWidgetBase::setDropIconSize(QSize *size)
+{
+    this->dropButton->setIconSize(*size);
+    //this->dropButton->adjustSize();
+}
+
+void SplitWidgetBase::setFlyout(QWidget *flyout)
+{
+    this->flyout = flyout;
+}
+
+void SplitWidgetBase::showFlyout()
+{
+    if(this->flyout == nullptr){
+        return;
+    }
+
+    QWidget *w = this->flyout;
+    RoundMenu *_w = qobject_cast<RoundMenu *>(w);
+    if(_w != nullptr){
+        _w->view->setMinimumWidth(this->width());
+        _w->view->adjustSize(nullptr, MenuAnimationType::NONE);
+        _w->adjustSize();
+
+        int dx = _w->layout()->contentsMargins().left();
+        int x = -_w->width() / 2 + dx + this->width() /2;
+        int y = this->height();
+        QPoint point = this->mapToGlobal(QPoint(x, y));
+        _w->exec(&point, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        int dx = 0;
+        int x = -w->width() / 2 + dx + this->width() /2;
+        int y = this->height();
+        QPoint point = this->mapToGlobal(QPoint(x, y));
+        _w->exec(&point, true, MenuAnimationType::DROP_DOWN);
+    }
+
+}
+
+
+SplitPushButton::SplitPushButton(QWidget *parent) : SplitWidgetBase(parent)
+{
+    this->button = new PushButton(this);
+    this->button->setObjectName(QString("splitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &SplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+}
+
+SplitPushButton::SplitPushButton(QString text, QWidget *parent, QVariant *icon) : SplitWidgetBase(parent)
+{
+    this->button = new PushButton(this);
+    this->button->setObjectName(QString("splitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &SplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setText(text);
+    this->setIcon(icon);
+}
+
+SplitPushButton::SplitPushButton(QIcon *icon, QString text, QWidget *parent) : SplitWidgetBase(parent)
+{
+    this->button = new PushButton(this);
+    this->button->setObjectName(QString("splitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &SplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setText(text);
+    QVariant _icon = QVariant::fromValue<QIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+SplitPushButton::SplitPushButton(FluentIcon *icon, QString text, QWidget *parent) : SplitWidgetBase(parent)
+{
+    this->button = new PushButton(this);
+    this->button->setObjectName(QString("splitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &SplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setText(text);
+    QVariant _icon = QVariant::fromValue<FluentIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+
+QString SplitPushButton::text(){
+    return this->button->text();
+}
+
+void SplitPushButton::setText(QString text)
+{
+    this->button->setText(text);
+    this->adjustSize();
+}
+
+QIcon *SplitPushButton::icon()
+{
+    QIcon icon = this->button->icon();
+    return &icon;
+}
+
+void SplitPushButton::setIcon(QVariant *icon)
+{
+    this->button->setIcon(icon);
+}
+
+void SplitPushButton::setIconSize(QSize *size)
+{
+    this->button->setIconSize(*size);
+}

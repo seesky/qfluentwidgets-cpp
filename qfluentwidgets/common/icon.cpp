@@ -8,7 +8,7 @@
 
 void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect)
 {   
-    qDebug() << icon;
+    //qDebug() << icon;
     QSvgRenderer *renderer = new QSvgRenderer(icon);
     renderer->render(painter, QRectF(rect));
     /*
@@ -77,7 +77,7 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
         return "";
     }
     QFile *f = new QFile(iconPath);
-    qDebug() << iconPath;
+    //qDebug() << iconPath;
     f->open(QFile::ReadOnly);
 
     QDomDocument *dom = new QDomDocument();
@@ -120,7 +120,7 @@ void MIcon::drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QSt
 QIcon *FluentIcon::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 {
     QString path = this->path(theme);
-    qDebug() << path;
+    //qDebug() << path;
     if(!((path.endsWith(".svg") && color != nullptr)))
     {
         QIcon *i = new QIcon(this->path(theme));
@@ -137,9 +137,9 @@ QIcon *FluentIcon::icon(Theme theme = Theme::AUTO, QColor color = nullptr)
 
 QString FluentIcon::path(Theme theme = Theme::AUTO)
 {
-    qDebug() << this->iconName;
+    //qDebug() << this->iconName;
     QString path = QString("qfluentwidgets/images/icons/" + FluentIconMap.at(this->iconName) + "_" + getIconColor(theme) + ".svg");
-    qDebug() << path;
+    //qDebug() << path;
     return path;
 }
 
@@ -253,7 +253,7 @@ QString Icon::path(Theme theme = Theme::AUTO)
 
 FluentIconEngine::FluentIconEngine(QVariant *icon, bool reverse = false)
 {
-    qDebug() << icon->typeName();
+    //qDebug() << icon->typeName();
     this->icon = new QVariant(*icon);
     this->isThemeReversed = reverse;
 }
@@ -269,7 +269,7 @@ void FluentIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode m
         painter->setOpacity(0.7);
     }
 
-    qDebug() << this->icon->typeName();
+    //qDebug() << this->icon->typeName();
     QVariant *_icon = this->icon;
     Theme theme;
 

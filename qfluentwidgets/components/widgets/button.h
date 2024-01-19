@@ -11,6 +11,7 @@ class PushButton : public QPushButton{
     Q_OBJECT
 public:
     PushButton(){};
+    PushButton(QWidget *parent);
     void initialize(QWidget *parent);
     PushButton(QString text, QWidget *parent, QVariant *icon);
     PushButton(QIcon *icon, QString text, QWidget *parent);
@@ -104,7 +105,7 @@ class ToolButton : public QToolButton{
     Q_OBJECT
 public:
     void initialize(QWidget *parent);
-    ToolButton(){};
+    ToolButton(QWidget *parent);
     ToolButton(FluentIcon *icon, QWidget *parent);
     ToolButton(QIcon *icon, QWidget *parent);
     ToolButton(QString icon, QWidget *parent);
@@ -139,7 +140,7 @@ private:
 class PrimaryToolButton : public ToolButton{
     Q_OBJECT
 public:
-    PrimaryToolButton(){};
+    PrimaryToolButton(QWidget *parent) : ToolButton(parent){};
     PrimaryToolButton(FluentIcon *icon, QWidget *parent);
     PrimaryToolButton(QIcon *icon, QWidget *parent);
     PrimaryToolButton(QString icon, QWidget *parent);
@@ -254,3 +255,145 @@ public:
 };
 
 
+class PrimaryDropDownPushButton : public PrimaryPushButton{
+    Q_OBJECT
+public:
+    PrimaryDropDownPushButton(QString text, QWidget *parent, QVariant *icon) : PrimaryPushButton(text, parent, icon){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
+    PrimaryDropDownPushButton(FluentIcon *icon, QString text, QWidget *parent) : PrimaryPushButton(icon, text, parent){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
+    void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *event);
+
+    void setMenu(RoundMenu *menu);
+    RoundMenu *menu();
+    void _showMenu();
+    void _hideMenu();
+    void _drawDropDownIcon(QPainter *painter, QRect rect);
+
+    RoundMenu *_menu;
+    TranslateYAnimation *arrowAni;
+    bool isHover;
+    bool isPressed;
+};
+
+
+class PrimaryDropDownToolButton : public PrimaryToolButton{
+    Q_OBJECT
+public:
+    PrimaryDropDownToolButton(QWidget *parent) : PrimaryToolButton(parent){};
+    PrimaryDropDownToolButton(FluentIcon *icon, QWidget *parent): PrimaryToolButton(icon, parent){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
+    void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *event);
+
+    void setMenu(RoundMenu *menu);
+    RoundMenu *menu();
+    void _showMenu();
+    void _hideMenu();
+    void _drawDropDownIcon(QPainter *painter, QRect rect);
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+
+    RoundMenu *_menu;
+    TranslateYAnimation *arrowAni;
+    bool isHover;
+    bool isPressed;
+};
+
+class SplitDropButton : public ToolButton{
+    Q_OBJECT
+public:
+    SplitDropButton(QWidget *parent) : ToolButton(parent){
+        this->_postInit();
+    };
+    SplitDropButton(FluentIcon *icon, QWidget *parent) : ToolButton(icon, parent){
+        this->_postInit();
+    };
+    SplitDropButton(QIcon *icon, QWidget *parent) : ToolButton(icon, parent){
+        this->_postInit();
+    };
+    SplitDropButton(QString icon, QWidget *parent) : ToolButton(icon, parent){
+        this->_postInit();
+    };
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+    void _postInit() override;
+
+    TranslateYAnimation *arrowAni;
+};
+
+
+class PrimarySplitDropButton : public PrimaryToolButton{
+    Q_OBJECT
+public:
+    PrimarySplitDropButton(FluentIcon *icon, QWidget *parent): PrimaryToolButton(icon, parent){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
+    void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *event);
+
+    void setMenu(RoundMenu *menu);
+    RoundMenu *menu();
+    void _showMenu();
+    void _hideMenu();
+    void _drawDropDownIcon(QPainter *painter, QRect rect);
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+    void _postInit() override;
+
+    RoundMenu *_menu;
+    TranslateYAnimation *arrowAni;
+};
+
+
+class SplitWidgetBase : public QWidget{
+    Q_OBJECT
+public:
+    SplitWidgetBase(){};
+    SplitWidgetBase(QWidget *parent);
+    void setWidget(QWidget *widget);
+    void setDropButton(SplitDropButton *button);
+    void setDropIcon(QVariant *icon);
+    void setDropIconSize(QSize *size);
+    void setFlyout(QWidget *flyout);
+    
+
+    SplitDropButton *dropButton;
+    QHBoxLayout *hBoxLayout;
+    QWidget *flyout;
+
+    
+    
+signals:
+    void dropDownClicked();
+
+public slots:
+    void showFlyout();
+};
+
+
+class SplitPushButton : public SplitWidgetBase{
+    Q_OBJECT
+public:
+    SplitPushButton(){};
+    SplitPushButton(QWidget *parent);
+    SplitPushButton(QString text, QWidget *parent, QVariant *icon);
+    SplitPushButton(QIcon *icon, QString text, QWidget *parent);
+    SplitPushButton(FluentIcon *icon, QString text, QWidget *parent);
+
+    void _postInit(){};
+    QString text();
+    void setText(QString text);
+    QIcon *icon();
+    void setIcon(QVariant *icon);
+    void setIconSize(QSize *size);
+
+    PushButton *button;
+signals:
+    void clicked();
+};
