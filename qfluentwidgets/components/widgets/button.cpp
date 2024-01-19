@@ -464,16 +464,11 @@ void ToggleToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, 
 }
 
 
-DropDownButtonBase::DropDownButtonBase(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon){
+DropDownButtonBase::DropDownButtonBase(){
     this->_menu = nullptr;
-    this->arrowAni = new TranslateYAnimation(this, 2);
+    //this->arrowAni = new TranslateYAnimation(this, 2);
 }
 
-DropDownButtonBase::DropDownButtonBase(FluentIcon *icon, QString text, QWidget *parent) : PushButton(icon, text, parent)
-{
-    this->_menu = nullptr;
-    this->arrowAni = new TranslateYAnimation(this, 2);
-}
 
 void DropDownButtonBase::setMenu(RoundMenu *menu)
 {
@@ -492,15 +487,15 @@ void DropDownButtonBase::_showMenu()
     }
 
     RoundMenu *menu = this->menu();
-    menu->view->setMinimumWidth(this->width());
+    menu->view->setMinimumWidth(((QWidget *)this)->width());
     menu->view->adjustSize(nullptr, MenuAnimationType::NONE);
     menu->adjustSize();
 
-    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + this->width() / 2;
-    QPoint pd = this->mapToGlobal(QPoint(x, this->height()));
+    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + ((QWidget *)this)->width() / 2;
+    QPoint pd = ((QWidget *)this)->mapToGlobal(QPoint(x, ((QWidget *)this)->height()));
     int hd = menu->view->heightForAnimation(&pd, MenuAnimationType::DROP_DOWN);
 
-    QPoint pu = this->mapToGlobal(QPoint(x, 0));
+    QPoint pu = ((QWidget *)this)->mapToGlobal(QPoint(x, 0));
     int hu = menu->view->heightForAnimation(&pu, MenuAnimationType::PULL_UP);
 
     if(hd >= hu){
@@ -543,7 +538,7 @@ void DropDownButtonBase::_drawDropDownIcon(QPainter *painter, QRect rect)
 
 void DropDownButtonBase::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
+    QPainter *painter = new QPainter((QWidget *)this);
     painter->setRenderHints(QPainter::Antialiasing);
     if(this->isHover){
         painter->setOpacity(0.8);
@@ -551,7 +546,7 @@ void DropDownButtonBase::paintEvent(QPaintEvent *event)
         painter->setOpacity(0.7);
     }
 
-    QRect rect = QRect(this->width() - 22, this->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
+    QRect rect = QRect(((QWidget *)this)->width() - 22, ((QWidget *)this)->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
     this->_drawDropDownIcon(painter, rect);
     painter->end();
 }
@@ -566,5 +561,186 @@ void DropDownPushButton::mouseReleaseEvent(QMouseEvent *e)
 void DropDownPushButton::paintEvent(QPaintEvent *event)
 {
     PushButton::paintEvent(event);
-    DropDownButtonBase::paintEvent(event);
+    QPainter *painter = new QPainter((QWidget *)this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(this->isHover){
+        painter->setOpacity(0.8);
+    }else if(this->isPressed){
+        painter->setOpacity(0.7);
+    }
+
+    QRect rect = QRect(((QWidget *)this)->width() - 22, ((QWidget *)this)->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
+    this->_drawDropDownIcon(painter, rect);
+    painter->end();
 }
+
+
+void DropDownPushButton::setMenu(RoundMenu *menu)
+{
+    this->_menu = menu;
+}
+
+RoundMenu *DropDownPushButton::menu()
+{
+    return this->_menu;
+}
+
+void DropDownPushButton::_showMenu()
+{
+    if(!this->menu()){
+        return;
+    }
+
+    RoundMenu *menu = this->menu();
+    menu->view->setMinimumWidth(this->width());
+    menu->view->adjustSize(nullptr, MenuAnimationType::NONE);
+    menu->adjustSize();
+
+    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + this->width() / 2;
+    QPoint pd = this->mapToGlobal(QPoint(x, this->height()));
+    int hd = menu->view->heightForAnimation(&pd, MenuAnimationType::DROP_DOWN);
+
+    QPoint pu = this->mapToGlobal(QPoint(x, 0));
+    int hu = menu->view->heightForAnimation(&pu, MenuAnimationType::PULL_UP);
+
+    if(hd >= hu){
+        menu->view->adjustSize(&pd, MenuAnimationType::DROP_DOWN);
+        menu->exec(&pd, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        menu->view->adjustSize(&pu, MenuAnimationType::PULL_UP);
+        menu->exec(&pu, true, MenuAnimationType::PULL_UP);
+    }
+}
+
+void DropDownPushButton::_hideMenu()
+{
+    if(this->menu())
+        this->menu()->hide();
+}
+
+void DropDownPushButton::_drawDropDownIcon(QPainter *painter, QRect rect)
+{
+    if(isDarkTheme()){
+        FluentIcon *icon = new FluentIcon();
+        icon->setIconName(QString("ARROW_DOWN"));
+        icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+    }else{
+        FluentIcon *icon = new FluentIcon();
+        icon->setIconName(QString("ARROW_DOWN"));
+
+        /*
+        std::map<QString, QString> attributes = {
+            {QString("fill"), QString("#646464")}
+        };
+        */
+        std::map<QString, QString> attributes;
+        attributes[QString("fill")] = QString("#646464");
+        
+        icon->render(painter, rect, Theme::AUTO, 0, &attributes);
+        //icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+    }
+}
+
+
+
+
+void DropDownToolButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    ToolButton::mouseReleaseEvent(e);
+    this->_showMenu();
+}
+
+void DropDownToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state)
+{
+    //rect.moveLeft(12);
+    QRect *r = new QRect(rect);
+    r->moveLeft(12);
+    //r->moveRight(25);
+    return ToolButton::_drawIcon(icon, painter, *r);
+}
+
+void DropDownToolButton::paintEvent(QPaintEvent *event)
+{
+    ToolButton::paintEvent(event);
+
+    QPainter *painter = new QPainter(this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(this->isHover){
+        painter->setOpacity(0.8);
+    }else if(this->isPressed){
+        painter->setOpacity(0.7);
+    }
+
+    QRect rect = QRect(this->width() - 22, this->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
+    this->_drawDropDownIcon(painter, rect);
+    painter->end();
+
+}
+
+
+void DropDownToolButton::setMenu(RoundMenu *menu)
+{
+    this->_menu = menu;
+}
+
+RoundMenu *DropDownToolButton::menu()
+{
+    return this->_menu;
+}
+
+void DropDownToolButton::_showMenu()
+{
+    if(!this->menu()){
+        return;
+    }
+
+    RoundMenu *menu = this->menu();
+    menu->view->setMinimumWidth(this->width());
+    menu->view->adjustSize(nullptr, MenuAnimationType::NONE);
+    menu->adjustSize();
+
+    int x = -menu->width() / 2 + menu->layout()->contentsMargins().left() + this->width() / 2;
+    QPoint pd = this->mapToGlobal(QPoint(x, this->height()));
+    int hd = menu->view->heightForAnimation(&pd, MenuAnimationType::DROP_DOWN);
+
+    QPoint pu = this->mapToGlobal(QPoint(x, 0));
+    int hu = menu->view->heightForAnimation(&pu, MenuAnimationType::PULL_UP);
+
+    if(hd >= hu){
+        menu->view->adjustSize(&pd, MenuAnimationType::DROP_DOWN);
+        menu->exec(&pd, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        menu->view->adjustSize(&pu, MenuAnimationType::PULL_UP);
+        menu->exec(&pu, true, MenuAnimationType::PULL_UP);
+    }
+}
+
+void DropDownToolButton::_hideMenu()
+{
+    if(this->menu())
+        this->menu()->hide();
+}
+
+void DropDownToolButton::_drawDropDownIcon(QPainter *painter, QRect rect)
+{
+    if(isDarkTheme()){
+        FluentIcon *icon = new FluentIcon();
+        icon->setIconName(QString("ARROW_DOWN"));
+        icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+    }else{
+        FluentIcon *icon = new FluentIcon();
+        icon->setIconName(QString("ARROW_DOWN"));
+
+        /*
+        std::map<QString, QString> attributes = {
+            {QString("fill"), QString("#646464")}
+        };
+        */
+        std::map<QString, QString> attributes;
+        attributes[QString("fill")] = QString("#646464");
+        
+        icon->render(painter, rect, Theme::AUTO, 0, &attributes);
+        //icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+    }
+}
+

@@ -89,6 +89,11 @@ public:
     RoundMenu *menu;
     DropDownPushButton *dropDownPushButton1;
     DropDownPushButton *dropDownPushButton2;
+    TransparentDropDownPushButton *transparentDropDownPushButton1;
+    TransparentDropDownPushButton *transparentDropDownPushButton2;
+
+    DropDownToolButton *dropDownToolButton;
+    TransparentDropDownToolButton *transparentDropDownToolButton;
 
     QGridLayout *gridLayout;
     PushButtonDemo(){
@@ -107,8 +112,6 @@ public:
         Action *b = new Action(menuActionIcon2, QString("Album"), nullptr);
         menu->addAction(a);
         menu->addAction(b);
-        //menu->addAction(new Action(menuActionIcon2, QString("Sing"), nullptr));
-        //menu->addAction(new Action(menuActionIcon3, QString("Music"), nullptr));
 
 
         ///*
@@ -176,6 +179,17 @@ public:
         dropDownPushButton2 = new DropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
         dropDownPushButton2->setMenu(this->menu);
 
+        transparentDropDownPushButton1 = new TransparentDropDownPushButton(QString("Email"), this, nullptr);
+        transparentDropDownPushButton2 = new TransparentDropDownPushButton(dropDownPushButton2ButtonIcon, QString("Email"), this);
+        transparentDropDownPushButton1->setMenu(this->menu);
+        transparentDropDownPushButton2->setMenu(this->menu);
+
+        dropDownToolButton = new DropDownToolButton(dropDownPushButton2ButtonIcon, this);
+        dropDownToolButton->setMenu(this->menu);
+
+        transparentDropDownToolButton = new TransparentDropDownToolButton(dropDownPushButton2ButtonIcon, this);
+        transparentDropDownToolButton->setMenu(this->menu);
+
 
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
@@ -201,12 +215,30 @@ public:
         
         gridLayout->addWidget(dropDownPushButton1, 9, 0);
         gridLayout->addWidget(dropDownPushButton2, 9, 1);
-        //*/
 
+        gridLayout->addWidget(transparentDropDownPushButton1, 10, 0);
+        gridLayout->addWidget(transparentDropDownPushButton2, 10, 1);
+
+        gridLayout->addWidget(dropDownToolButton, 11, 0);
+        gridLayout->addWidget(transparentDropDownToolButton, 11, 1);
+        
+        //*/
+        
+        //FluentIcon *dropDownPushButton2ButtonIcon = new FluentIcon();
+        //dropDownPushButton2ButtonIcon->setIconName("MAIL");
+        // dropDownPushButton1 = new DropDownPushButton(QString("Email"), this, nullptr);
+        // dropDownPushButton1->setMenu(this->menu);
+        //dropDownToolButton = new DropDownToolButton(dropDownPushButton2ButtonIcon,  this);
+        //dropDownToolButton->setMenu(this->menu);
+        //gridLayout->addWidget(dropDownPushButton1, 0, 0);
 
         
+
+        //gridLayout->addWidget(dropDownToolButton, 0, 1);
+
+
         setLayout(gridLayout);
-        resize(600, 900);
+        resize(600, 1000);
     }
 
 public slots:

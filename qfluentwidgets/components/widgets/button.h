@@ -167,11 +167,9 @@ public:
 };
 
 
-class DropDownButtonBase : public PushButton{
-    Q_OBJECT
+class DropDownButtonBase{
 public:
-    DropDownButtonBase(QString text, QWidget *parent, QVariant *icon);
-    DropDownButtonBase(FluentIcon *icon, QString text, QWidget *parent);
+    DropDownButtonBase();
     void setMenu(RoundMenu *menu);
     RoundMenu *menu();
     void _showMenu();
@@ -187,11 +185,72 @@ private:
 };
 
 
-class DropDownPushButton : public DropDownButtonBase{
+class DropDownPushButton : public PushButton{
+    Q_OBJECT
 public:
-    DropDownPushButton(QString text, QWidget *parent, QVariant *icon) : DropDownButtonBase(text, parent, icon){};
-    DropDownPushButton(FluentIcon *icon, QString text, QWidget *parent) : DropDownButtonBase(icon, text, parent){};
+    DropDownPushButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
+    DropDownPushButton(FluentIcon *icon, QString text, QWidget *parent) : PushButton(icon, text, parent){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
     void mouseReleaseEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *event);
+
+    void setMenu(RoundMenu *menu);
+    RoundMenu *menu();
+    void _showMenu();
+    void _hideMenu();
+    void _drawDropDownIcon(QPainter *painter, QRect rect);
+
+    RoundMenu *_menu;
+    TranslateYAnimation *arrowAni;
+    bool isHover;
+    bool isPressed;
 private:
 };
+
+
+class TransparentDropDownPushButton : public DropDownPushButton{
+    Q_OBJECT
+public:
+    TransparentDropDownPushButton(QString text, QWidget *parent, QVariant *icon) : DropDownPushButton(text, parent, icon){};
+    TransparentDropDownPushButton(FluentIcon *icon, QString text, QWidget *parent) : DropDownPushButton(icon, text, parent){};
+private:
+};
+
+
+class DropDownToolButton : public ToolButton{
+    Q_OBJECT
+public:
+    DropDownToolButton(FluentIcon *icon, QWidget *parent): ToolButton(icon, parent){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
+    void paintEvent(QPaintEvent *event) override;
+
+    void setMenu(RoundMenu *menu);
+    RoundMenu *menu();
+    void _showMenu();
+    void _hideMenu();
+    void _drawDropDownIcon(QPainter *painter, QRect rect);
+
+    RoundMenu *_menu;
+    TranslateYAnimation *arrowAni;
+    bool isHover;
+    bool isPressed;
+private:
+};
+
+
+class TransparentDropDownToolButton : public DropDownToolButton{
+    Q_OBJECT
+public:
+    TransparentDropDownToolButton(FluentIcon *icon, QWidget *parent): DropDownToolButton(icon, parent){};
+};
+
+
