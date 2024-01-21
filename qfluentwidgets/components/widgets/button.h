@@ -493,3 +493,28 @@ public:
 signals:
     void clicked();
 };
+
+
+class PillPushButton : public ToggleButton{
+    Q_OBJECT
+public:
+    PillPushButton(){};
+    PillPushButton(QString text, QWidget *parent, QVariant *icon) : ToggleButton(text, parent, icon){};
+    PillPushButton(FluentIcon *icon, QString text, QWidget *parent) : ToggleButton(icon, text, parent){};
+
+    void paintEvent(QPaintEvent *event) override;
+};
+
+
+
+class PillToolButton : public ToggleToolButton{
+    Q_OBJECT
+public:
+    PillToolButton(FluentIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
+    PillToolButton(QIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
+    PillToolButton(QString icon, QWidget *parent) : ToggleToolButton(icon, parent){};
+
+    void paintEvent(QPaintEvent *event) override;
+};
+
+

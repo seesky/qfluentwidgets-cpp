@@ -109,6 +109,14 @@ public:
     SplitToolButton *splitToolButton;
     PrimarySplitToolButton *primarySplitToolButton;
 
+    PillPushButton *pillPushButton1;
+    PillPushButton *pillPushButton2;
+
+    PillToolButton *pillToolButton1;
+    PillToolButton *pillToolButton2;
+    PillToolButton *pillToolButton3;
+
+
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
@@ -237,6 +245,23 @@ public:
         primarySplitToolButton = new PrimarySplitToolButton(splitPushButton2ButtonIcon, this);
         primarySplitToolButton->setFlyout(this->menu);
 
+
+        pillPushButton1 = new PillPushButton(QString("Pill Push Button"), this, nullptr);
+        FluentIcon *pillPushButton2ButtonIcon = new FluentIcon();
+        pillPushButton2ButtonIcon->setIconName("CALENDAR");
+        pillPushButton2 = new PillPushButton(pillPushButton2ButtonIcon, QString("Pill Push Button"), this);
+        //pillPushButton2.set
+
+
+        pillToolButton1 = new PillToolButton(pillPushButton2ButtonIcon, this);
+        pillToolButton2 = new PillToolButton(pillPushButton2ButtonIcon, this);
+        pillToolButton3 = new PillToolButton(pillPushButton2ButtonIcon, this);
+        pillToolButton2->setDisabled(true);
+        pillToolButton3->setChecked(true);
+        pillToolButton3->setDisabled(true);
+
+
+
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
         gridLayout->addWidget(primaryButton1, 1, 0);
@@ -279,11 +304,20 @@ public:
 
         gridLayout->addWidget(splitToolButton, 14, 0);
         gridLayout->addWidget(primarySplitToolButton, 14, 1);
+
+        gridLayout->addWidget(pillPushButton1, 15, 0);
+        gridLayout->addWidget(pillPushButton2, 15, 1);
+
+        gridLayout->addWidget(pillToolButton1, 16, 0);
+        gridLayout->addWidget(pillToolButton2, 16, 1);
+        gridLayout->addWidget(pillToolButton3, 16, 2);
+
         //*/
-        
-        // primarySplitPushButton1 = new PrimarySplitPushButton(QString("Split push button"), this, nullptr);
-        // primarySplitPushButton1->setFlyout(this->menu);
-        // gridLayout->addWidget(primarySplitPushButton1, 0, 0);
+
+
+
+        // gridLayout->addWidget(toggleToolButton, 1, 0);
+        // gridLayout->addWidget(transparentToggleToolButton, 1, 1);
 
         
 

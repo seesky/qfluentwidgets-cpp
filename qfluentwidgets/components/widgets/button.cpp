@@ -445,7 +445,7 @@ void PrimaryToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect,
         painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
         if(icon->canConvert<FluentIcon>()){
             FluentIcon i = icon->value<FluentIcon>();
-            qi = QVariant::fromValue<QIcon *>(i.icon(Theme::DARK, nullptr));
+            qi = QVariant::fromValue<QIcon>(*(i.icon(Theme::DARK, QColor())));
         }
     }else{
         qi = *icon;
@@ -1507,3 +1507,100 @@ void PrimarySplitToolButton::setIconSize(QSize *size)
     this->button->setIconSize(*size);
 }
 
+
+void PillPushButton::paintEvent(QPaintEvent *event)
+{
+    QPainter *painter = new QPainter(this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    bool isDark = isDarkTheme();
+    QRect rect;
+    if(!this->isChecked()){
+        rect = this->rect().adjusted(1, 1, -1, -1);
+        QColor borderColor = isDark ? QColor(255, 255, 255, 18) : QColor(0, 0, 0, 15);
+        QColor bgColor;
+        if(!this->isEnabled()){
+            bgColor = isDark ? QColor(255, 255, 255, 11) : QColor(249, 249, 249, 75);
+        }else if(this->isPressed || this->isHover){
+            bgColor = isDark ? QColor(255, 255, 255, 21) : QColor(249, 249, 249, 128);
+        }else{
+            bgColor = isDark ? QColor(255, 255, 255, 15) : QColor(249, 249, 249, 194);
+        }
+
+        painter->setPen(borderColor);
+        painter->setBrush(bgColor);
+        int r = rect.height() / 2;
+        painter->drawRoundedRect(rect, r, r);
+
+    }else{
+        QColor bgColor;
+        if(!this->isEnabled()){
+            bgColor = isDark ? QColor(255, 255, 255, 40) : QColor(0, 0, 0, 55);
+        }else if(this->isPressed){
+            bgColor = isDark ? *(ThemeColor().color(QString("DARK_2"))) : *(ThemeColor().color(QString("LIGHT_3")));
+        }else if(this->isHover){
+            bgColor = isDark ? *(ThemeColor().color(QString("DARK_1"))) : *(ThemeColor().color(QString("LIGHT_1")));
+        }else{
+            bgColor = *(ThemeColor().themeColor());
+        }
+
+        Qt::GlobalColor borderColor =  Qt::transparent;
+        rect = this->rect();
+
+        painter->setPen(borderColor);
+        painter->setBrush(bgColor);
+        int r = rect.height() / 2;
+        painter->drawRoundedRect(rect, r, r);
+    }
+
+    ToggleButton::paintEvent(event);
+}
+
+
+void PillToolButton::paintEvent(QPaintEvent *event)
+{
+    QPainter *painter = new QPainter(this);
+    painter->setRenderHints(QPainter::Antialiasing);
+    bool isDark = isDarkTheme();
+    QRect rect;
+    if(!this->isChecked()){
+        rect = this->rect().adjusted(1, 1, -1, -1);
+        QColor borderColor = isDark ? QColor(255, 255, 255, 18) : QColor(0, 0, 0, 15);
+        QColor bgColor;
+        if(!this->isEnabled()){
+            bgColor = isDark ? QColor(255, 255, 255, 11) : QColor(249, 249, 249, 75);
+        }else if(this->isPressed || this->isHover){
+            bgColor = isDark ? QColor(255, 255, 255, 21) : QColor(249, 249, 249, 128);
+        }else{
+            bgColor = isDark ? QColor(255, 255, 255, 15) : QColor(249, 249, 249, 194);
+        }
+
+        painter->setPen(borderColor);
+        painter->setBrush(bgColor);
+        int r = rect.height() / 2;
+        painter->drawRoundedRect(rect, r, r);
+
+    }else{
+        QColor bgColor;
+        if(!this->isEnabled()){
+            bgColor = isDark ? QColor(255, 255, 255, 40) : QColor(0, 0, 0, 55);
+        }else if(this->isPressed){
+            bgColor = isDark ? *(ThemeColor().color(QString("DARK_2"))) : *(ThemeColor().color(QString("LIGHT_3")));
+        }else if(this->isHover){
+            bgColor = isDark ? *(ThemeColor().color(QString("DARK_1"))) : *(ThemeColor().color(QString("LIGHT_1")));
+        }else{
+            bgColor = *(ThemeColor().themeColor());
+        }
+
+        Qt::GlobalColor borderColor =  Qt::transparent;
+        rect = this->rect();
+
+        painter->setPen(borderColor);
+        painter->setBrush(bgColor);
+        int r = rect.height() / 2;
+        painter->drawRoundedRect(rect, r, r);
+    }
+
+    painter->end();
+
+    ToggleToolButton::paintEvent(event);
+}
