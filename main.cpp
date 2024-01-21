@@ -103,6 +103,11 @@ public:
     SplitPushButton *splitPushButton1;
     SplitPushButton *splitPushButton2;
 
+    PrimarySplitPushButton *primarySplitPushButton1;
+    PrimarySplitPushButton *primarySplitPushButton2;
+
+    SplitToolButton *splitToolButton;
+
     QGridLayout *gridLayout;
     PushButtonDemo(){
 
@@ -218,6 +223,17 @@ public:
         splitPushButton2 = new SplitPushButton(splitPushButton2ButtonIcon, QString("Split push button"), this);
         splitPushButton2->setFlyout(this->menu);
 
+        primarySplitPushButton1 = new PrimarySplitPushButton(QString("Split push button"), this, nullptr);
+        primarySplitPushButton1->setFlyout(this->menu);
+        primarySplitPushButton1->setDropIcon(&qvSplitPushButton1ButtonIcon);
+        //primarySplitPushButton1->setDropIconSize();
+        primarySplitPushButton2 = new PrimarySplitPushButton(splitPushButton2ButtonIcon, QString("Split push button"), this);
+        primarySplitPushButton2->setFlyout(this->menu);
+
+        splitToolButton = new SplitToolButton(splitPushButton2ButtonIcon, this);
+        splitToolButton->setFlyout(this->menu);
+
+
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
         gridLayout->addWidget(primaryButton1, 1, 0);
@@ -254,12 +270,16 @@ public:
 
         gridLayout->addWidget(splitPushButton1, 12, 0);
         gridLayout->addWidget(splitPushButton2, 12, 1);
+
+        gridLayout->addWidget(primarySplitPushButton1, 13, 0);
+        gridLayout->addWidget(primarySplitPushButton2, 13, 1);
+
+        gridLayout->addWidget(splitToolButton, 14, 0);
         //*/
         
-        //QVariant qvEmptyIcon = QVariant::fromValue<QIcon>(QIcon());
-        //splitPushButton1 = new SplitPushButton(QString("Split push button"), this, nullptr);
-        //splitPushButton1->setFlyout(this->menu);
-        //gridLayout->addWidget(splitPushButton1, 0, 0);
+        // primarySplitPushButton1 = new PrimarySplitPushButton(QString("Split push button"), this, nullptr);
+        // primarySplitPushButton1->setFlyout(this->menu);
+        // gridLayout->addWidget(primarySplitPushButton1, 0, 0);
 
         
 

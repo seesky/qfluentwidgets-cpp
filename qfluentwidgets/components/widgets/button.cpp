@@ -1212,3 +1212,228 @@ void SplitPushButton::setIconSize(QSize *size)
 {
     this->button->setIconSize(*size);
 }
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+SplitWidgetBase2PrimaryButton::SplitWidgetBase2PrimaryButton(QWidget *parent) : QWidget(parent)
+{
+    
+    this->flyout = nullptr;
+    this->dropButton = new PrimarySplitDropButton(this);
+
+    this->hBoxLayout = new QHBoxLayout(this);
+    this->hBoxLayout->setSpacing(0);
+    this->hBoxLayout->setContentsMargins(0, 0, 0, 0);
+    this->hBoxLayout->addWidget(this->dropButton);
+
+    connect(this->dropButton, &PrimarySplitDropButton::clicked, this, &SplitWidgetBase2PrimaryButton::dropDownClicked);
+    connect(this->dropButton, &PrimarySplitDropButton::clicked, this, &SplitWidgetBase2PrimaryButton::showFlyout);
+
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    
+}
+
+void SplitWidgetBase2PrimaryButton::setWidget(QWidget *widget)
+{
+    this->hBoxLayout->insertWidget(0, widget, 1, Qt::AlignLeft);
+}
+
+void SplitWidgetBase2PrimaryButton::setDropButton(PrimarySplitDropButton *button)
+{
+    this->hBoxLayout->removeWidget(this->dropButton);
+    this->dropButton->deleteLater();
+
+    this->dropButton = button;
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->hBoxLayout->addWidget(button);
+}
+
+void SplitWidgetBase2PrimaryButton::setDropIcon(QVariant *icon)
+{
+    this->dropButton->setIcon(icon);
+    this->dropButton->removeEventFilter(this->dropButton->arrowAni);
+}
+
+void SplitWidgetBase2PrimaryButton::setDropIconSize(QSize *size)
+{
+    this->dropButton->setIconSize(*size);
+    //this->dropButton->adjustSize();
+}
+
+void SplitWidgetBase2PrimaryButton::setFlyout(QWidget *flyout)
+{
+    this->flyout = flyout;
+}
+
+void SplitWidgetBase2PrimaryButton::showFlyout()
+{
+    if(this->flyout == nullptr){
+        return;
+    }
+
+    QWidget *w = this->flyout;
+    RoundMenu *_w = qobject_cast<RoundMenu *>(w);
+    if(_w != nullptr){
+        _w->view->setMinimumWidth(this->width());
+        _w->view->adjustSize(nullptr, MenuAnimationType::NONE);
+        _w->adjustSize();
+
+        int dx = _w->layout()->contentsMargins().left();
+        int x = -_w->width() / 2 + dx + this->width() /2;
+        int y = this->height();
+        QPoint point = this->mapToGlobal(QPoint(x, y));
+        _w->exec(&point, true, MenuAnimationType::DROP_DOWN);
+    }else{
+        int dx = 0;
+        int x = -w->width() / 2 + dx + this->width() /2;
+        int y = this->height();
+        QPoint point = this->mapToGlobal(QPoint(x, y));
+        _w->exec(&point, true, MenuAnimationType::DROP_DOWN);
+    }
+
+}
+
+
+
+PrimarySplitPushButton::PrimarySplitPushButton(QWidget *parent) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryPushButton(this);
+    this->button->setObjectName(QString("primarySplitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &PrimarySplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+}
+
+PrimarySplitPushButton::PrimarySplitPushButton(QString text, QWidget *parent, QVariant *icon) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryPushButton(this);
+    this->button->setObjectName(QString("primarySplitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &PrimarySplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setText(text);
+    this->setIcon(icon);
+}
+
+PrimarySplitPushButton::PrimarySplitPushButton(QIcon *icon, QString text, QWidget *parent) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryPushButton(this);
+    this->button->setObjectName(QString("primarySplitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &PrimarySplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setText(text);
+    QVariant _icon = QVariant::fromValue<QIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+PrimarySplitPushButton::PrimarySplitPushButton(FluentIcon *icon, QString text, QWidget *parent) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryPushButton(this);
+    this->button->setObjectName(QString("primarySplitPushButton"));
+    connect(this->button, &PushButton::clicked, this, &PrimarySplitPushButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setText(text);
+    QVariant _icon = QVariant::fromValue<FluentIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+
+QString PrimarySplitPushButton::text(){
+    return this->button->text();
+}
+
+void PrimarySplitPushButton::setText(QString text)
+{
+    this->button->setText(text);
+    this->adjustSize();
+}
+
+QIcon *PrimarySplitPushButton::icon()
+{
+    QIcon icon = this->button->icon();
+    return &icon;
+}
+
+void PrimarySplitPushButton::setIcon(QVariant *icon)
+{
+    this->button->setIcon(icon);
+}
+
+void PrimarySplitPushButton::setIconSize(QSize *size)
+{
+    this->button->setIconSize(*size);
+}
+
+///////////////////////////////////////////////////////////
+SplitToolButton::SplitToolButton(QWidget *parent) : SplitWidgetBase(parent)
+{
+    this->button = new ToolButton(this);
+    this->button->setObjectName(QString("splitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &SplitToolButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+}
+
+SplitToolButton::SplitToolButton(QWidget *parent, QVariant *icon) : SplitWidgetBase(parent)
+{
+    this->button = new ToolButton(this);
+    this->button->setObjectName(QString("splitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &SplitToolButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setIcon(icon);
+}
+
+SplitToolButton::SplitToolButton(QIcon *icon, QWidget *parent) : SplitWidgetBase(parent)
+{
+    this->button = new ToolButton(this);
+    this->button->setObjectName(QString("splitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &SplitToolButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    QVariant _icon = QVariant::fromValue<QIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+SplitToolButton::SplitToolButton(FluentIcon *icon, QWidget *parent) : SplitWidgetBase(parent)
+{
+    this->button = new ToolButton(this);
+    this->button->setObjectName(QString("splitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &SplitToolButton::clicked);
+    this->setWidget(this->button);
+    QVariant _icon = QVariant::fromValue<FluentIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+
+QString SplitToolButton::text(){
+    return this->button->text();
+}
+
+void SplitToolButton::setText(QString text)
+{
+    this->button->setText(text);
+    this->adjustSize();
+}
+
+QIcon *SplitToolButton::icon()
+{
+    QIcon icon = this->button->icon();
+    return &icon;
+}
+
+void SplitToolButton::setIcon(QVariant *icon)
+{
+    this->button->setIcon(icon);
+}
+
+void SplitToolButton::setIconSize(QSize *size)
+{
+    this->button->setIconSize(*size);
+}

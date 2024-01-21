@@ -39,6 +39,7 @@ class PrimaryPushButton : public PushButton{
     Q_OBJECT
 public:
     PrimaryPushButton(){};
+    PrimaryPushButton(QWidget *parent) : PushButton(parent){};
     PrimaryPushButton(QString text, QWidget *parent, QVariant *icon);
     PrimaryPushButton(FluentIcon *icon, QString text, QWidget *parent);
     void _postInit() override {};
@@ -331,6 +332,11 @@ public:
 class PrimarySplitDropButton : public PrimaryToolButton{
     Q_OBJECT
 public:
+    PrimarySplitDropButton(QWidget *parent) : PrimaryToolButton(parent){
+        //this->_postInit();
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
     PrimarySplitDropButton(FluentIcon *icon, QWidget *parent): PrimaryToolButton(icon, parent){
         this->_menu = nullptr;
         this->arrowAni = new TranslateYAnimation(this, 2);
@@ -367,8 +373,6 @@ public:
     QHBoxLayout *hBoxLayout;
     QWidget *flyout;
 
-    
-    
 signals:
     void dropDownClicked();
 
@@ -394,6 +398,76 @@ public:
     void setIconSize(QSize *size);
 
     PushButton *button;
+signals:
+    void clicked();
+};
+
+
+
+
+class SplitWidgetBase2PrimaryButton : public QWidget{
+    Q_OBJECT
+public:
+    SplitWidgetBase2PrimaryButton(){};
+    SplitWidgetBase2PrimaryButton(QWidget *parent);
+    void setWidget(QWidget *widget);
+    void setDropButton(PrimarySplitDropButton *button);
+    void setDropIcon(QVariant *icon);
+    void setDropIconSize(QSize *size);
+    void setFlyout(QWidget *flyout);
+    
+    PrimarySplitDropButton *dropButton;
+    QHBoxLayout *hBoxLayout;
+    QWidget *flyout;
+
+signals:
+    void dropDownClicked();
+
+public slots:
+    void showFlyout();
+};
+
+
+
+class PrimarySplitPushButton : public SplitWidgetBase2PrimaryButton{
+    Q_OBJECT
+public:
+    PrimarySplitPushButton(){};
+    PrimarySplitPushButton(QWidget *parent);
+    PrimarySplitPushButton(QString text, QWidget *parent, QVariant *icon);
+    PrimarySplitPushButton(QIcon *icon, QString text, QWidget *parent);
+    PrimarySplitPushButton(FluentIcon *icon, QString text, QWidget *parent);
+
+    void _postInit(){};
+    QString text();
+    void setText(QString text);
+    QIcon *icon();
+    void setIcon(QVariant *icon);
+    void setIconSize(QSize *size);
+
+    PrimaryPushButton *button;
+signals:
+    void clicked();
+};
+
+
+class SplitToolButton : public SplitWidgetBase{
+    Q_OBJECT
+public:
+    SplitToolButton(){};
+    SplitToolButton(QWidget *parent);
+    SplitToolButton(QWidget *parent, QVariant *icon);
+    SplitToolButton(QIcon *icon, QWidget *parent);
+    SplitToolButton(FluentIcon *icon, QWidget *parent);
+
+    void _postInit(){};
+    QString text();
+    void setText(QString text);
+    QIcon *icon();
+    void setIcon(QVariant *icon);
+    void setIconSize(QSize *size);
+
+    ToolButton *button;
 signals:
     void clicked();
 };
