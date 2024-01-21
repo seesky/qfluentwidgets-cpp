@@ -107,6 +107,7 @@ public:
     PrimarySplitPushButton *primarySplitPushButton2;
 
     SplitToolButton *splitToolButton;
+    PrimarySplitToolButton *primarySplitToolButton;
 
     QGridLayout *gridLayout;
     PushButtonDemo(){
@@ -233,6 +234,8 @@ public:
         splitToolButton = new SplitToolButton(splitPushButton2ButtonIcon, this);
         splitToolButton->setFlyout(this->menu);
 
+        primarySplitToolButton = new PrimarySplitToolButton(splitPushButton2ButtonIcon, this);
+        primarySplitToolButton->setFlyout(this->menu);
 
         gridLayout->addWidget(pushButton1, 0, 0);
         gridLayout->addWidget(pushButton2, 0, 1);
@@ -275,6 +278,7 @@ public:
         gridLayout->addWidget(primarySplitPushButton2, 13, 1);
 
         gridLayout->addWidget(splitToolButton, 14, 0);
+        gridLayout->addWidget(primarySplitToolButton, 14, 1);
         //*/
         
         // primarySplitPushButton1 = new PrimarySplitPushButton(QString("Split push button"), this, nullptr);

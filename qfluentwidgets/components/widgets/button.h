@@ -471,3 +471,25 @@ public:
 signals:
     void clicked();
 };
+
+
+class PrimarySplitToolButton : public SplitWidgetBase2PrimaryButton{
+    Q_OBJECT
+public:
+    PrimarySplitToolButton(){};
+    PrimarySplitToolButton(QWidget *parent);
+    PrimarySplitToolButton(QWidget *parent, QVariant *icon);
+    PrimarySplitToolButton(QIcon *icon, QWidget *parent);
+    PrimarySplitToolButton(FluentIcon *icon, QWidget *parent);
+
+    void _postInit(){};
+    QString text();
+    void setText(QString text);
+    QIcon *icon();
+    void setIcon(QVariant *icon);
+    void setIconSize(QSize *size);
+
+    PrimaryToolButton *button;
+signals:
+    void clicked();
+};

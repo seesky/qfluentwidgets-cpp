@@ -1437,3 +1437,73 @@ void SplitToolButton::setIconSize(QSize *size)
 {
     this->button->setIconSize(*size);
 }
+
+
+///////////////////////////////////////////////////////////
+PrimarySplitToolButton::PrimarySplitToolButton(QWidget *parent) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryToolButton(this);
+    this->button->setObjectName(QString("primarySplitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &PrimarySplitToolButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+}
+
+PrimarySplitToolButton::PrimarySplitToolButton(QWidget *parent, QVariant *icon) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryToolButton(this);
+    this->button->setObjectName(QString("primarySplitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &PrimarySplitToolButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    this->setIcon(icon);
+}
+
+PrimarySplitToolButton::PrimarySplitToolButton(QIcon *icon, QWidget *parent) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryToolButton(this);
+    this->button->setObjectName(QString("primarySplitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &PrimarySplitToolButton::clicked);
+    this->setWidget(this->button);
+    this->_postInit();
+    QVariant _icon = QVariant::fromValue<QIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+PrimarySplitToolButton::PrimarySplitToolButton(FluentIcon *icon, QWidget *parent) : SplitWidgetBase2PrimaryButton(parent)
+{
+    this->button = new PrimaryToolButton(this);
+    this->button->setObjectName(QString("primarySplitToolButton"));
+    connect(this->button, &ToolButton::clicked, this, &PrimarySplitToolButton::clicked);
+    this->setWidget(this->button);
+    QVariant _icon = QVariant::fromValue<FluentIcon>(*icon);
+    this->setIcon(&_icon);
+}
+
+
+QString PrimarySplitToolButton::text(){
+    return this->button->text();
+}
+
+void PrimarySplitToolButton::setText(QString text)
+{
+    this->button->setText(text);
+    this->adjustSize();
+}
+
+QIcon *PrimarySplitToolButton::icon()
+{
+    QIcon icon = this->button->icon();
+    return &icon;
+}
+
+void PrimarySplitToolButton::setIcon(QVariant *icon)
+{
+    this->button->setIcon(icon);
+}
+
+void PrimarySplitToolButton::setIconSize(QSize *size)
+{
+    this->button->setIconSize(*size);
+}
+
