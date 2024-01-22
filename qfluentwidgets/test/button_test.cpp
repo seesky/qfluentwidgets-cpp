@@ -2,9 +2,9 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <QtCore/Qt>
-#include "./qfluentwidgets/components/widgets/menu.h"
-#include "./qfluentwidgets/components/widgets/button.h"
-#include "./qfluentwidgets/qframelesswindow/windows/qframe_less_window.h"
+#include "../../qfluentwidgets/components/widgets/menu.h"
+#include "../../qfluentwidgets/components/widgets/button.h"
+#include "../../qfluentwidgets/qframelesswindow/windows/qframe_less_window.h"
 
 
 class ButtonView : public QWidget{
@@ -63,7 +63,7 @@ public:
 private:
 };
 
-class PushButtonDemo : public ButtonView{
+class ButtonDemo : public ButtonView{
 public:
     PushButton *pushButton1;
     PushButton *pushButton2;
@@ -118,9 +118,8 @@ public:
 
 
     QGridLayout *gridLayout;
-    PushButtonDemo(){
+    ButtonDemo(){
 
-        //WId win = this->winId();
         gridLayout = new QGridLayout();
 
         
@@ -189,7 +188,7 @@ public:
         FluentIcon *toggleToolButtonIcon = new FluentIcon();
         toggleToolButtonIcon->setIconName("SETTING");
         toggleToolButton = new ToggleToolButton(toggleToolButtonIcon, this);
-        connect(toggleToolButton, &ToggleToolButton::toggled, this, &PushButtonDemo::toggleToolButtonPrint);
+        connect(toggleToolButton, &ToggleToolButton::toggled, this, &ButtonDemo::toggleToolButtonPrint);
 
         FluentIcon *transparentToggleToolButtonIcon = new FluentIcon();
         transparentToggleToolButtonIcon->setIconName("SETTING");
@@ -314,16 +313,6 @@ public:
 
         //*/
 
-
-
-        // gridLayout->addWidget(toggleToolButton, 1, 0);
-        // gridLayout->addWidget(transparentToggleToolButton, 1, 1);
-
-        
-
-        //gridLayout->addWidget(dropDownToolButton, 0, 1);
-
-
         setLayout(gridLayout);
         resize(600, 1000);
     }
@@ -344,11 +333,11 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     
     QApplication *app = new QApplication(argc, argv);
-    PushButtonDemo *w = new PushButtonDemo();
+    ButtonDemo *w = new ButtonDemo();
     w->show();
-    //Window *demo = new Window(nullptr);
-    //demo->show();
-    //Window2 *demo2 = new Window2(nullptr);
-    //demo2->show();
+    // Window *demo = new Window(nullptr);
+    // demo->show();
+    // Window2 *demo2 = new Window2(nullptr);
+    // demo2->show();
     return app->exec();
 }

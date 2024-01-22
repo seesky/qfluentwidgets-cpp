@@ -38,7 +38,7 @@ Q_DECLARE_METATYPE(QIcon *)
 class PrimaryPushButton : public PushButton{
     Q_OBJECT
 public:
-    PrimaryPushButton(){};
+    //PrimaryPushButton(){};
     PrimaryPushButton(QWidget *parent) : PushButton(parent){};
     PrimaryPushButton(QString text, QWidget *parent, QVariant *icon);
     PrimaryPushButton(FluentIcon *icon, QString text, QWidget *parent);
@@ -432,7 +432,7 @@ public slots:
 class PrimarySplitPushButton : public SplitWidgetBase2PrimaryButton{
     Q_OBJECT
 public:
-    PrimarySplitPushButton(){};
+    //PrimarySplitPushButton(){};
     PrimarySplitPushButton(QWidget *parent);
     PrimarySplitPushButton(QString text, QWidget *parent, QVariant *icon);
     PrimarySplitPushButton(QIcon *icon, QString text, QWidget *parent);

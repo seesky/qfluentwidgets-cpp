@@ -26,8 +26,8 @@ FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 
 find_package(Qt5 COMPONENTS Core Gui Widgets Svg Xml REQUIRED)
 add_executable(
-  test
-  main.cpp
+  button_test
+  qfluentwidgets/test/button_test.cpp
   qfluentwidgets/common/animation.h
   qfluentwidgets/common/animation.cpp
   qfluentwidgets/common/config.h
@@ -64,11 +64,11 @@ add_executable(
   qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
 )
 
-target_link_options(test PRIVATE "-Wl,--whole-archive")
+target_link_options(button_test PRIVATE "-Wl,--whole-archive")
 
 
 target_link_libraries(
-  test
+  button_test
   Qt5::Widgets
   Qt5::Core
   Qt5::Gui
@@ -77,3 +77,62 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+
+add_executable(
+  check_box_test
+  qfluentwidgets/test/check_box_test.cpp
+  qfluentwidgets/common/animation.h
+  qfluentwidgets/common/animation.cpp
+  qfluentwidgets/common/config.h
+  qfluentwidgets/common/config.cpp
+  qfluentwidgets/common/icon.h
+  qfluentwidgets/common/icon.cpp
+  qfluentwidgets/common/font.h
+  qfluentwidgets/common/font.cpp
+  qfluentwidgets/common/style_sheet.h
+  qfluentwidgets/common/style_sheet.cpp
+  qfluentwidgets/common/smooth_scroll.h
+  qfluentwidgets/common/smooth_scroll.cpp
+
+
+  qfluentwidgets/components/widgets/button.h
+  qfluentwidgets/components/widgets/button.cpp
+  qfluentwidgets/components/widgets/scroll_bar.h
+  qfluentwidgets/components/widgets/scroll_bar.cpp
+  qfluentwidgets/components/widgets/menu.h
+  qfluentwidgets/components/widgets/menu.cpp
+  qfluentwidgets/components/widgets/check_box.h
+  qfluentwidgets/components/widgets/check_box.cpp
+
+  qfluentwidgets/qframelesswindow/utils/win32_utils.h
+  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
+
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
+
+  qfluentwidgets/qframelesswindow/windows/window_effect.h
+  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
+  qfluentwidgets/qframelesswindow/windows/swcadef.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+
+)
+
+target_link_options(check_box_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  check_box_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+

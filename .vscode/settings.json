@@ -111,6 +111,7 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "qpushbutton": "cpp",
-        "qtwidgets": "cpp"
+        "qtwidgets": "cpp",
+        "qaction": "cpp"
     }
 }

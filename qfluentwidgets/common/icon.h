@@ -205,7 +205,7 @@ private:
 class FluentIconBase{
 public:
     QIcon *_icon;
-    QString path(Theme theme);
+    virtual QString path(Theme theme);
     QIcon *icon(Theme theme, QColor color);
     QIcon *qicon(bool reverse);
     QString iconName;
@@ -221,7 +221,7 @@ Q_DECLARE_METATYPE(FluentIconBase *)
 class FluentIcon : public FluentIconBase{
 public:
     QIcon *icon(Theme theme, QColor color);
-    QString path(Theme theme);
+    QString path(Theme theme) override;
     void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes) override;
 private:
     //std::map<QString, QString> FluentIconMap = FluentIconMap;
@@ -271,3 +271,8 @@ public:
     FluentIcon *fluentIcon;
 private:
 };
+
+
+QString getIconColor(Theme theme, bool reverse);
+//void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect);
+//QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> attributes = {});

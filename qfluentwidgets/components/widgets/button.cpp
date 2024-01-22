@@ -172,7 +172,7 @@ void PrimaryPushButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect,
         painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
         if(icon->canConvert<FluentIcon>()){
             FluentIcon i = icon->value<FluentIcon>();
-            qi = QVariant::fromValue<QIcon *>(i.icon(Theme::DARK, nullptr));
+            qi = QVariant::fromValue<QIcon>(*(i.icon(Theme::DARK, nullptr)));
         }
     }else{
         qi = *icon;
@@ -191,7 +191,7 @@ void ToggleButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIco
     if(!isChecked()){
         return PushButton::_drawIcon(icon, painter, rect);
     }
-    PrimaryPushButton *p = new PrimaryPushButton();
+    PrimaryPushButton *p = new PrimaryPushButton(this);
     p->_drawIcon(icon, painter, rect, QIcon::State::On);
 }
 
@@ -269,7 +269,7 @@ void HyperlinkButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, Q
         painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
         if(icon->canConvert<FluentIcon>()){
             FluentIcon i = icon->value<FluentIcon>();
-            qi = QVariant::fromValue<QIcon *>(i.icon(Theme::DARK, nullptr));
+            qi = QVariant::fromValue<QIcon>(*(i.icon(Theme::DARK, nullptr)));
         }
     }else{
         qi = *icon;
@@ -1551,6 +1551,8 @@ void PillPushButton::paintEvent(QPaintEvent *event)
         int r = rect.height() / 2;
         painter->drawRoundedRect(rect, r, r);
     }
+
+    painter->end();
 
     ToggleButton::paintEvent(event);
 }
