@@ -109,7 +109,7 @@ void ShortcutMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewIt
 }
 
 
-RoundMenu::RoundMenu(QString title, QWidget *parent) : QMenu(parent)
+RoundMenu::RoundMenu(QString title = QString(), QWidget *parent = nullptr) : QMenu(parent)
 {
     this->_title = title;
     QVariant __icon = QVariant::fromValue<QIcon>(QIcon());
@@ -699,7 +699,7 @@ void RoundMenu::exec(QPoint *pos, bool ani = true, MenuAnimationType aniType = M
     }
 }
 
-void RoundMenu::exec_(QPoint *pos, bool ani, MenuAnimationType aniType)
+void RoundMenu::exec_(QPoint *pos, bool ani = true, MenuAnimationType aniType = MenuAnimationType::DROP_DOWN)
 {
     this->exec(pos, ani, aniType);
 }
@@ -800,6 +800,16 @@ void MenuActionListWidget::setItemHeight(int height)
 
     this->_itemHeight = height;
     this->adjustSize();
+}
+
+void MenuActionListWidget::publicSetViewportMargins(int left, int top, int right, int bottom)
+{
+    this->setViewportMargins(left, top, right, bottom);
+}
+
+bool MenuActionListWidget::publicEvent(QEvent *e)
+{
+    this->event(e);
 }
 
 void MenuActionListWidget::setMaxVisibleItems(int num)
@@ -1263,7 +1273,12 @@ std::tuple<int, int> FadeInPullUpMenuActionListAnimationManager::availableViewSi
     return std::tuple<int, int>(ss.width() - 100, pos->y() - 28);
 }
 
-/*
+
+EditMenu::EditMenu(QString title, QWidget *parent) : RoundMenu(title, parent)
+{
+
+}
+
 void EditMenu::createActions()
 {
     FluentIcon *iconCut = new FluentIcon();
@@ -1294,26 +1309,331 @@ void EditMenu::createActions()
     this->selectAllAct->setShortcut(QKeySequence("Ctrl+A"));
     connect(this->selectAllAct, &QAction::triggered, this, &RoundMenu::selectAll);
 
-    this->action_list.append(this->cutAct);
-    this->action_list.append(this->copyAct);
-    this->action_list.append(this->pasteAct);
-    this->action_list.append(this->cancelAct);
-    this->action_list.append(this->selectAllAct);
+    this->action_list->append(this->cutAct);
+    this->action_list->append(this->copyAct);
+    this->action_list->append(this->pasteAct);
+    this->action_list->append(this->cancelAct);
+    this->action_list->append(this->selectAllAct);
 }
 
-void EditMenu::exec(QPoint *pos, bool ani, MenuAnimationType aniType)
+void EditMenu::exec(QPoint *pos, bool ani, MenuAnimationType aniType = MenuAnimationType::DROP_DOWN)
 {
     this->clear();
     this->createActions();
 
-    if(QApplication::clipboard()->mimeData()->hasText()){
-        if(this->_parentText()){
-            if(this->_parentSelectedText()){
-                if(this->parent()){
+    auto p = qobject_cast<QLineEdit *>(this->parent());
+    if(p != nullptr){
+        if(QApplication::clipboard()->mimeData()->hasText()){
+            if(!this->_parentText().isEmpty()){
+                if(!this->_parentSelectedText().isEmpty()){
+                    if(p->isReadOnly()){
+                        QList<QAction *> *ac = new QList<QAction *>();
+                        ac->append(this->copyAct);
+                        ac->append(this->selectAllAct);
+                        this->addActions(ac);
+                    }else{
+                        this->addActions(this->action_list);
+                    }
+                }else{
+                    if(p->isReadOnly()){
+                        this->addAction(this->selectAllAct);
+                    }else{
+                        QList<QAction *> ac =  this->action_list->mid(2);
+                        this->addActions(&ac);
+                    }
+                }
+            }else if(!p->isReadOnly()){
+                this->addAction(this->pasteAct);
+            }else{
+                return;
+            }
+        }else{
+            if(this->_parentText().isEmpty()){
+                return;
+            }
 
+            if(!this->_parentSelectedText().isEmpty()){
+                if(p->isReadOnly()){
+                    QList<QAction *> *ac = new QList<QAction *>();
+                    ac->append(this->copyAct);
+                    ac->append(this->selectAllAct);
+                    this->addActions(ac);
+                }else{
+                    QList<QAction *> ac =  this->action_list->mid(2) + this->action_list->mid(3);
+                    this->addActions(&ac);
+                }
+            }else{
+                if(p->isReadOnly()){
+                    this->addAction(this->selectAllAct);
+                }else{
+                    QList<QAction *> ac =  this->action_list->mid(3);
+                    this->addActions(&ac);
                 }
             }
         }
+        RoundMenu::exec(pos, ani, aniType);
+        return;
+    }else{
+        
+    }
+
+
+    auto p1 = qobject_cast<QTextEdit *>(this->parent());
+    if(p != nullptr){
+        if(QApplication::clipboard()->mimeData()->hasText()){
+            if(!this->_parentText().isEmpty()){
+                if(!this->_parentSelectedText().isEmpty()){
+                    if(p1->isReadOnly()){
+                        QList<QAction *> *ac = new QList<QAction *>();
+                        ac->append(this->copyAct);
+                        ac->append(this->selectAllAct);
+                        this->addActions(ac);
+                    }else{
+                        this->addActions(this->action_list);
+                    }
+                }else{
+                    if(p1->isReadOnly()){
+                        this->addAction(this->selectAllAct);
+                    }else{
+                        QList<QAction *> ac =  this->action_list->mid(2);
+                        this->addActions(&ac);
+                    }
+                }
+            }else if(!p1->isReadOnly()){
+                this->addAction(this->pasteAct);
+            }else{
+                return;
+            }
+        }else{
+            if(this->_parentText().isEmpty()){
+                return;
+            }
+
+            if(!this->_parentSelectedText().isEmpty()){
+                if(p1->isReadOnly()){
+                    QList<QAction *> *ac = new QList<QAction *>();
+                    ac->append(this->copyAct);
+                    ac->append(this->selectAllAct);
+                    this->addActions(ac);
+                }else{
+                    QList<QAction *> ac =  this->action_list->mid(2) + this->action_list->mid(3);
+                    this->addActions(&ac);
+                }
+            }else{
+                if(p1->isReadOnly()){
+                    this->addAction(this->selectAllAct);
+                }else{
+                    QList<QAction *> ac =  this->action_list->mid(3);
+                    this->addActions(&ac);
+                }
+            }
+        }
+        RoundMenu::exec(pos, ani, aniType);
+        return;
     }
 }
-*/
+
+
+LineEditMenu::LineEditMenu(QLineEdit *parent) : EditMenu(QString(), parent)
+{
+    this->selectionStart = parent->selectionStart();
+    this->selectionLength = parent->selectionLength();
+}
+
+void LineEditMenu::_onItemClicked(QListWidgetItem *item)
+{
+    if(this->selectionStart >= 0){
+        ((QLineEdit *)this->parent())->setSelection(this->selectionStart, this->selectionLength);
+    }
+
+    EditMenu::_onItemClicked(item);
+}
+
+QString LineEditMenu::_parentText()
+{
+    return ((QLineEdit *)this->parent())->text();
+}
+
+QString LineEditMenu::_parentSelectedText()
+{
+    return ((QLineEdit *)this->parent())->selectedText();
+}
+
+
+
+TextEditMenu::TextEditMenu(QTextEdit *parent) : EditMenu(QString(), parent)
+{
+    QTextCursor cursor = parent->textCursor();
+    this->selectionStart = cursor.selectionStart();
+    this->selectionLength = cursor.selectionEnd() - this->selectionStart + 1;
+}
+
+void TextEditMenu::_onItemClicked(QListWidgetItem *item)
+{
+    if(this->selectionStart >= 0){
+        QTextCursor cursor = ((QTextEdit *)this->parent())->textCursor();
+        cursor.setPosition(this->selectionStart);
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, this->selectionLength);
+        
+    }
+
+    EditMenu::_onItemClicked(item);
+}
+
+QString TextEditMenu::_parentText()
+{
+    return ((QTextEdit *)this->parent())->toPlainText();
+}
+
+QString TextEditMenu::_parentSelectedText()
+{
+    return ((QTextEdit *)this->parent())->textCursor().selectedText();
+}
+
+
+//////////////////////////////////////////////
+
+TextEditMenu2QPlainTextEdit::TextEditMenu2QPlainTextEdit(QPlainTextEdit *parent) : EditMenu(QString(), parent)
+{
+    QTextCursor cursor = parent->textCursor();
+    this->selectionStart = cursor.selectionStart();
+    this->selectionLength = cursor.selectionEnd() - this->selectionStart + 1;
+}
+
+void TextEditMenu2QPlainTextEdit::_onItemClicked(QListWidgetItem *item)
+{
+    if(this->selectionStart >= 0){
+        QTextCursor cursor = ((QPlainTextEdit *)this->parent())->textCursor();
+        cursor.setPosition(this->selectionStart);
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, this->selectionLength);
+        
+    }
+
+    EditMenu::_onItemClicked(item);
+}
+
+QString TextEditMenu2QPlainTextEdit::_parentText()
+{
+    return ((QPlainTextEdit *)this->parent())->toPlainText();
+}
+
+QString TextEditMenu2QPlainTextEdit::_parentSelectedText()
+{
+    return ((QPlainTextEdit *)this->parent())->textCursor().selectedText();
+}
+
+///////////////////////////////////////////////
+
+void IndicatorMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    MenuItemDelegate::paint(painter, option, index);
+    if(!option.state & QStyle::State_Selected){
+        return;
+    }
+
+    painter->save();
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(*(ThemeColor().themeColor()));
+    painter->drawRoundedRect(6, 11 + option.rect.y(), 3, 15, 1.5, 1.5);
+    painter->restore();
+    painter->end();
+}
+
+
+void CheckableMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    ShortcutMenuItemDelegate::paint(painter, option, index);
+
+    QVariant action = index.data(Qt::UserRole);
+    if(action.canConvert<QAction *>()){
+        if(action.value<QAction *>()->isChecked()){
+            return;
+        }
+    }
+
+    painter->save();
+    this->_drawIndicator(painter, option, index);
+    painter->restore();
+    
+}
+
+void RadioIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    QRect rect = option.rect;
+    int r = 5;
+    int x = rect.x() + 22;
+    int y = rect.center().y() - r / 2;
+
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(!option.state & QStyle::State_MouseOver){
+        painter->setOpacity(isDarkTheme() ? 0.75 : 0.65);
+    }
+
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(isDarkTheme() ? Qt::white : Qt::black);
+    painter->drawEllipse(QRectF(x, y, r, r));
+}
+
+
+void CheckIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    QRect rect = option.rect;
+    int s = 11;
+    int x = rect.x() + 19;
+    int y = rect.center().y() - s / 2;
+
+    painter->setRenderHints(QPainter::Antialiasing);
+    if(!option.state & QStyle::State_MouseOver){
+        painter->setOpacity(0.75);
+    }
+
+    FluentIcon *icon = new FluentIcon();
+    icon->setIconName(QString("ACCEPT"));
+    icon->render(painter, QRect(x, y, s, s), Theme::AUTO, 0, nullptr);
+}
+
+
+QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style)
+{
+    if(style == MenuIndicatorType::RADIO){
+        return new QVariant(QVariant::fromValue<RadioIndicatorMenuItemDelegate *>(new RadioIndicatorMenuItemDelegate(nullptr)));
+    }else if(style == MenuIndicatorType::CHECK){
+        return new QVariant(QVariant::fromValue<CheckIndicatorMenuItemDelegate *>(new CheckIndicatorMenuItemDelegate(nullptr)));
+    }
+    return nullptr;
+}
+
+
+CheckableMenu::CheckableMenu(QString title, QWidget *parent, MenuIndicatorType indicator) : RoundMenu(title, parent)
+{
+    QVariant *itemDelegate = createCheckableMenuItemDelegate(indicator);
+
+    if(itemDelegate->canConvert<RadioIndicatorMenuItemDelegate *>()){
+        this->view->setItemDelegate(itemDelegate->value<RadioIndicatorMenuItemDelegate *>());
+    }else if(itemDelegate->canConvert<CheckIndicatorMenuItemDelegate *>()){
+        this->view->setItemDelegate(itemDelegate->value<CheckIndicatorMenuItemDelegate *>());
+    }
+
+    this->view->setObjectName(QString("checkableListWidget"));
+    
+}
+
+void CheckableMenu::_adjustItemText(QListWidgetItem *item, QAction *action)
+{
+    int w = RoundMenu::_adjustItemText(item, action);
+    item->setSizeHint(QSize(w + 26, this->itemHeight));
+}
+
+
+void SystemTrayMenu::showEvent(QShowEvent *event)
+{
+    RoundMenu::showEvent(event);
+    this->adjustPosition();
+}
+
+void CheckableSystemTrayMenu::showEvent(QShowEvent *event)
+{
+    CheckableMenu::showEvent(event);
+    this->adjustPosition();
+}

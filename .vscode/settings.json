@@ -112,6 +112,13 @@
         "xutility": "cpp",
         "qpushbutton": "cpp",
         "qtwidgets": "cpp",
-        "qaction": "cpp"
+        "qaction": "cpp",
+        "qcompleter": "cpp",
+        "qrectf": "cpp",
+        "qpoint": "cpp",
+        "qtimer": "cpp",
+        "qabstractitemmodel": "cpp",
+        "qsize": "cpp",
+        "qpainterpath": "cpp"
     }
 }

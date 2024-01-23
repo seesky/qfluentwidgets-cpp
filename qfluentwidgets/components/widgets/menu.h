@@ -61,6 +61,12 @@ enum class MenuAnimationType{
     FADE_IN_PULL_UP = 4
 };
 
+Q_DECLARE_METATYPE(MenuAnimationType)
+
+enum class MenuIndicatorType{
+    CHECK = 0,
+    RADIO = 1
+};
 
 /*
     QApplication a(argc, argv);
@@ -152,6 +158,8 @@ public:
     void adjustSize(QPoint *pos, MenuAnimationType aniType);
     void setItemHeight(int height);
     void setMaxVisibleItems(int num);
+    void publicSetViewportMargins(int left, int top, int right, int bottom);
+    bool publicEvent(QEvent *e);
     int maxVisibleItems();
     int heightForAnimation(QPoint *pos, MenuAnimationType aniType);
     int itemsHeight();
@@ -402,13 +410,14 @@ public:
     QParallelAnimationGroup *aniGroup;
 };
 
-/*
+
 class EditMenu : public RoundMenu{
     Q_OBJECT
 public:
+    EditMenu(QString title, QWidget *parent);
     void createActions();
-    void _parentText(){};
-    void _parentSelectedText(){};
+    QString _parentText(){};
+    QString _parentSelectedText(){};
     void exec(QPoint *pos, bool ani, MenuAnimationType aniType);
 
     QAction *cutAct;
@@ -416,7 +425,104 @@ public:
     QAction *pasteAct;
     QAction *cancelAct;
     QAction *selectAllAct;
-    QList<QAction *> action_list;
+    QList<QAction *> *action_list;
 private:
 };
-*/
+
+
+class LineEditMenu : public EditMenu{
+    Q_OBJECT
+public:
+    LineEditMenu(QLineEdit *parent);
+    QString _parentText();
+    QString _parentSelectedText();
+
+    int selectionStart;
+    int selectionLength;
+public slots:
+    void _onItemClicked(QListWidgetItem *item);
+};
+
+
+class TextEditMenu : public EditMenu{
+    Q_OBJECT
+public:
+    TextEditMenu(QTextEdit *parent);
+    QString _parentText();
+    QString _parentSelectedText();
+
+    int selectionStart;
+    int selectionLength;
+public slots:
+    void _onItemClicked(QListWidgetItem *item);
+};
+
+class TextEditMenu2QPlainTextEdit : public EditMenu{
+    Q_OBJECT
+public:
+    TextEditMenu2QPlainTextEdit(QPlainTextEdit *parent);
+    QString _parentText();
+    QString _parentSelectedText();
+
+    int selectionStart;
+    int selectionLength;
+public slots:
+    void _onItemClicked(QListWidgetItem *item);
+};
+
+
+class IndicatorMenuItemDelegate : public MenuItemDelegate{
+    Q_OBJECT
+public:
+    IndicatorMenuItemDelegate(QObject *parent) : MenuItemDelegate(parent){};
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+};
+
+
+class CheckableMenuItemDelegate : public ShortcutMenuItemDelegate{
+    Q_OBJECT
+public:
+    CheckableMenuItemDelegate(QObject *parent) : ShortcutMenuItemDelegate(parent){};
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index){};
+};
+
+
+class RadioIndicatorMenuItemDelegate : public CheckableMenuItemDelegate{
+    Q_OBJECT
+public:
+    RadioIndicatorMenuItemDelegate(QObject *parent) : CheckableMenuItemDelegate(parent){};
+    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+};
+
+class CheckIndicatorMenuItemDelegate : public CheckableMenuItemDelegate{
+    Q_OBJECT
+public:
+    CheckIndicatorMenuItemDelegate(QObject *parent) : CheckableMenuItemDelegate(parent){};
+    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+};
+
+
+QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style);
+
+
+class CheckableMenu : public RoundMenu{
+    Q_OBJECT
+public:
+    CheckableMenu(QString title, QWidget *parent, MenuIndicatorType indicator);
+    void _adjustItemText(QListWidgetItem *item, QAction *action);
+};
+
+
+class SystemTrayMenu : public RoundMenu{
+    Q_OBJECT
+public:
+    void showEvent(QShowEvent *event);
+};
+
+
+class CheckableSystemTrayMenu : public CheckableMenu{
+    Q_OBJECT
+public:
+    void showEvent(QShowEvent *event);
+};
