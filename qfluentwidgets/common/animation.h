@@ -24,10 +24,11 @@ public:
 class TranslateYAnimation : public AnimationBase
 {
     Q_OBJECT
+    Q_PROPERTY(float y READ getY WRITE setY)
 public:
     TranslateYAnimation(QWidget *parent, int offset);
-    float y();
-    void y(float y);
+    float getY();
+    void setY(float y);
     void _onPress(QMouseEvent *e);
     void _onRelease(QMouseEvent *e);
 

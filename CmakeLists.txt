@@ -319,3 +319,69 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+add_executable(
+  calendar_picker_test
+  qfluentwidgets/test/calendar_picker_test.cpp
+  qfluentwidgets/common/animation.h
+  qfluentwidgets/common/animation.cpp
+  qfluentwidgets/common/config.h
+  qfluentwidgets/common/config.cpp
+  qfluentwidgets/common/icon.h
+  qfluentwidgets/common/icon.cpp
+  qfluentwidgets/common/font.h
+  qfluentwidgets/common/font.cpp
+  qfluentwidgets/common/style_sheet.h
+  qfluentwidgets/common/style_sheet.cpp
+  qfluentwidgets/common/smooth_scroll.h
+  qfluentwidgets/common/smooth_scroll.cpp
+
+
+  qfluentwidgets/components/widgets/button.h
+  qfluentwidgets/components/widgets/button.cpp
+  qfluentwidgets/components/widgets/scroll_bar.h
+  qfluentwidgets/components/widgets/scroll_bar.cpp
+  qfluentwidgets/components/widgets/menu.h
+  qfluentwidgets/components/widgets/menu.cpp
+  qfluentwidgets/components/widgets/combo_box.h
+  qfluentwidgets/components/widgets/combo_box.cpp
+  qfluentwidgets/components/widgets/line_edit.h
+  qfluentwidgets/components/widgets/line_edit.cpp
+  qfluentwidgets/components/widgets/slider.h
+  qfluentwidgets/components/widgets/slider.cpp
+
+  qfluentwidgets/components/date_time/calendar_picker.h
+  qfluentwidgets/components/date_time/calendar_picker.cpp
+  qfluentwidgets/components/date_time/calendar_view.h
+  qfluentwidgets/components/date_time/calendar_view.cpp
+
+  qfluentwidgets/qframelesswindow/utils/win32_utils.h
+  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
+
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
+
+  qfluentwidgets/qframelesswindow/windows/window_effect.h
+  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
+  qfluentwidgets/qframelesswindow/windows/swcadef.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+
+)
+
+target_link_options(calendar_picker_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  calendar_picker_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)

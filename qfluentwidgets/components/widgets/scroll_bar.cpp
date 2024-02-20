@@ -18,7 +18,7 @@ void MQAbstractScrollArea::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy poli
 
 ArrowButton::ArrowButton(FluentIcon *icon, QWidget *parent) : QToolButton(parent)
 {
-    setFixedSize(10, 10);
+    this->setFixedSize(10, 10);
     this->_icon = icon;
 }
 
@@ -30,10 +30,13 @@ void ArrowButton::paintEvent(QPaintEvent *e)
     float s = isDown() ? 7 : 8;
     float x = (this->width() - s) / 2;
     QColor color = (new QColor("#858789"))->name();
+    //QColor color = (QColor("#858789")).name();
     std::map<QString, QString> attributes = {
         {"fill", color.name()}
     };
     this->_icon->render(painter, QRect(x, x, s, s), Theme::AUTO, 0, &attributes);
+
+    painter->end();
 }
 
 
@@ -41,7 +44,7 @@ ScrollBarGroove::ScrollBarGroove(Qt::Orientation orient, QWidget *parent) : QWid
 {
     if(orient == Qt::Vertical)
     {
-        setFixedWidth(12);
+        this->setFixedWidth(12);
         FluentIcon *upButtonIcon = new FluentIcon();
         upButtonIcon->setIconName("CARE_UP_SOLID");
         this->upButton = new ArrowButton(upButtonIcon, this);
@@ -54,6 +57,7 @@ ScrollBarGroove::ScrollBarGroove(Qt::Orientation orient, QWidget *parent) : QWid
         layout->addStretch(1);
         layout->addWidget(this->downButton, 0, Qt::AlignHCenter);
         layout->setContentsMargins(0, 3, 0, 3);
+        //this->setLayout(layout);
     }else{
         setFixedHeight(12);
         FluentIcon *upButtonIcon = new FluentIcon();
@@ -71,8 +75,8 @@ ScrollBarGroove::ScrollBarGroove(Qt::Orientation orient, QWidget *parent) : QWid
     }
 
     this->opacityEffect = new QGraphicsOpacityEffect(this);
-    this->opacityAni = new QPropertyAnimation(this->opacityEffect, "opacity", this);
-    setGraphicsEffect(this->opacityEffect);
+    this->opacityAni = new QPropertyAnimation(this->opacityEffect, QString("opacity").toUtf8(), this);
+    this->setGraphicsEffect(this->opacityEffect);
     this->opacityEffect->setOpacity(0);
 }
 
@@ -104,7 +108,9 @@ void ScrollBarGroove::paintEvent(QPaintEvent *e)
         painter->setBrush(QColor(44, 44, 44, 245));
     }
 
-    painter->drawRoundedRect(rect(), 6, 6);
+    painter->drawRoundedRect(this->rect(), 6, 6);
+
+    painter->end();
 }
 
 
@@ -112,9 +118,9 @@ ScrollBarHandle::ScrollBarHandle(Qt::Orientation orient, QWidget *parent) : QWid
 {
     this->orient = orient;
     if(orient == Qt::Vertical){
-        setFixedWidth(3);
+        this->setFixedWidth(3);
     }else{
-        setFixedHeight(3);
+        this->setFixedHeight(3);
     }
 }
 
@@ -126,7 +132,8 @@ void ScrollBarHandle::paintEvent(QPaintEvent *e)
     float r = this->orient == Qt::Vertical ? width() / 2 : height() / 2;
     QColor c = isDarkTheme() ? QColor(255, 255, 255, 139) : QColor(0, 0, 0, 114);
     painter->setBrush(c);
-    painter->drawRoundedRect(rect(), r, r);
+    painter->drawRoundedRect(this->rect(), r, r);
+    painter->end();
 }
 
 ScrollBar::ScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent) : QWidget(parent)
@@ -155,10 +162,12 @@ ScrollBar::ScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent) : QWid
         this->partnerBar = parent->verticalScrollBar();
         QAbstractScrollArea *asa = new QAbstractScrollArea(parent);
         asa->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        asa->setVisible(false);
     }else{
         this->partnerBar = parent->horizontalScrollBar();
         QAbstractScrollArea *asa = new QAbstractScrollArea(parent);
         asa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        asa->setVisible(false);
     }
 
     this->__initWidget(parent);
@@ -166,24 +175,28 @@ ScrollBar::ScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent) : QWid
 
 void ScrollBar::__initWidget(QWidget *parent)
 {
-    connect(this->groove->upButton, SIGNAL(QToolButton::clicked), SLOT(this->_onPageUp()));
-    ////connect(this->groove->upButton, &QToolButton::clicked, this, &ScrollBar::_onPageUp);
-    connect(this->groove->downButton, SIGNAL(QToolButton::clicked), SLOT(this->_onPageDown()));
-    ////connect(this->groove->downButton, &QToolButton::clicked, this, &ScrollBar::_onPageDown);
-    connect(this->groove->opacityAni, SIGNAL(QPropertyAnimation::valueChanged), SLOT(this->_onOpacityAniValueChanged()));
-    ////connect(this->groove->opacityAni, &QPropertyAnimation::valueChanged, this, &ScrollBar::_onOpacityAniValueChanged);
+    //connect(this->groove->upButton, SIGNAL(QToolButton::clicked), SLOT(this->_onPageUp()));
+    connect(this->groove->upButton, &ArrowButton::clicked, this, &ScrollBar::_onPageUp);
 
-    connect(this->partnerBar, SIGNAL(QScrollBar::rangeChanged), SLOT(this->setRange));
-    ////connect(this->partnerBar, &QScrollBar::rangeChanged, this, &ScrollBar::setRange);
-    connect(this->partnerBar, SIGNAL(QScrollBar::valueChanged), SLOT(this->_onValueChanged));
-    ////connect(this->partnerBar, &QScrollBar::valueChanged, this, &ScrollBar::_onValueChanged);
-    connect(this, SIGNAL(this->valueChanged()), SLOT(this->partnerBar->setValue())); //TODO:这个地方需要重点关注是否正确
-    ////connect(this, &ScrollBar::valueChanged, this, SLOT(this->partnerBar->setValue())); //TODO:这个地方需要重点关注是否正确
+    //connect(this->groove->downButton, SIGNAL(QToolButton::clicked), SLOT(this->_onPageDown()));
+
+    connect(this->groove->downButton, &ArrowButton::clicked, this, &ScrollBar::_onPageDown);
+
+    //connect(this->groove->opacityAni, SIGNAL(QPropertyAnimation::valueChanged), SLOT(this->_onOpacityAniValueChanged()));
+    connect(this->groove->opacityAni, &QPropertyAnimation::valueChanged, this, &ScrollBar::_onOpacityAniValueChanged);
+
+    //connect(this->partnerBar, SIGNAL(QScrollBar::rangeChanged), SLOT(this->setRange));
+    connect(this->partnerBar, &QScrollBar::rangeChanged, this, &ScrollBar::setRange);
+
+    //connect(this->partnerBar, SIGNAL(QScrollBar::valueChanged), SLOT(this->_onValueChanged));
+    connect(this->partnerBar, &QScrollBar::valueChanged, this, &ScrollBar::_onValueChanged);
+    //connect(this, SIGNAL(this->valueChanged()), SLOT(this->partnerBar->setValue())); //TODO:这个地方需要重点关注是否正确
+    connect(this, &ScrollBar::valueChanged, this->partnerBar, &QScrollBar::setValue); //TODO:这个地方需要重点关注是否正确
     parent->installEventFilter(this);
 
     this->setRange(this->partnerBar->minimum(), this->partnerBar->maximum());
     this->setVisible(this->maximum() > 0 && !this->_isForceHidden);
-    this->_adjustPos(parent->size());
+    this->_adjustPos(((QWidget *)this->parent())->size());
 }
 
 void ScrollBar::_onPageUp()
@@ -356,7 +369,7 @@ void ScrollBar::leaveEvent(QEvent *event)
 
 bool ScrollBar::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched != parent())
+    if(watched != this->parent())
     {
         return QWidget::eventFilter(watched, event);
     }
@@ -365,11 +378,13 @@ bool ScrollBar::eventFilter(QObject *watched, QEvent *event)
     {
         this->_adjustPos(((QResizeEvent *)event)->size());
     }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void ScrollBar::resizeEvent(QResizeEvent *event)
 {
-    this->groove->resize(size());
+    this->groove->resize(this->size());
 }
 
 void ScrollBar::mousePressEvent(QMouseEvent *event)
@@ -425,7 +440,8 @@ void ScrollBar::mouseMoveEvent(QMouseEvent *event)
     }
 
     dv = int(dv / qMax(this->_slideLength(), 1) * (this->maximum() - this->minimum()));
-    ScrollBar::setValue(this->value() + dv);
+    //ScrollBar::setValue(this->value() + dv);
+    this->setValue(this->value() + dv);
     emit(this->sliderMoved());
 }
 
@@ -533,12 +549,12 @@ void ScrollBar::wheelEvent(QWheelEvent *event)
     QApplication::sendEvent(p->viewport(), event);
 }
 
-SmoothScrollBar::SmoothScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent)
+SmoothScrollBar::SmoothScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent) : ScrollBar(orient, parent)
 {
     this->duration = 500;
     this->ani = new QPropertyAnimation();
     this->ani->setTargetObject(this);
-    this->ani->setPropertyName(QString("val").toUtf8());
+    this->ani->setPropertyName(QString("val").toUtf8()); //TODO:这里无法使用对象的val值
     this->ani->setEasingCurve(QEasingCurve::OutCubic);
     this->ani->setDuration(this->duration);
 
@@ -572,7 +588,7 @@ void SmoothScrollBar::setValue(int value, bool useAni)
     this->ani->start();
 }
 
-void SmoothScrollBar::scrollValue(int value, bool useAni)
+void SmoothScrollBar::scrollValue(int value, bool useAni = true)
 {
     this->__value += value;
     this->__value = qMax(this->minimum(), this->__value);
@@ -580,7 +596,7 @@ void SmoothScrollBar::scrollValue(int value, bool useAni)
     this->setValue(this->__value, useAni);
 }
 
-void SmoothScrollBar::scrollTo(int value, bool useAni)
+void SmoothScrollBar::scrollTo(int value, bool useAni = true)
 {
     this->__value = value;
     this->__value = qMax(this->minimum(), this->__value);
@@ -607,7 +623,7 @@ void SmoothScrollBar::mouseMoveEvent(QMouseEvent *event)
     this->__value = this->value();
 }
 
-void SmoothScrollBar::setScrollAnimation(int duration, QEasingCurve easing)
+void SmoothScrollBar::setScrollAnimation(int duration, QEasingCurve easing = QEasingCurve::OutCubic)
 {
     this->duration = duration;
     this->ani->setDuration(duration);
@@ -626,17 +642,25 @@ SmoothScrollDelegate::SmoothScrollDelegate(QAbstractScrollArea *parent, bool use
     if(itemView){
         itemView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         itemView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+        parent->viewport()->installEventFilter(this);
+        this->vScrollBar->setForceHidden(true);
+        this->hScrollBar->setForceHidden(true);
+        return;
     }
 
     QListView *listView = qobject_cast<QListView *>(parent);
     if(listView){
         itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         itemView->horizontalScrollBar()->setStyleSheet("QScrollBar:horizontal{height: 0px}");
+        parent->viewport()->installEventFilter(this);
+        this->vScrollBar->setForceHidden(true);
+        this->hScrollBar->setForceHidden(true);
+        return;
     }
 
-    parent->viewport()->installEventFilter(this);
-    this->vScrollBar->setForceHidden(true);
-    this->hScrollBar->setForceHidden(true);
+    //parent->viewport()->installEventFilter(this);
+    //this->vScrollBar->setForceHidden(true);
+    //this->hScrollBar->setForceHidden(true);
     //TODO:parent.setVerticalScrollBarPolicy = self.setVerticalScrollBarPolicy
     //TODO:parent.setHorizontalScrollBarPolicy = self.setHorizontalScrollBarPolicy
 }

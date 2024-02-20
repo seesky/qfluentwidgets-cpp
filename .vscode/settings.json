@@ -119,6 +119,7 @@
         "qtimer": "cpp",
         "qabstractitemmodel": "cpp",
         "qsize": "cpp",
-        "qpainterpath": "cpp"
+        "qpainterpath": "cpp",
+        "qapplication": "cpp"
     }
 }

@@ -46,12 +46,12 @@ TranslateYAnimation::TranslateYAnimation(QWidget *parent, int offset = 2)
     this->ani = new QPropertyAnimation(this, "y", this);
 }
 
-float TranslateYAnimation::y()
+float TranslateYAnimation::getY()
 {
     return this->_y;
 }
 
-void TranslateYAnimation::y(float y)
+void TranslateYAnimation::setY(float y)
 {
     this->_y = y;
     parentWidget()->update();

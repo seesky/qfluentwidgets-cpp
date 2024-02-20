@@ -30,7 +30,7 @@ ComboBox::ComboBox(QWidget *parent) : QPushButton(parent)
     this->dropMenu = nullptr;
     this->_placeholderText = QString();
 
-    FluentStyleSheet().apply((QWidget *)this, FluentStyleSheetMap.value("COMBO_BOX"), Theme::AUTO); //特殊关注
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("COMBO_BOX"), Theme::AUTO); //特殊关注
     this->installEventFilter(this);
 
     this->arrowAni = new TranslateYAnimation(this, 2);
@@ -423,6 +423,8 @@ void ComboBox::paintEvent(QPaintEvent *e)
         attributes[QString("fill")] = QString("#646464");
         icon->render(painter, rect, Theme::AUTO, 0, &attributes);
     }
+
+    painter->end();
 }
 
 

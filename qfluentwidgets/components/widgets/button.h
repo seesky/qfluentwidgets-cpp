@@ -110,6 +110,7 @@ public:
     ToolButton(FluentIcon *icon, QWidget *parent);
     ToolButton(QIcon *icon, QWidget *parent);
     ToolButton(QString icon, QWidget *parent);
+    ~ToolButton();
     virtual void _postInit();
     void setIcon(QVariant *icon);
     QIcon icon();

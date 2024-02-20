@@ -204,6 +204,14 @@ private:
 
 class FluentIconBase{
 public:
+    FluentIconBase(){
+        this->_icon = nullptr;
+    };
+    ~FluentIconBase(){
+        if(this->_icon != nullptr){
+            delete this->_icon;
+        }
+    };
     QIcon *_icon;
     virtual QString path(Theme theme);
     QIcon *icon(Theme theme, QColor color);
@@ -220,6 +228,7 @@ Q_DECLARE_METATYPE(FluentIconBase *)
 
 class FluentIcon : public FluentIconBase{
 public:
+    FluentIcon(){};
     QIcon *icon(Theme theme, QColor color);
     QString path(Theme theme) override;
     void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes) override;

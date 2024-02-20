@@ -56,6 +56,7 @@ void StyleSheetManager::register_(QVariant source, QWidget *widget, bool reset =
 
 void StyleSheetManager::deregister(QWidget *widget)
 {
+    /*
     if(this->widgets->find(widget) == this->widgets->end()){
         return;
     }
@@ -64,6 +65,11 @@ void StyleSheetManager::deregister(QWidget *widget)
             this->widgets->erase(w);
         }
     }
+    */
+    if(!this->widgets->contains(widget)){
+        return;
+    }
+    this->widgets->remove(widget);
 }
 
 void StyleSheetManager::deregisterWrapper(QObject* obj)
@@ -103,8 +109,7 @@ QString QssTemplate::safe_substitute(QMap<QString, QString> mapping)
         QString capturedText = match.captured(0);
         QString _capturedText = QString(capturedText);
         _capturedText.remove(0, this->delimiter.length());
-        //qDebug() << capturedText;
-        //qDebug() << _capturedText;
+
         int capturedTextStart = match.capturedStart();
         int capturedTextEnd = match.capturedEnd();
         int capturedTextLength = match.capturedLength();

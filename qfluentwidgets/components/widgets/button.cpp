@@ -291,7 +291,7 @@ RadioButton::RadioButton(QString text, QWidget *parent) : QRadioButton(parent)
 }
 
 void ToolButton::initialize(QWidget *parent)
-{
+{   
     FluentStyleSheet().apply(this, FluentStyleSheetMap.value("BUTTON"), Theme::AUTO);
     this->isPressed = false;
     this->isHover = false;
@@ -320,6 +320,7 @@ ToolButton::ToolButton(FluentIcon *icon, QWidget *parent) : QToolButton(parent)
     QVariant *__icon = new QVariant();
     __icon->setValue<FluentIcon>(*icon);
     this->setIcon(__icon);
+    delete __icon;
 }
 
 ToolButton::ToolButton(QIcon *icon, QWidget *parent) : QToolButton(parent)
@@ -334,6 +335,11 @@ ToolButton::ToolButton(QString icon, QWidget *parent) : QToolButton(parent)
     this->initialize(parent);
     QVariant __icon = QVariant::fromValue<QString>(icon);
     this->setIcon(&__icon);
+}
+
+ToolButton::~ToolButton()
+{
+    delete this->_icon;
 }
 
 void ToolButton::_postInit(){}
@@ -412,6 +418,7 @@ void ToolButton::paintEvent(QPaintEvent *event)
     
     this->_drawIcon(this->_icon, painter, QRect(x, y, w, h));
     painter->end();
+    delete painter;
 }
 
 TransparentToolButton::TransparentToolButton(FluentIcon *icon, QWidget *parent) : ToolButton(icon, parent){}

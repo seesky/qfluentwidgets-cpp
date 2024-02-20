@@ -71,13 +71,11 @@ private:
 
 class ScrollBar : public QWidget{
     Q_OBJECT
+    Q_PROPERTY(int val READ getVal WRITE setVal)
 public:
     ScrollBar(){};
     ScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent);
     void __initWidget(QWidget *parent);
-    //void _onPageUp();
-    //void _onPageDown();
-    //void _onValueChanged(int value);
     int value();
     int getVal();
     void setVal(int value);
@@ -90,7 +88,6 @@ public:
     void setValue(int value);
     void setMinimum(int min);
     void setMaximum(int max);
-    //void setRange(int min, int max);
     void setPageStep(int step);
     void setSingleStep(int step);
     void setSliderDown(bool isDown);
@@ -109,7 +106,6 @@ public:
     int _grooveLength();
     int _slideLength();
     bool _isSlideResion(QPoint pos);
-    //void _onOpacityAniValueChanged();
     void setForceHidden(bool isHidden);
     void wheelEvent(QWheelEvent *event);
 
@@ -166,6 +162,12 @@ public:
 private:
 };
 
+
+class MQAbstractItemView : public QAbstractItemView{
+    Q_OBJECT
+public:
+
+};
 
 class SmoothScrollDelegate : public QObject{
     Q_OBJECT
