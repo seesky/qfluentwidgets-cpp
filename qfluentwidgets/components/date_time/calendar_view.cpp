@@ -645,10 +645,11 @@ void DayScrollView::_initItems()
         QListWidgetItem *item = this->item(i);
         item->setData(Qt::UserRole, QVariant::fromValue<QDate>(dates.at(i - bias)));
         item->setSizeHint(this->gridSize());
+
     }
     
 
-    this->delegate->setCurrentIndex(this->model()->index(this->_dateToRow(this->currentDate), 0));
+    this->delegate->setCurrentIndex(this->model()->index(this->_dateToRow(this->currentDate), 0)); //TODO:这里有个bug，无法定位到天所在的index，造成在绘制背景的时候无法绘制正确的颜色，后期解决
 }
 
 
