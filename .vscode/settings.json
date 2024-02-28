@@ -120,6 +120,15 @@
         "qabstractitemmodel": "cpp",
         "qsize": "cpp",
         "qpainterpath": "cpp",
-        "qapplication": "cpp"
+        "qapplication": "cpp",
+        "any": "cpp",
+        "strstream": "cpp",
+        "cfenv": "cpp",
+        "forward_list": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "fstream": "cpp",
+        "shared_mutex": "cpp",
+        "valarray": "cpp"
     }
 }

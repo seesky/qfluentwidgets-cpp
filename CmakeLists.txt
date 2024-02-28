@@ -19,6 +19,7 @@ INCLUDE_DIRECTORIES(C://msys64//mingw64//include//glib-2.0)
 INCLUDE_DIRECTORIES(C://msys64//mingw64//lib//glib-2.0//include)
 INCLUDE_DIRECTORIES(C://msys64//mingw64//include//c++//13.1.0)
 INCLUDE_DIRECTORIES(C://msys64//mingw64//include//c++//13.1.0//x86_64-w64-mingw32)
+INCLUDE_DIRECTORIES(C://msys64//mingw64//include//opencv4//opencv2)
 
 
 FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
@@ -458,4 +459,92 @@ target_link_libraries(
   Qt5::Xml
   jsoncpp
   Dwmapi
+)
+
+find_package(OpenCV REQUIRED)
+add_executable(
+  acrylic_brush_test
+  qfluentwidgets/test/acrylic_brush_test.cpp
+  qfluentwidgets/common/animation.h
+  qfluentwidgets/common/animation.cpp
+  qfluentwidgets/common/config.h
+  qfluentwidgets/common/config.cpp
+  qfluentwidgets/common/icon.h
+  qfluentwidgets/common/icon.cpp
+  qfluentwidgets/common/font.h
+  qfluentwidgets/common/font.cpp
+  qfluentwidgets/common/style_sheet.h
+  qfluentwidgets/common/style_sheet.cpp
+  qfluentwidgets/common/smooth_scroll.h
+  qfluentwidgets/common/smooth_scroll.cpp
+  qfluentwidgets/common/image_utils.h
+  qfluentwidgets/common/image_utils.cpp
+
+
+  qfluentwidgets/components/widgets/button.h
+  qfluentwidgets/components/widgets/button.cpp
+  qfluentwidgets/components/widgets/scroll_bar.h
+  qfluentwidgets/components/widgets/scroll_bar.cpp
+  qfluentwidgets/components/widgets/menu.h
+  qfluentwidgets/components/widgets/menu.cpp
+  qfluentwidgets/components/widgets/combo_box.h
+  qfluentwidgets/components/widgets/combo_box.cpp
+  qfluentwidgets/components/widgets/line_edit.h
+  qfluentwidgets/components/widgets/line_edit.cpp
+  qfluentwidgets/components/widgets/slider.h
+  qfluentwidgets/components/widgets/slider.cpp
+  qfluentwidgets/components/widgets/cycle_list_widget.h
+  qfluentwidgets/components/widgets/cycle_list_widget.cpp
+  qfluentwidgets/components/widgets/arcylic_label.h
+  qfluentwidgets/components/widgets/arcylic_label.cpp
+
+
+  qfluentwidgets/components/date_time/calendar_picker.h
+  qfluentwidgets/components/date_time/calendar_picker.cpp
+  qfluentwidgets/components/date_time/calendar_view.h
+  qfluentwidgets/components/date_time/calendar_view.cpp
+  qfluentwidgets/components/date_time/picker_base.h
+  qfluentwidgets/components/date_time/picker_base.cpp
+  qfluentwidgets/components/date_time/time_picker.h
+  qfluentwidgets/components/date_time/time_picker.cpp  
+  qfluentwidgets/components/date_time/date_picker.h
+  qfluentwidgets/components/date_time/date_picker.cpp
+
+  qfluentwidgets/components/dialog_box/mask_dialog_base.h
+  qfluentwidgets/components/dialog_box/mask_dialog_base.cpp
+  qfluentwidgets/components/dialog_box/color_dialog.h
+  qfluentwidgets/components/dialog_box/color_dialog.cpp
+
+  qfluentwidgets/components/settings/setting_card.h
+  qfluentwidgets/components/settings/setting_card.cpp
+
+  qfluentwidgets/qframelesswindow/utils/win32_utils.h
+  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
+
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
+  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
+  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
+
+  qfluentwidgets/qframelesswindow/windows/window_effect.h
+  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
+  qfluentwidgets/qframelesswindow/windows/swcadef.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
+  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+
+)
+
+target_link_options(acrylic_brush_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  acrylic_brush_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+  ${OpenCV_LIBS}
 )

@@ -29,7 +29,7 @@ public:
     }
 };
 
-class CalendarPickerDemo : public QWidget{
+class TimePickerDemo : public QWidget{
 public:
     
 
@@ -43,7 +43,7 @@ public:
     TimePicker *timePicker3;
 
 
-    CalendarPickerDemo(){
+    TimePickerDemo(){
         this->setStyleSheet(QString("Demo{background: white}"));
         this->vBoxLayout = new QVBoxLayout(this);
 
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     
     QApplication *app = new QApplication(argc, argv);
-    CalendarPickerDemo *w = new CalendarPickerDemo();
+    TimePickerDemo *w = new TimePickerDemo();
     w->show();
     return app->exec();
 }
