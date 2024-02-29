@@ -134,8 +134,8 @@ class MenuItemDelegate : public QStyledItemDelegate{
     Q_OBJECT
 public:
     MenuItemDelegate(QObject *parent) : QStyledItemDelegate(parent){};
-    bool _isSeparator(QModelIndex index);
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    bool _isSeparator(QModelIndex index) const;
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 private:
 };
 
@@ -143,7 +143,7 @@ class ShortcutMenuItemDelegate : public MenuItemDelegate{
     Q_OBJECT
 public:
     ShortcutMenuItemDelegate(QObject *parent) : MenuItemDelegate(parent){};
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 private:
 };
 
@@ -209,7 +209,7 @@ public:
     QList<QAction *> *menuActions();
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
-    void exec(QPoint *pos, bool ani, MenuAnimationType aniType);
+    virtual void exec(QPoint *pos, bool ani, MenuAnimationType aniType);
     void exec_(QPoint *pos, bool ani, MenuAnimationType aniType);
     void adjustPosition();
     void paintEvent(QPaintEvent *e);
@@ -475,7 +475,7 @@ class IndicatorMenuItemDelegate : public MenuItemDelegate{
     Q_OBJECT
 public:
     IndicatorMenuItemDelegate(QObject *parent) : MenuItemDelegate(parent){};
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 
@@ -483,8 +483,8 @@ class CheckableMenuItemDelegate : public ShortcutMenuItemDelegate{
     Q_OBJECT
 public:
     CheckableMenuItemDelegate(QObject *parent) : ShortcutMenuItemDelegate(parent){};
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
-    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index){};
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const{};
 };
 
 

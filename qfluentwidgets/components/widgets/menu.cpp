@@ -53,12 +53,12 @@ void SubMenuItemWidget::paintEvent(QPaintEvent *event)
     painter->end();
 }
 
-bool MenuItemDelegate::_isSeparator(QModelIndex index)
+bool MenuItemDelegate::_isSeparator(QModelIndex index) const
 {
     return index.model()->data(index, Qt::DecorationRole) == "seperator";
 }
 
-void MenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void MenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if(!this->_isSeparator(index))
         return QStyledItemDelegate::paint(painter, option, index);
@@ -75,7 +75,7 @@ void MenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 }
 
 
-void ShortcutMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void ShortcutMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     MenuItemDelegate::paint(painter, option, index);
     if(this->_isSeparator(index))
@@ -1524,10 +1524,10 @@ QString TextEditMenu2QPlainTextEdit::_parentSelectedText()
 
 ///////////////////////////////////////////////
 
-void IndicatorMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void IndicatorMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     MenuItemDelegate::paint(painter, option, index);
-    if(!option.state & QStyle::State_Selected){
+    if(!(option.state & QStyle::State_Selected)){
         return;
     }
 
@@ -1537,11 +1537,10 @@ void IndicatorMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     painter->setBrush(*(ThemeColor().themeColor()));
     painter->drawRoundedRect(6, 11 + option.rect.y(), 3, 15, 1.5, 1.5);
     painter->restore();
-    painter->end();
 }
 
 
-void CheckableMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void CheckableMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     ShortcutMenuItemDelegate::paint(painter, option, index);
 
