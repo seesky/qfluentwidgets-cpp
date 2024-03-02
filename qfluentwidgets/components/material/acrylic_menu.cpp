@@ -140,15 +140,24 @@ AcrylicCompleterMenu::AcrylicCompleterMenu(LineEdit *lineEdit) : CompleterMenu(l
     this->setItemHeight(33);
 }
 
-void AcrylicCompleterMenu::setItems(QStringList *items)
+void AcrylicCompleterMenu::setItems(QStringList *items) //TODO:特殊关注
 {
     this->view->clear();
 
     this->items = items;
 
-    auto _view = qobject_cast<AcrylicMenuActionListWidget*>(this->view);
-    //QListWidget::addItem(new QListWidget());
+    auto _view = qobject_cast<QListWidget*>(this->view); //TODO:特殊关注
+    auto __view = qobject_cast<AcrylicMenuActionListWidget*>(this->view);
+    _view->addItem(__view->createPlaceholderItem(__view->_bottomMargin()));
 
+    _view->addItems(*items);
+
+    for(int i = 1; i < _view->count(); i++){
+        QListWidgetItem * item = _view->item(i);
+        item->setSizeHint(QSize(1, this->itemHeight));
+    }
+
+    _view->addItem(__view->createPlaceholderItem(__view->_bottomMargin()));
 
 }
 
@@ -172,4 +181,77 @@ void AcrylicCompleterMenu::exec(QPoint *pos, bool ani, MenuAnimationType aniType
     auto _view = qobject_cast<AcrylicMenuActionListWidget*>(this->view);
     _view->acrylicBrush->grabImage(QRect(*p, this->layout()->sizeHint()));
     RoundMenu::exec(pos, ani, aniType);
+}
+
+AcrylicLineEditMenu::AcrylicLineEditMenu(QLineEdit *parent) : LineEditMenu(parent)
+{
+    this->setUpMenu(new AcrylicMenuActionListWidget(this));
+}
+
+void AcrylicLineEditMenu::setUpMenu(AcrylicMenuActionListWidget *view)
+{
+    this->hBoxLayout->removeWidget(this->view);
+    this->view->deleteLater();
+
+    this->view = view;
+    this->hBoxLayout->addWidget(this->view);
+
+    this->setShadowEffect(30, std::tuple<int, int>(0, 8), new QColor(0, 0, 0, 30));
+
+    connect(this->view, &MenuActionListWidget::itemClicked, this, &AcrylicMenu::_onItemClicked);
+    connect(this->view, &MenuActionListWidget::itemEntered, this, &AcrylicMenu::_onItemEntered);
+}
+
+void AcrylicLineEditMenu::exec(QPoint *pos, bool ani = true, MenuAnimationType aniType = MenuAnimationType::DROP_DOWN)
+{
+    QPoint *p =  MenuAnimationManager().make(aniType, this)->_endPosition(pos);
+    auto _view = qobject_cast<AcrylicMenuActionListWidget*>(this->view);
+    _view->acrylicBrush->grabImage(QRect(*p, this->layout()->sizeHint()));
+    RoundMenu::exec(pos, ani, aniType);
+}
+
+
+AcrylicCheckableMenu::AcrylicCheckableMenu(QString title, QWidget *parent, MenuIndicatorType indicatorType) : CheckableMenu(title, parent, indicatorType)
+{
+    this->setUpMenu(new AcrylicMenuActionListWidget(this));
+    this->view->setObjectName(QString("checkableListWidget"));
+}
+
+
+
+void AcrylicCheckableMenu::setUpMenu(AcrylicMenuActionListWidget *view)
+{
+    this->hBoxLayout->removeWidget(this->view);
+    this->view->deleteLater();
+
+    this->view = view;
+    this->hBoxLayout->addWidget(this->view);
+
+    this->setShadowEffect(30, std::tuple<int, int>(0, 8), new QColor(0, 0, 0, 30));
+
+    connect(this->view, &MenuActionListWidget::itemClicked, this, &AcrylicMenu::_onItemClicked);
+    connect(this->view, &MenuActionListWidget::itemEntered, this, &AcrylicMenu::_onItemEntered);
+}
+
+void AcrylicCheckableMenu::exec(QPoint *pos, bool ani, MenuAnimationType aniType)
+{
+    QPoint *p =  MenuAnimationManager().make(aniType, this)->_endPosition(pos);
+    auto _view = qobject_cast<AcrylicMenuActionListWidget*>(this->view);
+    _view->acrylicBrush->grabImage(QRect(*p, this->layout()->sizeHint()));
+    RoundMenu::exec(pos, ani, aniType);
+}
+
+void AcrylicSystemTrayMenu::showEvent(QShowEvent *event)
+{
+    AcrylicMenu::showEvent(event);
+    this->adjustPosition();
+    auto _view = qobject_cast<AcrylicMenuActionListWidget*>(this->view);
+    _view->acrylicBrush->grabImage(QRect(this->pos(), this->layout()->sizeHint()));
+}
+
+
+void AcrylicCheckableSystemTrayMenu::showEvent(QShowEvent *event)
+{
+    AcrylicCheckableMenu::showEvent(event);
+    this->adjustPosition();
 }

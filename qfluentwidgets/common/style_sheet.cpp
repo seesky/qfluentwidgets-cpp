@@ -19,6 +19,7 @@ StyleSheetFile::StyleSheetFile(QString path)
 
 QString StyleSheetFile::path(Theme theme)
 {
+    qDebug() << this->filePath;
     return this->filePath;
 }
 
@@ -197,6 +198,11 @@ void setStyleSheet(QWidget *widget, QVariant source, Theme theme = Theme::AUTO, 
 QString StyleSheetBase::content(Theme theme = Theme::AUTO)
 {
     return getStyleSheetFromFile(((StyleSheetFile *)this)->path(theme));
+}
+
+QString StyleSheetBase::content(QString fluentStyleSheet, Theme theme)
+{
+    this->path(theme);
 }
 
 void StyleSheetBase::apply(QWidget *widget, QString fluentStyleSheet, Theme theme = Theme::AUTO)

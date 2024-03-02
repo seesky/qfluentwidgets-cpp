@@ -129,6 +129,10 @@
         "unordered_set": "cpp",
         "fstream": "cpp",
         "shared_mutex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "qgraphicsdropshadoweffect": "cpp",
+        "qframe": "cpp",
+        "*.inc": "cpp",
+        "qscrollarea": "cpp"
     }
 }

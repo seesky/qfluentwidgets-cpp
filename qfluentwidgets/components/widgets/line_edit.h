@@ -40,13 +40,13 @@ public:
     LineEdit(QWidget *parent);
     void setClearButtonEnabled(bool enable);
     bool isClearButtonEnabled();
-    void setCompleter(QCompleter *completer);
+    virtual void setCompleter(QCompleter *completer);
     QCompleter *completer();
     void focusOutEvent(QFocusEvent *e);
     void focusInEvent(QFocusEvent *e);
     void setCompleterMenu(CompleterMenu *menu);
     void _showCompleterMenu();
-    void contextMenuEvent(QContextMenuEvent *e);
+    void contextMenuEvent(QContextMenuEvent *e) override;
     void paintEvent(QPaintEvent *e);
 
     bool _isClearButtonEnabled;

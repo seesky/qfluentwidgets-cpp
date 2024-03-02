@@ -90,8 +90,9 @@ private:
 class StyleSheetBase{
 public:
     StyleSheetBase();
-    QString path(Theme theme);
+    virtual QString path(Theme theme);
     QString content(Theme theme);
+    QString content(QString fluentStyleSheet, Theme theme);
     void apply(QWidget *widget, QString fluentStyleSheet, Theme theme);
     bool operator==(const StyleSheetBase& other) const {
         return *this == other;
@@ -111,7 +112,7 @@ class StyleSheetFile : public StyleSheetBase{
 public:
     StyleSheetFile();
     StyleSheetFile(QString path);
-    QString path(Theme theme);
+    QString path(Theme theme) override;
 private:
     QString filePath;
 };

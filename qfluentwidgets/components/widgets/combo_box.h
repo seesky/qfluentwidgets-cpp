@@ -120,7 +120,7 @@ public:
     void _toggleComboMenu();
     void setCompleterMenu(CompleterMenu *menu);
     void setPlaceholderText(QString text);
-    void _onTextEdited(QString text);
+    
 
     bool isHover;
     bool isPressed;
@@ -140,6 +140,7 @@ public slots:
     void _onReturnPressed();
     void _onClearButtonClicked();
     void __onActivated(QString text);
+    void _onTextEdited(QString text);
 };
 
 

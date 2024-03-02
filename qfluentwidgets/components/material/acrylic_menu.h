@@ -58,3 +58,34 @@ public:
     void setUpMenu(AcrylicCompleterMenuActionListWidget *view);
     void exec(QPoint *pos, bool ani, MenuAnimationType aniType) override;
 };
+
+
+class AcrylicLineEditMenu : public LineEditMenu{
+    Q_OBJECT
+public:
+    AcrylicLineEditMenu(QLineEdit *parent);
+    void setUpMenu(AcrylicMenuActionListWidget *view);
+    void exec(QPoint *pos, bool ani, MenuAnimationType aniType) override;
+};
+
+
+class AcrylicCheckableMenu : public CheckableMenu{
+    Q_OBJECT
+public:
+    AcrylicCheckableMenu(QString title, QWidget *parent, MenuIndicatorType indicatorType);
+    void setUpMenu(AcrylicMenuActionListWidget *view);
+    void exec(QPoint *pos, bool ani, MenuAnimationType aniType) override;
+};
+
+
+class AcrylicSystemTrayMenu : public AcrylicMenu{
+    Q_OBJECT
+public:
+    void showEvent(QShowEvent *event);
+};
+
+class AcrylicCheckableSystemTrayMenu : public AcrylicCheckableMenu{
+    Q_OBJECT
+public:
+    void showEvent(QShowEvent *event);
+};
