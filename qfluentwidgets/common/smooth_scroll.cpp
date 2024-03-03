@@ -39,8 +39,9 @@ void SmoothScroll::wheelEvent(QWheelEvent *e)
         return;
     }
 
-    int now = QDateTime().currentDateTime().toMSecsSinceEpoch();
+    int now = QDateTime::currentDateTime().toMSecsSinceEpoch();
     this->scrollStamps->append(now);
+
     while((now - this->scrollStamps->at(0)) > 500){
         this->scrollStamps->pop_front();
     }
@@ -61,7 +62,9 @@ void SmoothScroll::wheelEvent(QWheelEvent *e)
         delta += delta * this->acceleration * accerationRatio;
     }
 
-    float array[] = {delta, this->stepsTotal};
+    float *array = new float[2];
+    array[0] = float(delta);
+    array[1] = float(this->stepsTotal);
     this->stepsLeftQueue->append(array);
 
     this->smoothMoveTimer->start(int(1000 / this->fps));
@@ -69,13 +72,16 @@ void SmoothScroll::wheelEvent(QWheelEvent *e)
 
 void SmoothScroll::__smoothMove()
 {
+    
     float totalDelta = 0;
-    QList<float *>::iterator it;
-    for (it = this->stepsLeftQueue->begin(); it != this->stepsLeftQueue->end(); ++it) {
-        totalDelta += this->__subDelta(*it[0], *it[1]);
-        *it[1] -= 1;
+
+    for (QList<float *>::iterator it = this->stepsLeftQueue->begin(); it != this->stepsLeftQueue->end(); ++it) {
+        float* value = *it;
+        totalDelta += this->__subDelta(value[0], value[1]);
+        value[1] -= 1;
     }
 
+    
     while(!this->stepsLeftQueue->isEmpty() && this->stepsLeftQueue->at(0)[1] == 0)
     {
         this->stepsLeftQueue->pop_front();
@@ -109,6 +115,7 @@ void SmoothScroll::__smoothMove()
     {
         this->smoothMoveTimer->stop();
     }
+    
 }
 
 float SmoothScroll::__subDelta(float delta, float stepsLeft)

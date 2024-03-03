@@ -24,45 +24,37 @@ INCLUDE_DIRECTORIES(C://msys64//mingw64//include//opencv4//opencv2)
 
 FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 
+file(GLOB HEADER_FILES
+    "qfluentwidgets/common/*.h"
+    "qfluentwidgets/components/date_time/*.h"
+    "qfluentwidgets/components/dialog_box/*.h"
+    "qfluentwidgets/components/material/*.h"
+    "qfluentwidgets/components/settings/*.h"
+    "qfluentwidgets/components/widgets/*.h"
+    "qfluentwidgets/qframelesswindow/titlebar/*.h"
+    "qfluentwidgets/qframelesswindow/utils/*.h"
+    "qfluentwidgets/qframelesswindow/windows/*.h"
+)
+
+file(GLOB SOURCE_FILES
+    "qfluentwidgets/common/*.cpp"
+    "qfluentwidgets/components/date_time/*.cpp"
+    "qfluentwidgets/components/dialog_box/*.cpp"
+    "qfluentwidgets/components/material/*.cpp"
+    "qfluentwidgets/components/settings/*.cpp"
+    "qfluentwidgets/components/widgets/*.cpp"
+    "qfluentwidgets/qframelesswindow/titlebar/*.cpp"
+    "qfluentwidgets/qframelesswindow/utils/*.cpp"
+    "qfluentwidgets/qframelesswindow/windows/*.cpp"
+)
+
 
 find_package(Qt5 COMPONENTS Core Gui Widgets Svg Xml REQUIRED)
 add_executable(
   button_test
   qfluentwidgets/test/button_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 )
 
 target_link_options(button_test PRIVATE "-Wl,--whole-archive")
@@ -84,43 +76,8 @@ target_link_libraries(
 add_executable(
   check_box_test
   qfluentwidgets/test/check_box_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/check_box.h
-  qfluentwidgets/components/widgets/check_box.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
-
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 )
 
 target_link_options(check_box_test PRIVATE "-Wl,--whole-archive")
@@ -142,45 +99,8 @@ target_link_libraries(
 add_executable(
   combo_box_test
   qfluentwidgets/test/combo_box_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
-
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 )
 
 target_link_options(combo_box_test PRIVATE "-Wl,--whole-archive")
@@ -203,44 +123,8 @@ target_link_libraries(
 add_executable(
   radio_button_test
   qfluentwidgets/test/radio_button_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 
 )
 
@@ -264,47 +148,8 @@ target_link_libraries(
 add_executable(
   slider_test
   qfluentwidgets/test/slider_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-  qfluentwidgets/components/widgets/slider.h
-  qfluentwidgets/components/widgets/slider.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
-
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 )
 
 target_link_options(slider_test PRIVATE "-Wl,--whole-archive")
@@ -325,50 +170,9 @@ target_link_libraries(
 
 add_executable(
   switch_button_test
-  qfluentwidgets/test/switch_button_text.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-  qfluentwidgets/components/widgets/slider.h
-  qfluentwidgets/components/widgets/slider.cpp
-  qfluentwidgets/components/widgets/switch_button.h
-  qfluentwidgets/components/widgets/switch_button.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
-
+  qfluentwidgets/test/switch_button_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 )
 
 target_link_options(switch_button_test PRIVATE "-Wl,--whole-archive")
@@ -391,52 +195,8 @@ target_link_libraries(
 add_executable(
   calendar_picker_test
   qfluentwidgets/test/calendar_picker_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-  qfluentwidgets/components/widgets/slider.h
-  qfluentwidgets/components/widgets/slider.cpp
-
-  qfluentwidgets/components/date_time/calendar_picker.h
-  qfluentwidgets/components/date_time/calendar_picker.cpp
-  qfluentwidgets/components/date_time/calendar_view.h
-  qfluentwidgets/components/date_time/calendar_view.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
-
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 )
 
 target_link_options(calendar_picker_test PRIVATE "-Wl,--whole-archive")
@@ -457,59 +217,8 @@ target_link_libraries(
 add_executable(
   time_picker_test
   qfluentwidgets/test/time_picker_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-  qfluentwidgets/components/widgets/slider.h
-  qfluentwidgets/components/widgets/slider.cpp
-  qfluentwidgets/components/widgets/cycle_list_widget.h
-  qfluentwidgets/components/widgets/cycle_list_widget.cpp
-
-  qfluentwidgets/components/date_time/calendar_picker.h
-  qfluentwidgets/components/date_time/calendar_picker.cpp
-  qfluentwidgets/components/date_time/calendar_view.h
-  qfluentwidgets/components/date_time/calendar_view.cpp
-  qfluentwidgets/components/date_time/picker_base.h
-  qfluentwidgets/components/date_time/picker_base.cpp
-  qfluentwidgets/components/date_time/time_picker.h
-  qfluentwidgets/components/date_time/time_picker.cpp  
-  qfluentwidgets/components/date_time/date_picker.h
-  qfluentwidgets/components/date_time/date_picker.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 
 )
 
@@ -527,76 +236,36 @@ target_link_libraries(
   Dwmapi
 )
 
-find_package(OpenCV REQUIRED)
+
+add_executable(
+  color_dialog_test
+  qfluentwidgets/test/color_dialog_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+
+target_link_options(color_dialog_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  color_dialog_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
+
+
 add_executable(
   acrylic_brush_test
   qfluentwidgets/test/acrylic_brush_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-  qfluentwidgets/common/image_utils.h
-  qfluentwidgets/common/image_utils.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-  qfluentwidgets/components/widgets/slider.h
-  qfluentwidgets/components/widgets/slider.cpp
-  qfluentwidgets/components/widgets/cycle_list_widget.h
-  qfluentwidgets/components/widgets/cycle_list_widget.cpp
-  qfluentwidgets/components/widgets/arcylic_label.h
-  qfluentwidgets/components/widgets/arcylic_label.cpp
-
-
-  qfluentwidgets/components/date_time/calendar_picker.h
-  qfluentwidgets/components/date_time/calendar_picker.cpp
-  qfluentwidgets/components/date_time/calendar_view.h
-  qfluentwidgets/components/date_time/calendar_view.cpp
-  qfluentwidgets/components/date_time/picker_base.h
-  qfluentwidgets/components/date_time/picker_base.cpp
-  qfluentwidgets/components/date_time/time_picker.h
-  qfluentwidgets/components/date_time/time_picker.cpp  
-  qfluentwidgets/components/date_time/date_picker.h
-  qfluentwidgets/components/date_time/date_picker.cpp
-
-  qfluentwidgets/components/dialog_box/mask_dialog_base.h
-  qfluentwidgets/components/dialog_box/mask_dialog_base.cpp
-  qfluentwidgets/components/dialog_box/color_dialog.h
-  qfluentwidgets/components/dialog_box/color_dialog.cpp
-
-  qfluentwidgets/components/settings/setting_card.h
-  qfluentwidgets/components/settings/setting_card.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 
 )
 
@@ -612,7 +281,6 @@ target_link_libraries(
   Qt5::Xml
   jsoncpp
   Dwmapi
-  ${OpenCV_LIBS}
 )
 
 
@@ -620,81 +288,8 @@ target_link_libraries(
 add_executable(
   acrylic_combo_box_test
   qfluentwidgets/test/acrylic_combo_box_test.cpp
-  qfluentwidgets/common/animation.h
-  qfluentwidgets/common/animation.cpp
-  qfluentwidgets/common/config.h
-  qfluentwidgets/common/config.cpp
-  qfluentwidgets/common/icon.h
-  qfluentwidgets/common/icon.cpp
-  qfluentwidgets/common/font.h
-  qfluentwidgets/common/font.cpp
-  qfluentwidgets/common/style_sheet.h
-  qfluentwidgets/common/style_sheet.cpp
-  qfluentwidgets/common/smooth_scroll.h
-  qfluentwidgets/common/smooth_scroll.cpp
-  qfluentwidgets/common/image_utils.h
-  qfluentwidgets/common/image_utils.cpp
-
-
-  qfluentwidgets/components/widgets/button.h
-  qfluentwidgets/components/widgets/button.cpp
-  qfluentwidgets/components/widgets/scroll_bar.h
-  qfluentwidgets/components/widgets/scroll_bar.cpp
-  qfluentwidgets/components/widgets/menu.h
-  qfluentwidgets/components/widgets/menu.cpp
-  qfluentwidgets/components/widgets/combo_box.h
-  qfluentwidgets/components/widgets/combo_box.cpp
-  qfluentwidgets/components/widgets/line_edit.h
-  qfluentwidgets/components/widgets/line_edit.cpp
-  qfluentwidgets/components/widgets/slider.h
-  qfluentwidgets/components/widgets/slider.cpp
-  qfluentwidgets/components/widgets/cycle_list_widget.h
-  qfluentwidgets/components/widgets/cycle_list_widget.cpp
-  qfluentwidgets/components/widgets/arcylic_label.h
-  qfluentwidgets/components/widgets/arcylic_label.cpp
-  qfluentwidgets/components/widgets/scroll_area.h
-  qfluentwidgets/components/widgets/scroll_area.cpp
-  qfluentwidgets/components/widgets/switch_button.h
-  qfluentwidgets/components/widgets/switch_button.cpp
-
-
-  qfluentwidgets/components/date_time/calendar_picker.h
-  qfluentwidgets/components/date_time/calendar_picker.cpp
-  qfluentwidgets/components/date_time/calendar_view.h
-  qfluentwidgets/components/date_time/calendar_view.cpp
-  qfluentwidgets/components/date_time/picker_base.h
-  qfluentwidgets/components/date_time/picker_base.cpp
-  qfluentwidgets/components/date_time/time_picker.h
-  qfluentwidgets/components/date_time/time_picker.cpp  
-  qfluentwidgets/components/date_time/date_picker.h
-  qfluentwidgets/components/date_time/date_picker.cpp
-
-  qfluentwidgets/components/dialog_box/mask_dialog_base.h
-  qfluentwidgets/components/dialog_box/mask_dialog_base.cpp
-  qfluentwidgets/components/dialog_box/color_dialog.h
-  qfluentwidgets/components/dialog_box/color_dialog.cpp
-
-  qfluentwidgets/components/settings/setting_card.h
-  qfluentwidgets/components/settings/setting_card.cpp
-
-  qfluentwidgets/components/material/acrylic_menu.h
-  qfluentwidgets/components/material/acrylic_menu.cpp
-  qfluentwidgets/components/material/acrylic_line_edit.h
-  qfluentwidgets/components/material/acrylic_line_edit.cpp
-
-  qfluentwidgets/qframelesswindow/utils/win32_utils.h
-  qfluentwidgets/qframelesswindow/utils/win32_utils.cpp
-
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.h
-  qfluentwidgets/qframelesswindow/titlebar/title_bar_buttons.cpp
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.h
-  qfluentwidgets/qframelesswindow/titlebar/titlebar.cpp
-
-  qfluentwidgets/qframelesswindow/windows/window_effect.h
-  qfluentwidgets/qframelesswindow/windows/window_effect.cpp
-  qfluentwidgets/qframelesswindow/windows/swcadef.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.h
-  qfluentwidgets/qframelesswindow/windows/qframe_less_window.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
 
 )
 

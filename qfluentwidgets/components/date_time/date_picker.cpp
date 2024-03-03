@@ -246,9 +246,6 @@ void DatePicker::_onConfirmed(QList<QString> *value)
     QString year = this->decodeValue(this, this->yearIndex, value->at(this->yearIndex)).value<QString>();
     QString month = this->decodeValue(this, this->monthIndex, value->at(this->monthIndex)).value<QString>();
     QString day = this->decodeValue(this, this->dayIndex, value->at(this->dayIndex)).value<QString>();
-    qDebug() << year;
-    qDebug() << month;
-    qDebug() << month;
     QDate *date = new QDate(year.toInt(), month.toInt(), day.toInt());
     QDate *od = this->_date;
 

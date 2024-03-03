@@ -4,7 +4,7 @@
 HuePanel::HuePanel(QColor color, QWidget *parent) : QWidget(parent)
 {
     this->setFixedSize(256, 256);
-    this->huePixmap = QPixmap("/qfluentwidgets/images/color_dialog/HuePanel.png");
+    this->huePixmap = QPixmap("qfluentwidgets/images/color_dialog/HuePanel.png");
     this->setColor(color);
 }
 
@@ -21,7 +21,12 @@ void HuePanel::mouseMoveEvent(QMouseEvent *event)
 void HuePanel::setPickerPosition(QPoint pos)
 {
     this->pickerPos = QPoint(pos);
-    this->color.setHsv(int(qMax(0, qMin(1, pos.x() / this->width())) * 360), int(qMax(0, qMin(1, (this->height() - pos.y()) / this->height())) * 255), 255); //TODO:特殊关注
+    //this->color.setHsv(int(qMax(0, qMin(1, pos.x() / this->width())) * 360), int(qMax(0, qMin(1, (this->height() - pos.y()) / this->height())) * 255), 255); //TODO:特殊关注
+    int hue = qBound(0, static_cast<int>(static_cast<float>(pos.x()) / width() * 360), 360);
+    int saturation = qBound(0, static_cast<int>(static_cast<float>(height() - pos.y()) / height() * 255), 255);
+    int value = 255;
+    this->color.setHsv(hue, saturation, value);
+   
     this->update();
     emit(this->colorChanged(this->color));
 }
@@ -30,7 +35,14 @@ void HuePanel::setColor(QColor color)
 {
     this->color = QColor(color);
     this->color.setHsv(this->color.hue(), this->color.saturation(), 255);
-    this->pickerPos = QPoint(int(this->hue() / 360 * this->width()), int(255 - this->saturation()) / 255 * this->height());
+    //this->pickerPos = QPoint(int(this->hue() / 360 * this->width()), int(255 - this->saturation()) / 255 * this->height());
+
+    int pickerPosX = static_cast<int>(static_cast<float>(this->hue()) / 360 * this->width());
+
+    int pickerPosY = static_cast<int>(static_cast<float>(255 - this->saturation()) / 255 * this->height());
+
+    this->pickerPos = QPoint(pickerPosX, pickerPosY);
+
     this->update();
 }
 
@@ -46,12 +58,12 @@ int HuePanel::saturation()
 
 void HuePanel::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-    painter->setBrush(QBrush(this->huePixmap));
-    painter->setPen(QPen(QColor(0, 0, 0, 15), 2.4));
-    painter->drawRoundedRect(this->rect(), 5.6, 5.6);
+    painter.setBrush(QBrush(this->huePixmap));
+    painter.setPen(QPen(QColor(0, 0, 0, 15), 2.4));
+    painter.drawRoundedRect(this->rect(), 5.6, 5.6);
 
 
     QColor color;
@@ -61,12 +73,13 @@ void HuePanel::paintEvent(QPaintEvent *event)
         color = QColor(255, 253, 254);
     }
 
-    painter->setPen(QPen(color, 3));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawEllipse(this->pickerPos.x() - 8, this->pickerPos.y() - 8, 16, 16);
+    painter.setPen(QPen(color, 3));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawEllipse(this->pickerPos.x() - 8, this->pickerPos.y() - 8, 16, 16);
+    painter.end();
 }
 
-BrightnessSlider::BrightnessSlider(QColor color, QWidget *parent) : ClickableSlider(parent)
+BrightnessSlider::BrightnessSlider(QColor color, QWidget *parent) : ClickableSlider(Qt::Horizontal, parent)
 {
     this->setRange(0, 255);
     this->setSingleStep(1);
@@ -78,7 +91,8 @@ void BrightnessSlider::setColor(QColor color)
 {
     this->color = QColor(color);
     this->setValue(this->color.value());
-    QString qss =  StyleSheetFile(FluentStyleSheetMap.value("COLOR_DIALOG")).content(Theme::AUTO);
+    //QString qss =  StyleSheetFile(FluentStyleSheetMap.value("COLOR_DIALOG")).content(Theme::AUTO);  //TODO：bug
+    QString qss =  FluentStyleSheet().content(QString("COLOR_DIALOG"), Theme::AUTO);
     qss = qss.replace("--slider-hue", QString::number(this->color.hue()));
     qss = qss.replace("--slider-saturation", QString::number(this->color.saturation()));
     this->setStyleSheet(qss);
@@ -121,7 +135,7 @@ void ColorCard::setColor(QColor color)
 
 void ColorCard::paintEvent(QPaintEvent *event)
 {
-    QPainter painter = QPainter(this);
+    QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing);
 
     if(this->enableAlpha){
@@ -133,7 +147,7 @@ void ColorCard::paintEvent(QPaintEvent *event)
     painter.setBrush(this->color);
     painter.setPen(QColor(0, 0, 0, 13));
     painter.drawRoundedRect(this->rect(), 4, 4);
-
+    //painter.end();
 }
 
 
@@ -178,7 +192,7 @@ void HexColorLineEdit::setColor(QColor color)
 }
 
 
-OpacityLineEdit::OpacityLineEdit(int value, QWidget *parent, bool enableAlpha = false) : ColorLineEdit(int(value/255*100), parent)
+OpacityLineEdit::OpacityLineEdit(int value, QWidget *parent, bool enableAlpha = false) : ColorLineEdit(int(float(value)/255*100), parent)
 {
     this->setValidator(new QRegExpValidator(QRegExp("[0-9][0-9]{0,1}|100")));
     this->setTextMargins(4, 0, 33, 0);
@@ -189,7 +203,7 @@ OpacityLineEdit::OpacityLineEdit(int value, QWidget *parent, bool enableAlpha = 
 
 void OpacityLineEdit::showEvent(QShowEvent *event)
 {
-    OpacityLineEdit::showEvent(event);
+    ColorLineEdit::showEvent(event);
     this->_adjustSuffixPos();
 }
 
@@ -210,6 +224,8 @@ ColorDialog::ColorDialog(QColor color, QString title, QWidget *parent, bool enab
     if(!enableAlpha){
         _color = QColor(color);
         _color.setAlpha(255);
+    }else{
+        _color = QColor(color);
     }
 
     this->oldColor = QColor(_color);
@@ -236,6 +252,7 @@ ColorDialog::ColorDialog(QColor color, QString title, QWidget *parent, bool enab
     this->hexLineEdit = new HexColorLineEdit(this->color.red(), this->scrollWidget, enableAlpha);
     this->redLineEdit = new ColorLineEdit(this->color.red(), this->scrollWidget);
     this->greenLineEdit = new ColorLineEdit(this->color.blue(), this->scrollWidget);
+    this->blueLineEdit = new ColorLineEdit(this->color.blue(), this->scrollWidget);
     this->opacityLineEdit = new OpacityLineEdit(this->color.alpha(), this->scrollWidget, false);
     
     this->vBoxLayout = new QVBoxLayout(this->widget);
@@ -293,6 +310,9 @@ void ColorDialog::__initLayout()
     this->vBoxLayout->setContentsMargins(0, 0, 0, 0);
     this->vBoxLayout->addWidget(this->scrollArea, 1);
     this->vBoxLayout->addWidget(this->buttonGroup, 0, Qt::AlignBottom);
+
+    this->yesButton->move(24, 25);
+    this->cancelButton->move(250, 25);
 }
 
 void ColorDialog::__setQss()
@@ -335,27 +355,27 @@ void ColorDialog::__onBrightnessChanged(QColor color)
     this->setColor(this->color, false);
 }
 
-void ColorDialog::__onRedChanged(int red)
+void ColorDialog::__onRedChanged(QString red)
 {
-    this->color.setRed(red);
+    this->color.setRed(red.toInt());
     this->setColor(this->color);
 }
 
-void ColorDialog::__onBlueChanged(int blue)
+void ColorDialog::__onBlueChanged(QString blue)
 {
-    this->color.setBlue(blue);
+    this->color.setBlue(blue.toInt());
     this->setColor(this->color);
 }
 
-void ColorDialog::__onGreenChanged(int green)
+void ColorDialog::__onGreenChanged(QString green)
 {
-    this->color.setGreen(green);
+    this->color.setGreen(green.toInt());
     this->setColor(this->color);
 }
 
-void ColorDialog::__onOpacityChanged(float opacity)
+void ColorDialog::__onOpacityChanged(QString opacity)
 {
-    this->color.setAlpha(int(int(opacity)/100*255));
+    this->color.setAlpha(int(opacity.toFloat()/100*255)); //TODO:特殊关注小数计算
     this->setColor(this->color);
 }
 

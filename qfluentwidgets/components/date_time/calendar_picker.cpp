@@ -85,20 +85,17 @@ void CalendarPicker::_onDateChanged(QDate date)
 void CalendarPicker::paintEvent(QPaintEvent *e)
 {
     QPushButton::paintEvent(e);
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     if(!this->property("hasDate").value<bool>()){
-        painter->setOpacity(0.6);
+        painter.setOpacity(0.6);
     }
 
     int w = 12;
     QRect rect = QRect(this->width() - 23, this->height() / 2 - w / 2, w, w);
     FluentIcon *icon = new FluentIcon();
     icon->setIconName(QString("CALENDAR"));
-    icon->render(painter, rect, Theme::AUTO, 0, nullptr);
-
-    painter->end();
+    icon->render(&painter, rect, Theme::AUTO, 0, nullptr);
     delete icon;
-    delete painter;
 }

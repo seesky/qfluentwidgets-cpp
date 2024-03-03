@@ -142,7 +142,6 @@ QString PickerColumnButton::value()
     if(this->_value.isNull()){
         return QString();
     }
-    qDebug() << this->_value;
     PickerColumnFormatter *p = this->formatter();
     return this->formatter()->encode(QVariant::fromValue<QString>(this->_value));
 }

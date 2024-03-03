@@ -133,6 +133,8 @@
         "qgraphicsdropshadoweffect": "cpp",
         "qframe": "cpp",
         "*.inc": "cpp",
-        "qscrollarea": "cpp"
+        "qscrollarea": "cpp",
+        "qdatetime": "cpp",
+        "qlist": "cpp"
     }
 }

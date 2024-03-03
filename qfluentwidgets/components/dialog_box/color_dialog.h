@@ -148,10 +148,10 @@ signals:
 public slots:
     void __onHueChanged(QColor color);
     void __onBrightnessChanged(QColor color);
-    void __onRedChanged(int red);
-    void __onBlueChanged(int blue);
-    void __onGreenChanged(int green);
-    void __onOpacityChanged(float opacity);
+    void __onRedChanged(QString red);
+    void __onBlueChanged(QString blue);
+    void __onGreenChanged(QString green);
+    void __onOpacityChanged(QString opacity);
     void __onHexColorChanged(QString color);
     void __onYesButtonClicked();
     void __connectSignalToSlot();

@@ -19,7 +19,6 @@ StyleSheetFile::StyleSheetFile(QString path)
 
 QString StyleSheetFile::path(Theme theme)
 {
-    qDebug() << this->filePath;
     return this->filePath;
 }
 
@@ -140,7 +139,6 @@ QString StyleSheetBase::path(Theme theme=Theme::AUTO)
 
 QString getStyleSheetFromFile(QString file)
 {
-    
     QFile *f = new QFile(file);
 
     f->open(QFile::ReadOnly);
@@ -202,7 +200,19 @@ QString StyleSheetBase::content(Theme theme = Theme::AUTO)
 
 QString StyleSheetBase::content(QString fluentStyleSheet, Theme theme)
 {
-    this->path(theme);
+    QString themeOptionsName;
+    if(theme == Theme::AUTO){
+        //TODO:theme = qconfig.theme if theme == Theme.AUTO else theme
+        theme = Theme::LIGHT;
+        themeOptionsName = "LIGHT";
+    }else if(theme == Theme::DARK){
+        theme = Theme::DARK;
+        themeOptionsName = "DARK";
+    }else{
+        theme = Theme::LIGHT;
+        themeOptionsName = "LIGHT";
+    }
+    return getStyleSheetFromFile(((FluentStyleSheet *)this)->path(themeOptionsName, fluentStyleSheet, theme));
 }
 
 void StyleSheetBase::apply(QWidget *widget, QString fluentStyleSheet, Theme theme = Theme::AUTO)
@@ -218,7 +228,7 @@ QString FluentStyleSheet::path(QString ThemeOptionsName, QString FluentStyleShee
         //TODO:theme = qconfig.theme if theme == Theme.AUTO else theme
         theme = Theme::LIGHT;
     }
-    return "/qfluentwidgets/qss/" + ThemeOptionsMap.key(ThemeOptionsName) + "/" + ThemeColorMap.key(FluentStyleSheetName) + ".qss";
+    return "qfluentwidgets/qss/" + ThemeOptionsMap.value(ThemeOptionsName) + "/" + FluentStyleSheetMap.value(FluentStyleSheetName) + ".qss";
 }
 
 void setCustomStyleSheet(QWidget *widget, QString lightQss, QString darkQss)

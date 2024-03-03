@@ -157,17 +157,22 @@ ScrollBar::ScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent) : QWid
     this->_pressedPos =  QPoint();
     this->_isForceHidden = false;
 
-    if(orient == Qt::Vertical)
+    if(orient == Qt::Vertical)  //TODO:这里之前有个一个bug，当不执行setvisible方法的时候，在界面上会出现一个方框
     {
         this->partnerBar = parent->verticalScrollBar();
-        QAbstractScrollArea *asa = new QAbstractScrollArea(parent);
-        asa->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        asa->setVisible(false);
+
+        parent->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //parent->setVisible(false);
+        //QAbstractScrollArea *asa = new QAbstractScrollArea(parent);
+        //asa->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //asa->setVisible(false);
     }else{
         this->partnerBar = parent->horizontalScrollBar();
-        QAbstractScrollArea *asa = new QAbstractScrollArea(parent);
-        asa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        asa->setVisible(false);
+        //QAbstractScrollArea *asa = new QAbstractScrollArea(parent);
+        //asa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //asa->setVisible(false);
+        parent->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        //parent->setVisible(false);
     }
 
     this->__initWidget(parent);

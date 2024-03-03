@@ -10,6 +10,7 @@ void ScrollButton::paintEvent(QPaintEvent *event)
 {
     TransparentToolButton::paintEvent(event);
     QPainter *painter = new QPainter(this);
+    //QPainter painter(this);
     painter->setRenderHints(QPainter::Antialiasing);
 
     int w, h;

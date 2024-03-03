@@ -10,6 +10,7 @@
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QAbstractScrollArea>
 #include <QtCore/QList>
+#include <QtCore/Qdebug>
 #include "math.h"
 
 enum class SmoothMode {

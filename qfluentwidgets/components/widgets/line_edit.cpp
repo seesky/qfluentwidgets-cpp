@@ -49,6 +49,8 @@ void LineEditButton::paintEvent(QPaintEvent *e)
         attributes[QString("fill")] = QString("#656565");
         MIcon().drawIcon(this->_icon, painter, *rect, &attributes,  QIcon::State::Off);
     }
+
+    painter->end();
 }
 
 LineEdit::LineEdit(QWidget *parent) : QLineEdit(parent)
@@ -179,14 +181,15 @@ void LineEdit::contextMenuEvent(QContextMenuEvent *e)
 
 void LineEdit::paintEvent(QPaintEvent *e)
 {
+    
     QLineEdit::paintEvent(e);
     if(!this->hasFocus()){
         return;
     }
 
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
 
     QMargins m = this->contentsMargins();
     QPainterPath *path = new QPainterPath();
@@ -194,10 +197,10 @@ void LineEdit::paintEvent(QPaintEvent *e)
     int h = this->height();
 
     path->addRoundedRect(QRectF(m.left(), h - 10, w, 10), 5, 5);
-    QPainterPath *rectPath = new QPainterPath();
-    rectPath->addRect(m.left(), h - 10, w, 8);
-    QPainterPath _path = path->subtracted(*rectPath);
-    painter->fillPath(_path, *(ThemeColor().themeColor()));
+    QPainterPath rectPath = QPainterPath();
+    rectPath.addRect(m.left(), h - 10, w, 8);
+    QPainterPath _path = path->subtracted(rectPath);
+    painter.fillPath(_path, *(ThemeColor().themeColor()));
 }
 
 
@@ -374,9 +377,9 @@ void EditLayer::paintEvent(QPaintEvent *event)
         return;
     }
 
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
 
     QMargins m = this->contentsMargins();
     QPainterPath *path = new QPainterPath();
@@ -387,7 +390,8 @@ void EditLayer::paintEvent(QPaintEvent *event)
     QPainterPath *rectPath = new QPainterPath();
     rectPath->addRect(m.left(), h - 10, w, 7.5);
     QPainterPath _path = path->subtracted(*rectPath);
-    painter->fillPath(_path, *(ThemeColor().themeColor())); 
+    painter.fillPath(_path, *(ThemeColor().themeColor())); 
+
 }
 
 

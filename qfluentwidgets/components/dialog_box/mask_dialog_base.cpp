@@ -63,6 +63,7 @@ void MaskDialogBase::done(int code)
     connect(opacityAni, &QPropertyAnimation::finished, this, [this, code](){ //TODO:特殊关注
         QDialog::done(code);
     });
+    opacityAni->start();
 }
 
 void MaskDialogBase::resizeEvent(QResizeEvent *e)
@@ -78,4 +79,6 @@ bool MaskDialogBase::eventFilter(QObject *obj, QEvent *e)
             this->resize(re->size());
         }
     }
+
+    return QDialog::eventFilter(obj, e);
 }

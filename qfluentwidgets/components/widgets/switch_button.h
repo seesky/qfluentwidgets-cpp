@@ -55,6 +55,11 @@ public slots:
 
 class SwitchButton : public QWidget{
     Q_OBJECT
+    Q_PROPERTY(int spacing READ getSpacing WRITE setSpacing)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
+    Q_PROPERTY(QString text READ getText WRITE setText)
+    Q_PROPERTY(QString onText READ getOnText WRITE setOnText)
+    Q_PROPERTY(QString offText READ getOffText WRITE setOffText)
 public:
     SwitchButton(QWidget *parent, IndicatorPosition indicatorPos);
     SwitchButton(QString text, QWidget *parent, IndicatorPosition indicatorPos);

@@ -68,6 +68,7 @@ public slots:
 class ClickableSlider : public QSlider{
     Q_OBJECT
 public:
+    ClickableSlider(Qt::Orientation orientation, QWidget *parent) : QSlider(orientation, parent){};
     ClickableSlider(QWidget *parent) : QSlider(parent){};
     void mousePressEvent(QMouseEvent *event);
 signals:
