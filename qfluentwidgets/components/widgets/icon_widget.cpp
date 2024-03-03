@@ -51,9 +51,9 @@ void IconWidget::setIcon(QVariant *icon)
 
 void IconWidget::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    MIcon().drawIcon(this->_icon, painter, this->rect(), nullptr, QIcon::State::Off);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    MIcon().drawIcon(this->_icon, &painter, this->rect(), nullptr, QIcon::State::Off);
 }
 
 

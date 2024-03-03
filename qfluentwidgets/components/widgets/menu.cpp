@@ -44,13 +44,12 @@ void SubMenuItemWidget::enterEvent(QEvent *event)
 
 void SubMenuItemWidget::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     FluentIcon *icon = new FluentIcon();
     icon->setIconName("CHEVRON_RIGHT");
-    icon->render(painter, QRect(this->width()-10, this->height()/2-9/2, 9, 9), Theme::AUTO, 0, nullptr); //TODO:特殊关注
-    painter->end();
+    icon->render(&painter, QRect(this->width()-10, this->height()/2-9/2, 9, 9), Theme::AUTO, 0, nullptr); //TODO:特殊关注
 }
 
 bool MenuItemDelegate::_isSeparator(QModelIndex index) const

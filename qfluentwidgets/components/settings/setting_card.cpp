@@ -123,7 +123,6 @@ void ColorPickerButton::__onColorChanged(QColor color)
 
 void ColorPickerButton::paintEvent(QPaintEvent *event)
 {
-    //QPainter *painter = new QPainter(this);
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing);
     QColor pc = isDarkTheme() ? QColor(255, 255, 255, 10) : QColor(234, 234, 234);

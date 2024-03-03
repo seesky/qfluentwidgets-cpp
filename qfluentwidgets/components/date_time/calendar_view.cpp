@@ -9,9 +9,9 @@ void ScrollButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIco
 void ScrollButton::paintEvent(QPaintEvent *event)
 {
     TransparentToolButton::paintEvent(event);
-    QPainter *painter = new QPainter(this);
-    //QPainter painter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     int w, h;
     if(!this->isPressed){
@@ -28,14 +28,12 @@ void ScrollButton::paintEvent(QPaintEvent *event)
     if(!isDarkTheme()){
         std::map<QString, QString> attributes;
         attributes[QString("fill")] = QString("#5e5e5e");
-        this->_icon->value<FluentIcon>().render(painter, QRect(x, y, w, h), Theme::AUTO, 0, &attributes);
+        this->_icon->value<FluentIcon>().render(&painter, QRect(x, y, w, h), Theme::AUTO, 0, &attributes);
     }else{
         std::map<QString, QString> attributes;
         attributes[QString("fill")] = QString("#9c9c9c");
-        this->_icon->value<FluentIcon>().render(painter, QRect(x, y, w, h), Theme::AUTO, 0, &attributes);
+        this->_icon->value<FluentIcon>().render(&painter, QRect(x, y, w, h), Theme::AUTO, 0, &attributes);
     }
-
-    painter->end();
 }
 
 

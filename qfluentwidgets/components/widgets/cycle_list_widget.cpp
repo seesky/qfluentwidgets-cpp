@@ -24,8 +24,8 @@ bool ScrollButtonC::eventFilter(QObject *watched, QEvent *event)
 void ScrollButtonC::paintEvent(QPaintEvent *e)
 {
     QToolButton::paintEvent(e);
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     int w, h;
 
@@ -45,11 +45,10 @@ void ScrollButtonC::paintEvent(QPaintEvent *e)
         std::map<QString, QString> attributes = {
             {"fill", color.name()}
         };
-        this->_icon->render(painter, QRect(x, y, w, h), Theme::AUTO, 0, &attributes);
+        this->_icon->render(&painter, QRect(x, y, w, h), Theme::AUTO, 0, &attributes);
     }else{
-        this->_icon->render(painter, QRect(x, y, w, h), Theme::AUTO, 0, nullptr);
+        this->_icon->render(&painter, QRect(x, y, w, h), Theme::AUTO, 0, nullptr);
     }
-    painter->end();
 }
 
 CycleListWidget::CycleListWidget(QList<QVariant> *items, QSize *itemSize, Qt::Alignment align, QWidget *parent) : QListWidget(parent)

@@ -24,8 +24,8 @@ ArrowButton::ArrowButton(FluentIcon *icon, QWidget *parent) : QToolButton(parent
 
 void ArrowButton::paintEvent(QPaintEvent *e)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     float s = isDown() ? 7 : 8;
     float x = (this->width() - s) / 2;
@@ -34,9 +34,8 @@ void ArrowButton::paintEvent(QPaintEvent *e)
     std::map<QString, QString> attributes = {
         {"fill", color.name()}
     };
-    this->_icon->render(painter, QRect(x, x, s, s), Theme::AUTO, 0, &attributes);
+    this->_icon->render(&painter, QRect(x, x, s, s), Theme::AUTO, 0, &attributes);
 
-    painter->end();
 }
 
 
@@ -97,20 +96,20 @@ void ScrollBarGroove::fadeOut()
 
 void ScrollBarGroove::paintEvent(QPaintEvent *e)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
 
     if(!isDarkTheme())
     {
-        painter->setBrush(QColor(252, 252, 252, 217));
+        painter.setBrush(QColor(252, 252, 252, 217));
     }else{
-        painter->setBrush(QColor(44, 44, 44, 245));
+        painter.setBrush(QColor(44, 44, 44, 245));
     }
 
-    painter->drawRoundedRect(this->rect(), 6, 6);
+    painter.drawRoundedRect(this->rect(), 6, 6);
 
-    painter->end();
+    painter.end();
 }
 
 
@@ -126,14 +125,14 @@ ScrollBarHandle::ScrollBarHandle(Qt::Orientation orient, QWidget *parent) : QWid
 
 void ScrollBarHandle::paintEvent(QPaintEvent *e)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
     float r = this->orient == Qt::Vertical ? width() / 2 : height() / 2;
     QColor c = isDarkTheme() ? QColor(255, 255, 255, 139) : QColor(0, 0, 0, 114);
-    painter->setBrush(c);
-    painter->drawRoundedRect(this->rect(), r, r);
-    painter->end();
+    painter.setBrush(c);
+    painter.drawRoundedRect(this->rect(), r, r);
+    painter.end();
 }
 
 ScrollBar::ScrollBar(Qt::Orientation orient, QAbstractScrollArea *parent) : QWidget(parent)

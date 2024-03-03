@@ -24,10 +24,10 @@ CheckBox::CheckBox(QString text, QWidget *parent) : QCheckBox(parent)
 void CheckBox::paintEvent(QPaintEvent *e)
 {
     QCheckBox::paintEvent(e);
-    QPainter *painter = new QPainter(this);
+    QPainter painter(this);
 
     if(!this->isEnabled()){
-        painter->setOpacity(0.8);
+        painter.setOpacity(0.8);
     }
 
     QStyleOptionButton *opt = new QStyleOptionButton();
@@ -37,12 +37,10 @@ void CheckBox::paintEvent(QPaintEvent *e)
     if(this->checkState() == Qt::Checked){
         CheckBoxIcon *icon = new CheckBoxIcon();
         icon->setIconName(QString("ACCEPT"));
-        icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+        icon->render(&painter, rect, Theme::AUTO, 0, nullptr);
     }else if(this->checkState() == Qt::PartiallyChecked){
         CheckBoxIcon *icon = new CheckBoxIcon();
         icon->setIconName(QString("PARTIAL_ACCEPT"));
-        icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+        icon->render(&painter, rect, Theme::AUTO, 0, nullptr);
     }
-
-    painter->end();
 }

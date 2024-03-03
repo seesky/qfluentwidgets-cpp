@@ -45,18 +45,18 @@ void SliderHandle::_startAni(float radius)
 
 void SliderHandle::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::RenderHint::Antialiasing);
-    painter->setPen(Qt::PenStyle::NoPen);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::RenderHint::Antialiasing);
+    painter.setPen(Qt::PenStyle::NoPen);
 
     bool isDark = isDarkTheme();
-    painter->setPen(QColor(0, 0, 0, isDark ? 90 : 25));
-    painter->setBrush(isDark ? QColor(69, 69, 69) : Qt::GlobalColor::white);
-    painter->drawEllipse(this->rect().adjusted(1, 1, -1, -1));
+    painter.setPen(QColor(0, 0, 0, isDark ? 90 : 25));
+    painter.setBrush(isDark ? QColor(69, 69, 69) : Qt::GlobalColor::white);
+    painter.drawEllipse(this->rect().adjusted(1, 1, -1, -1));
 
-    painter->setBrush(*(ThemeColor().themeColor()));
-    painter->drawEllipse(QPoint(11, 11), this->radius(), this->radius());
-    painter->end();
+    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.drawEllipse(QPoint(11, 11), this->radius(), this->radius());
+    painter.end();
 }
 
 
@@ -141,17 +141,16 @@ float Slider::_posToValue(QPoint *pos)
 
 void Slider::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::RenderHint::Antialiasing);
-    painter->setPen(Qt::PenStyle::NoPen);
-    painter->setBrush(isDarkTheme() ? QColor(255, 255, 255, 115) : QColor(0, 0, 0, 100));
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::RenderHint::Antialiasing);
+    painter.setPen(Qt::PenStyle::NoPen);
+    painter.setBrush(isDarkTheme() ? QColor(255, 255, 255, 115) : QColor(0, 0, 0, 100));
 
     if(this->orientation() == Qt::Orientation::Horizontal){
-        this->_drawHorizonGroove(painter);
+        this->_drawHorizonGroove(&painter);
     }else{
-        this->_drawVerticalGroove(painter);
+        this->_drawVerticalGroove(&painter);
     }
-    painter->end();
 }
 
 //绘制水平槽

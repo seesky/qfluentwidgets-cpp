@@ -23,42 +23,40 @@ ItemMaskWidget::ItemMaskWidget(QList<CycleListWidget *> *listWidgets, QWidget *p
 
 void ItemMaskWidget::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
 
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(*(ThemeColor().themeColor()));
-    painter->drawRoundedRect(this->rect().adjusted(4, 0, -3, 0), 5, 5);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.drawRoundedRect(this->rect().adjusted(4, 0, -3, 0), 5, 5);
 
-    painter->setPen(isDarkTheme() ? Qt::black : Qt::white);
-    painter->setFont(this->font());
+    painter.setPen(isDarkTheme() ? Qt::black : Qt::white);
+    painter.setFont(this->font());
     int w = 0;
     int h = this->height();
 
     for(int i = 0; i < this->listWidgets->length(); i++){
-        painter->save();
+        painter.save();
 
         int x = this->listWidgets->at(i)->itemSize->width() / 2 + 4 + this->x();
         QListWidgetItem *item1 = this->listWidgets->at(i)->itemAt(QPoint(x, this->y() + 6));
         if(item1 == nullptr){
-            painter->restore();
+            painter.restore();
             continue;
         }
 
         int iw = item1->sizeHint().width();
         int y = this->listWidgets->at(i)->visualItemRect(item1).y();
-        painter->translate(w, y - this->y() + 7);
-        this->_drawText(item1, painter, 0);
+        painter.translate(w, y - this->y() + 7);
+        this->_drawText(item1, &painter, 0);
 
         QListWidgetItem *item2 = this->listWidgets->at(i)->itemAt(this->pos() + QPoint(x, h - 6));
-        this->_drawText(item2, painter, h);
+        this->_drawText(item2, &painter, h);
 
-        painter->restore();
+        painter.restore();
 
         w += (iw + 8);
     }
-
-    painter->end();
 }
 
 

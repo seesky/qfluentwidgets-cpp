@@ -121,12 +121,12 @@ void PushButton::paintEvent(QPaintEvent *event)
         return;
     }
 
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     if(!isEnabled()){
-        painter->setOpacity(0.3628);
+        painter.setOpacity(0.3628);
     }else if(this->isPressed){
-        painter->setOpacity(0.786);
+        painter.setOpacity(0.786);
     }
 
     int w = iconSize().width();
@@ -136,12 +136,10 @@ void PushButton::paintEvent(QPaintEvent *event)
     if(mw > 0)
     {
         //TODO:self._drawIcon(self._icon, painter, QRectF(12+(self.width()-mw)//2, y, w, h))
-        this->_drawIcon(this->_icon, painter, QRect(12 + (width() - mw)/2, y, w, h));
+        this->_drawIcon(this->_icon, &painter, QRect(12 + (width() - mw)/2, y, w, h));
     }else{
-        this->_drawIcon(this->_icon, painter, QRect(12, y, w, h));
+        this->_drawIcon(this->_icon, &painter, QRect(12, y, w, h));
     }
-
-    painter->end();
 }
 
 PrimaryPushButton::PrimaryPushButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon)
@@ -403,12 +401,12 @@ void ToolButton::paintEvent(QPaintEvent *event)
         return;
     }
 
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     if(!isEnabled()){
-        painter->setOpacity(0.43);
+        painter.setOpacity(0.43);
     }else if(this->isPressed){
-        painter->setOpacity(0.63);
+        painter.setOpacity(0.63);
     }
 
     int w = iconSize().width();
@@ -416,9 +414,7 @@ void ToolButton::paintEvent(QPaintEvent *event)
     int y = (height() - h) / 2;
     int x = (width() - w) / 2;
     
-    this->_drawIcon(this->_icon, painter, QRect(x, y, w, h));
-    painter->end();
-    delete painter;
+    this->_drawIcon(this->_icon, &painter, QRect(x, y, w, h));
 }
 
 TransparentToolButton::TransparentToolButton(FluentIcon *icon, QWidget *parent) : ToolButton(icon, parent){}
@@ -687,17 +683,16 @@ void DropDownToolButton::paintEvent(QPaintEvent *event)
 {
     ToolButton::paintEvent(event);
 
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
     if(this->isHover){
-        painter->setOpacity(0.8);
+        painter.setOpacity(0.8);
     }else if(this->isPressed){
-        painter->setOpacity(0.7);
+        painter.setOpacity(0.7);
     }
 
     QRect rect = QRect(this->width() - 22, this->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
-    this->_drawDropDownIcon(painter, rect);
-    painter->end();
+    this->_drawDropDownIcon(&painter, rect);
 
 }
 
@@ -1517,8 +1512,8 @@ void PrimarySplitToolButton::setIconSize(QSize *size)
 
 void PillPushButton::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
     bool isDark = isDarkTheme();
     QRect rect;
     if(!this->isChecked()){
@@ -1533,10 +1528,10 @@ void PillPushButton::paintEvent(QPaintEvent *event)
             bgColor = isDark ? QColor(255, 255, 255, 15) : QColor(249, 249, 249, 194);
         }
 
-        painter->setPen(borderColor);
-        painter->setBrush(bgColor);
+        painter.setPen(borderColor);
+        painter.setBrush(bgColor);
         int r = rect.height() / 2;
-        painter->drawRoundedRect(rect, r, r);
+        painter.drawRoundedRect(rect, r, r);
 
     }else{
         QColor bgColor;
@@ -1553,13 +1548,12 @@ void PillPushButton::paintEvent(QPaintEvent *event)
         Qt::GlobalColor borderColor =  Qt::transparent;
         rect = this->rect();
 
-        painter->setPen(borderColor);
-        painter->setBrush(bgColor);
+        painter.setPen(borderColor);
+        painter.setBrush(bgColor);
         int r = rect.height() / 2;
-        painter->drawRoundedRect(rect, r, r);
+        painter.drawRoundedRect(rect, r, r);
     }
 
-    painter->end();
 
     ToggleButton::paintEvent(event);
 }
@@ -1567,8 +1561,8 @@ void PillPushButton::paintEvent(QPaintEvent *event)
 
 void PillToolButton::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
     bool isDark = isDarkTheme();
     QRect rect;
     if(!this->isChecked()){
@@ -1583,10 +1577,10 @@ void PillToolButton::paintEvent(QPaintEvent *event)
             bgColor = isDark ? QColor(255, 255, 255, 15) : QColor(249, 249, 249, 194);
         }
 
-        painter->setPen(borderColor);
-        painter->setBrush(bgColor);
+        painter.setPen(borderColor);
+        painter.setBrush(bgColor);
         int r = rect.height() / 2;
-        painter->drawRoundedRect(rect, r, r);
+        painter.drawRoundedRect(rect, r, r);
 
     }else{
         QColor bgColor;
@@ -1603,13 +1597,13 @@ void PillToolButton::paintEvent(QPaintEvent *event)
         Qt::GlobalColor borderColor =  Qt::transparent;
         rect = this->rect();
 
-        painter->setPen(borderColor);
-        painter->setBrush(bgColor);
+        painter.setPen(borderColor);
+        painter.setBrush(bgColor);
         int r = rect.height() / 2;
-        painter->drawRoundedRect(rect, r, r);
+        painter.drawRoundedRect(rect, r, r);
     }
 
-    painter->end();
+    painter.end();
 
     ToggleToolButton::paintEvent(event);
 }

@@ -26,9 +26,9 @@ void LineEditButton::mouseReleaseEvent(QMouseEvent *e)
 void LineEditButton::paintEvent(QPaintEvent *e)
 {
     QToolButton::paintEvent(e);
-    QPainter *painter = new QPainter(this);
+    QPainter painter(this);
 
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     int iw = this->iconSize().width();
     int ih = this->iconSize().height();
@@ -39,18 +39,16 @@ void LineEditButton::paintEvent(QPaintEvent *e)
     QRect *rect = new QRect((w - iw)/2, (h - ih)/2, iw, ih);
 
     if(this->isPressed){
-        painter->setOpacity(0.7);
+        painter.setOpacity(0.7);
     }
 
     if(isDarkTheme()){
-        MIcon().drawIcon(this->_icon, painter, *rect, nullptr,  QIcon::State::Off);
+        MIcon().drawIcon(this->_icon, &painter, *rect, nullptr,  QIcon::State::Off);
     }else{
         std::map<QString, QString> attributes;
         attributes[QString("fill")] = QString("#656565");
-        MIcon().drawIcon(this->_icon, painter, *rect, &attributes,  QIcon::State::Off);
+        MIcon().drawIcon(this->_icon, &painter, *rect, &attributes,  QIcon::State::Off);
     }
-
-    painter->end();
 }
 
 LineEdit::LineEdit(QWidget *parent) : QLineEdit(parent)

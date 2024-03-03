@@ -44,11 +44,10 @@ void Indicator::setHover(bool isHover)
 
 void Indicator::paintEvent(QPaintEvent *event)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
-    this->_drawBackground(painter);
-    this->_drawCircle(painter);
-    painter->end();
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
+    this->_drawBackground(&painter);
+    this->_drawCircle(&painter);
 }
 
 void Indicator::_drawBackground(QPainter *painter)

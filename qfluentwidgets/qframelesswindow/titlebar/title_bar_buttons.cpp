@@ -110,15 +110,15 @@ void SvgTitleBarButton::setIcon(QString iconPath)
 
 void SvgTitleBarButton::paintEvent(QPaintEvent *e)
 {
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     std::tuple<QColor *, QColor *> c = this->_getColors();
     QColor *color = std::get<0>(c);
     QColor *bgColor = std::get<1>(c);
 
-    painter->setBrush(*bgColor);
-    painter->setPen(Qt::NoPen);
-    painter->drawRect(this->rect());
+    painter.setBrush(*bgColor);
+    painter.setPen(Qt::NoPen);
+    painter.drawRect(this->rect());
 
     QString color_name = color->name();
     QDomNodeList pathNodes = this->_svgDom->elementsByTagName("path");
@@ -129,28 +129,27 @@ void SvgTitleBarButton::paintEvent(QPaintEvent *e)
     }
 
     QSvgRenderer *renderer = new QSvgRenderer(this->_svgDom->toByteArray());
-    renderer->render(painter, QRectF(this->rect()));
-    painter->end();
+    renderer->render(&painter, QRectF(this->rect()));
 }
 
 
 void MinimizeButton::paintEvent(QPaintEvent *e)
 {
-    QPainter *painter = new QPainter(this);
+    QPainter painter(this);
     std::tuple<QColor *, QColor *> c = this->_getColors();
     QColor *color = std::get<0>(c);
     QColor *bgColor = std::get<1>(c);
 
-    painter->setBrush(*bgColor);
-    painter->setPen(Qt::NoPen);
-    painter->drawRect(this->rect());
+    painter.setBrush(*bgColor);
+    painter.setPen(Qt::NoPen);
+    painter.drawRect(this->rect());
 
-    painter->setBrush(Qt::NoBrush);
+    painter.setBrush(Qt::NoBrush);
     QPen *pen = new QPen(*color, 1);
     pen->setCosmetic(true);
-    painter->setPen(*pen);
-    painter->drawLine(18, 16, 28, 16);
-    painter->end();
+    painter.setPen(*pen);
+    painter.drawLine(18, 16, 28, 16);
+    painter.end();
 }
 
 MaximizeButton::MaximizeButton(QWidget *parent) : TitleBarButton(parent)
@@ -169,26 +168,26 @@ void MaximizeButton::setMaxState(bool isMax)
 
 void MaximizeButton::paintEvent(QPaintEvent *e)
 {
-    QPainter *painter = new QPainter(this);
+    QPainter painter(this);
     std::tuple<QColor *, QColor *> c = this->_getColors();
     QColor *color = std::get<0>(c);
     QColor *bgColor = std::get<1>(c);
 
-    painter->setBrush(*bgColor);
-    painter->setPen(Qt::NoPen);
-    painter->drawRect(this->rect());
+    painter.setBrush(*bgColor);
+    painter.setPen(Qt::NoPen);
+    painter.drawRect(this->rect());
 
-    painter->setBrush(Qt::NoBrush);
+    painter.setBrush(Qt::NoBrush);
     QPen *pen = new QPen(*color, 1);
     pen->setCosmetic(true);
-    painter->setPen(*pen);
+    painter.setPen(*pen);
 
     float r = devicePixelRatioF();
-    painter->scale(1/r, 1/r);
+    painter.scale(1/r, 1/r);
     if(!this->_isMax){
-        painter->drawRect(int(18*r), int(11*r), int(10*r), int(10*r));
+        painter.drawRect(int(18*r), int(11*r), int(10*r), int(10*r));
     }else{
-        painter->drawRect(int(18*r), int(13*r), int(8*r), int(8*r));
+        painter.drawRect(int(18*r), int(13*r), int(8*r), int(8*r));
         int x0 = int(18*r) + int(2*r);
         int y0 = 13*r;
         int dw = int(2*r);
@@ -197,10 +196,8 @@ void MaximizeButton::paintEvent(QPaintEvent *e)
         path.lineTo(x0+8*r, y0-dw);
         path.lineTo(x0+8*r, y0-dw+8*r);
         path.lineTo(x0+8*r-dw, y0-dw+8*r);
-        painter->drawPath(path);
+        painter.drawPath(path);
     }
-    painter->end();
-
 }
 
 CloseButton::CloseButton(QWidget *parent) : SvgTitleBarButton("qfluentwidgets/images/close.svg", parent)

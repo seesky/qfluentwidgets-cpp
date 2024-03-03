@@ -401,13 +401,13 @@ void ComboBox::mouseReleaseEvent(QMouseEvent *e)
 void ComboBox::paintEvent(QPaintEvent *e)
 {
     QPushButton::paintEvent(e);
-    QPainter *painter = new QPainter(this);
-    painter->setRenderHints(QPainter::Antialiasing);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     if(this->isPressed){
-        painter->setOpacity(0.8);
+        painter.setOpacity(0.8);
     }else if(this->isPressed){
-        painter->setOpacity(0.7);
+        painter.setOpacity(0.7);
     }
 
     QRect rect = QRect(this->width() - 22, this->height() / 2 - 5 + this->arrowAni->y(), 10, 10);
@@ -415,16 +415,14 @@ void ComboBox::paintEvent(QPaintEvent *e)
     if(isDarkTheme()){
         FluentIcon *icon = new FluentIcon();
         icon->setIconName(QString("ARROW_DOWN"));
-        icon->render(painter, rect, Theme::AUTO, 0, nullptr);
+        icon->render(&painter, rect, Theme::AUTO, 0, nullptr);
     }else{
         FluentIcon *icon = new FluentIcon();
         icon->setIconName(QString("ARROW_DOWN"));
         std::map<QString, QString> attributes;
         attributes[QString("fill")] = QString("#646464");
-        icon->render(painter, rect, Theme::AUTO, 0, &attributes);
+        icon->render(&painter, rect, Theme::AUTO, 0, &attributes);
     }
-
-    painter->end();
 }
 
 
