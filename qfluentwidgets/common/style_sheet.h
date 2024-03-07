@@ -168,3 +168,6 @@ public:
     QColor *themeColor();
 private:
 };
+
+
+void setCustomStyleSheet(QWidget *widget, QString lightQss, QString darkQss);

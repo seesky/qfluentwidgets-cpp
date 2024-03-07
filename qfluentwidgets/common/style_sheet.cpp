@@ -345,13 +345,14 @@ CustomStyleSheet *CustomStyleSheet::setCustomStyleSheet(QString lightQss, QStrin
 
 CustomStyleSheet *CustomStyleSheet::setLightStyleSheet(QString qss)
 {
-    this->widget->setProperty((CustomStyleSheetMap.key("LIGHT_QSS_KEY", "")).toStdString().c_str(), qss);
+    this->widget->setProperty((CustomStyleSheetMap.key("LIGHT_QSS_KEY", "")).toStdString().c_str(), QVariant::fromValue<QString>(qss));
     return this;
 }
 
 CustomStyleSheet *CustomStyleSheet::setDarkStyleSheet(QString qss)
 {
-    this->widget->setProperty((CustomStyleSheetMap.key("DARK_QSS_KEY", "")).toStdString().c_str(), qss);
+    this->widget->setProperty((CustomStyleSheetMap.key("DARK_QSS_KEY", "")).toStdString().c_str(), QVariant::fromValue<QString>(qss));
+    return this;
 }
 
 QString CustomStyleSheet::lightStyleSheet()
@@ -440,3 +441,5 @@ QColor *ThemeColor::themeColor()
 {
     return this->color("");
 }
+
+

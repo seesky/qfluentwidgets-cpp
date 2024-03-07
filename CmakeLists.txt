@@ -259,6 +259,27 @@ target_link_libraries(
 )
 
 
+add_executable(
+  custom_message_box_test
+  qfluentwidgets/test/custom_message_box_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(custom_message_box_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  custom_message_box_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
 
 
 add_executable(
@@ -306,3 +327,6 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+

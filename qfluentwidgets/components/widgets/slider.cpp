@@ -172,7 +172,7 @@ void Slider::_drawHorizonGroove(QPainter *painter)
     int selfMaximum = this->maximum();
 
     float aw = (float(this->value()) - float(this->minimum())) / (float(this->maximum()) - float(this->minimum())) * (w - r * 2);
-    qDebug() << aw;
+    //qDebug() << aw;
     painter->drawRoundedRect(QRectF(r, r - 2, aw, 4), 2, 2);
 }
 

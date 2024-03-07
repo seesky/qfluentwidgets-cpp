@@ -135,6 +135,8 @@
         "*.inc": "cpp",
         "qscrollarea": "cpp",
         "qdatetime": "cpp",
-        "qlist": "cpp"
+        "qlist": "cpp",
+        "qplaintextedit": "cpp",
+        "qguiapplication": "cpp"
     }
 }
