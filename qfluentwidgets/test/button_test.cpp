@@ -335,8 +335,8 @@ int main(int argc, char *argv[])
     QApplication *app = new QApplication(argc, argv);
     ButtonDemo *w = new ButtonDemo();
     w->show();
-    // Window *demo = new Window(nullptr);
-    // demo->show();
+    //Window *demo = new Window(nullptr);
+    //demo->show();
     // Window2 *demo2 = new Window2(nullptr);
     // demo2->show();
     return app->exec();

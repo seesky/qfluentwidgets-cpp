@@ -8,7 +8,7 @@
 #include <QtGui/QIconEngine>
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>
-#include <QVariant>
+#include <QtCore/QVariant>
 #include <QMetaType>
 #include <QList>
 

@@ -137,6 +137,7 @@
         "qdatetime": "cpp",
         "qlist": "cpp",
         "qplaintextedit": "cpp",
-        "qguiapplication": "cpp"
+        "qguiapplication": "cpp",
+        "qstring": "cpp"
     }
 }

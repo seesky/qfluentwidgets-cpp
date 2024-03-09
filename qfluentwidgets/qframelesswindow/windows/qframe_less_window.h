@@ -45,14 +45,40 @@ private:
 };
 
 
-class FramelessDialog : public QDialog, public WindowsFramelessWindow{
+class FramelessDialog : public QDialog{
+    Q_OBJECT
 public:
     FramelessDialog(QWidget *parent);
+    void updateFrameless();
+    void setTitleBar(TitleBar *titleBar);
+    void setResizeEnabled(bool isEnabled);
+    void resizeEvent(QResizeEvent *event);
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
+    int BORDER_WIDTH = 5;
+
+    TitleBar *titleBar;
+    WindowsWindowEffect *windowEffect;
+    bool _isResizeEnabled;
 private:
+public slots:
+    void __onScreenChanged();
+
 };
 
-class FramelessMainWindow : public QMainWindow, public WindowsFramelessWindow{
+class FramelessMainWindow : public QMainWindow{
+    Q_OBJECT
 public:
-    FramelessMainWindow(QWidget *parent);
+    FramelessMainWindow(QWidget *parent);void updateFrameless();
+    void setTitleBar(TitleBar *titleBar);
+    void setResizeEnabled(bool isEnabled);
+    void resizeEvent(QResizeEvent *event);
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
+    int BORDER_WIDTH = 5;
+
+    TitleBar *titleBar;
+    WindowsWindowEffect *windowEffect;
+    bool _isResizeEnabled;
 private:
+public slots:
+    void __onScreenChanged();
 };

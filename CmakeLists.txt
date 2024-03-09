@@ -279,6 +279,26 @@ target_link_libraries(
   Dwmapi
 )
 
+add_executable(
+  dialog_test
+  qfluentwidgets/test/dialog_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(dialog_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  dialog_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
 
 
 

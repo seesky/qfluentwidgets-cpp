@@ -164,17 +164,349 @@ bool WindowsFramelessWindow::nativeEvent(const QByteArray &eventType, void *mess
 }
 
 
-FramelessDialog::FramelessDialog(QWidget *parent) : QDialog(parent), WindowsFramelessWindow(parent)
+FramelessDialog::FramelessDialog(QWidget *parent) : QDialog(parent)
 {
+    this->windowEffect = new WindowsWindowEffect(this);
+    this->titleBar = new TitleBar(this);
+    this->_isResizeEnabled = true;
+    WId id = this->winId();
+    this->updateFrameless();
+    connect(this->windowHandle(), &QWindow::screenChanged, this, &FramelessDialog::__onScreenChanged);
+    resize(500, 500);
+    this->titleBar->raise();
+
     this->titleBar->minBtn->hide();
     this->titleBar->maxBtn->hide();
     this->titleBar->setDoubleClickEnabled(false);
     this->windowEffect->disableMaximizeButton(HWND(((QWindow *)(this))->winId()));
 }
 
-FramelessMainWindow::FramelessMainWindow(QWidget *parent) : QMainWindow(parent), WindowsFramelessWindow(parent)
+
+
+void FramelessDialog::updateFrameless()
+{
+
+    if(!isWin7())
+    {
+        this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+    }else if(this->parent()){
+        this->setWindowFlags(((QWidget *)(this->parent()))->windowFlags() | Qt::FramelessWindowHint | Qt::WindowMinMaxButtonsHint); //TODO:特殊关注
+    }else{
+        this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+    }
+
+
+    HWND id = (HWND)(this->winId());
+    this->windowEffect->addWindowAnimation(id);    
+    
+    if(dynamic_cast<AcrylicWindow*>(this) == nullptr){
+        this->windowEffect->addShadowEffect(HWND(this->winId()));
+    }
+    
+}
+
+void FramelessDialog::setTitleBar(TitleBar *titleBar)
+{
+    this->titleBar->deleteLater();
+    this->titleBar->hide();
+    this->titleBar = titleBar;
+    this->titleBar->setParent(this);
+    this->titleBar->raise();
+}
+
+void FramelessDialog::setResizeEnabled(bool isEnabled)
+{
+    this->_isResizeEnabled = isEnabled;
+}
+
+void FramelessDialog::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    this->titleBar->resize(this->width(), this->titleBar->height());
+}
+
+bool FramelessDialog::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
     
+    MSG *msg = reinterpret_cast<MSG *>(message);
+    if(!msg->hwnd){
+        return QWidget::nativeEvent(eventType, message, result);
+    }
+
+    
+    if(msg->message == WM_NCHITTEST && this->_isResizeEnabled)
+    {
+        QPoint pos = QCursor().pos();
+        int xPos = pos.x() - this->x();
+        int yPos = pos.y() - this->y();
+        int w = this->width();
+        int h = this->height();
+
+        int bw;
+        if(_isMaximized(msg->hwnd) || _isFullScreen(msg->hwnd)){
+            bw = 0;
+        }else{
+            bw = this->BORDER_WIDTH;
+        }
+
+        bool lx = xPos < bw;
+        bool rx = xPos > w - bw;
+        bool ty = yPos < bw;
+        bool by = yPos > h - bw;
+
+        if(lx && ty){
+            *result = HTTOPLEFT;
+            return true;
+        }else if(rx && by){
+            *result = HTBOTTOMRIGHT;
+            return true;
+        }else if(rx && ty){
+            *result = HTTOPRIGHT;
+            return true;
+        }else if(lx && by){
+            *result = HTBOTTOMLEFT;
+            return true;
+        }else if(ty){
+            *result = HTTOP;
+            return true;
+        }else if(by){
+            *result = HTBOTTOM;
+            return true;
+        }else if(lx){
+            *result = HTLEFT;
+            return true;
+        }else if(rx){
+            *result = HTRIGHT;
+            return true;
+        }
+    }
+    else if(msg->message == WM_NCCALCSIZE){
+        RECT rect = {0};
+
+        
+        if(msg->wParam){
+            LPNCCALCSIZE_PARAMS params = reinterpret_cast<LPNCCALCSIZE_PARAMS>(msg->lParam);
+            rect = params->rgrc[0];
+        }else{
+            rect.bottom = reinterpret_cast<LPRECT>(msg->lParam)->bottom;
+            rect.left = reinterpret_cast<LPRECT>(msg->lParam)->left;  
+            rect.right = reinterpret_cast<LPRECT>(msg->lParam)->right; 
+            rect.top = reinterpret_cast<LPRECT>(msg->lParam)->top; 
+        }
+        
+        bool isMax = _isMaximized(msg->hwnd);
+        bool isFull = _isFullScreen(msg->hwnd);
+        
+        if(isMax && !isFull){
+            int ty = getResizeBorderThickness(msg->hwnd, false);
+            rect.top +=  ty;
+            rect.bottom -= ty;
+
+            int tx = getResizeBorderThickness(msg->hwnd, true);
+            rect.left += tx;
+            rect.right -= tx;
+        }
+
+        
+        
+        if((isMax || isFull) && Taskbar::isAutoHide()){
+            TASKBAR position = Taskbar().getPosition(msg->hwnd);
+            if(position == TASKBAR::TOP){
+                rect.top += 2; //AUTO_HIDE_THICKNESS = 2
+            }else if(position == TASKBAR::BOTTOM){
+                rect.bottom -= 2;
+            }else if(position == TASKBAR::LEFT){
+                rect.left += 2;
+            }else if(position == TASKBAR::RIGHT){
+                rect.right -= 2;
+            }
+        }
+
+        int _result = !msg->wParam ? 0 : WVR_REDRAW;
+        *result = _result;
+        return true;
+        
+    }
+
+
+    return QWidget::nativeEvent(eventType, message, result);
+}
+
+void FramelessDialog::__onScreenChanged()
+{
+    HWND hWnd = HWND(windowHandle()->winId());
+    SetWindowPos(hWnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+}
+
+
+
+
+FramelessMainWindow::FramelessMainWindow(QWidget *parent) : QMainWindow(parent)
+{
+    this->windowEffect = new WindowsWindowEffect(this);
+    this->titleBar = new TitleBar(this);
+    this->_isResizeEnabled = true;
+    WId id = this->winId();
+    this->updateFrameless();
+    connect(this->windowHandle(), &QWindow::screenChanged, this, &FramelessMainWindow::__onScreenChanged);
+    resize(500, 500);
+    this->titleBar->raise();
+}
+
+
+void FramelessMainWindow::updateFrameless()
+{
+
+    if(!isWin7())
+    {
+        this->setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+    }else if(this->parent()){
+        this->setWindowFlags(((QWidget *)(this->parent()))->windowFlags() | Qt::FramelessWindowHint | Qt::WindowMinMaxButtonsHint); //TODO:特殊关注
+    }else{
+        this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+    }
+
+
+    HWND id = (HWND)(this->winId());
+    this->windowEffect->addWindowAnimation(id);    
+    
+    if(dynamic_cast<AcrylicWindow*>(this) == nullptr){
+        this->windowEffect->addShadowEffect(HWND(this->winId()));
+    }
+    
+}
+
+void FramelessMainWindow::setTitleBar(TitleBar *titleBar)
+{
+    this->titleBar->deleteLater();
+    this->titleBar->hide();
+    this->titleBar = titleBar;
+    this->titleBar->setParent(this);
+    this->titleBar->raise();
+}
+
+void FramelessMainWindow::setResizeEnabled(bool isEnabled)
+{
+    this->_isResizeEnabled = isEnabled;
+}
+
+void FramelessMainWindow::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    this->titleBar->resize(this->width(), this->titleBar->height());
+}
+
+bool FramelessMainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
+    
+    MSG *msg = reinterpret_cast<MSG *>(message);
+    if(!msg->hwnd){
+        return QWidget::nativeEvent(eventType, message, result);
+    }
+
+    
+    if(msg->message == WM_NCHITTEST && this->_isResizeEnabled)
+    {
+        QPoint pos = QCursor().pos();
+        int xPos = pos.x() - this->x();
+        int yPos = pos.y() - this->y();
+        int w = this->width();
+        int h = this->height();
+
+        int bw;
+        if(_isMaximized(msg->hwnd) || _isFullScreen(msg->hwnd)){
+            bw = 0;
+        }else{
+            bw = this->BORDER_WIDTH;
+        }
+
+        bool lx = xPos < bw;
+        bool rx = xPos > w - bw;
+        bool ty = yPos < bw;
+        bool by = yPos > h - bw;
+
+        if(lx && ty){
+            *result = HTTOPLEFT;
+            return true;
+        }else if(rx && by){
+            *result = HTBOTTOMRIGHT;
+            return true;
+        }else if(rx && ty){
+            *result = HTTOPRIGHT;
+            return true;
+        }else if(lx && by){
+            *result = HTBOTTOMLEFT;
+            return true;
+        }else if(ty){
+            *result = HTTOP;
+            return true;
+        }else if(by){
+            *result = HTBOTTOM;
+            return true;
+        }else if(lx){
+            *result = HTLEFT;
+            return true;
+        }else if(rx){
+            *result = HTRIGHT;
+            return true;
+        }
+    }
+    else if(msg->message == WM_NCCALCSIZE){
+        RECT rect = {0};
+
+        
+        if(msg->wParam){
+            LPNCCALCSIZE_PARAMS params = reinterpret_cast<LPNCCALCSIZE_PARAMS>(msg->lParam);
+            rect = params->rgrc[0];
+        }else{
+            rect.bottom = reinterpret_cast<LPRECT>(msg->lParam)->bottom;
+            rect.left = reinterpret_cast<LPRECT>(msg->lParam)->left;  
+            rect.right = reinterpret_cast<LPRECT>(msg->lParam)->right; 
+            rect.top = reinterpret_cast<LPRECT>(msg->lParam)->top; 
+        }
+        
+        bool isMax = _isMaximized(msg->hwnd);
+        bool isFull = _isFullScreen(msg->hwnd);
+        
+        if(isMax && !isFull){
+            int ty = getResizeBorderThickness(msg->hwnd, false);
+            rect.top +=  ty;
+            rect.bottom -= ty;
+
+            int tx = getResizeBorderThickness(msg->hwnd, true);
+            rect.left += tx;
+            rect.right -= tx;
+        }
+
+        
+        
+        if((isMax || isFull) && Taskbar::isAutoHide()){
+            TASKBAR position = Taskbar().getPosition(msg->hwnd);
+            if(position == TASKBAR::TOP){
+                rect.top += 2; //AUTO_HIDE_THICKNESS = 2
+            }else if(position == TASKBAR::BOTTOM){
+                rect.bottom -= 2;
+            }else if(position == TASKBAR::LEFT){
+                rect.left += 2;
+            }else if(position == TASKBAR::RIGHT){
+                rect.right -= 2;
+            }
+        }
+
+        int _result = !msg->wParam ? 0 : WVR_REDRAW;
+        *result = _result;
+        return true;
+        
+    }
+
+
+    return QWidget::nativeEvent(eventType, message, result);
+}
+
+void FramelessMainWindow::__onScreenChanged()
+{
+    HWND hWnd = HWND(windowHandle()->winId());
+    SetWindowPos(hWnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 }
 
 
