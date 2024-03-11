@@ -8,7 +8,7 @@
 
 void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect)
 {   
-    //qDebug() << icon;
+    qDebug() << icon;
     QSvgRenderer *renderer = new QSvgRenderer(icon);
     renderer->render(painter, QRectF(rect));
     /*
@@ -101,10 +101,13 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
 
 void MIcon::drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QString, QString> *attributes, QIcon::State state = QIcon::State::Off)
 {
+    qDebug() << icon->typeName();
     if(icon->canConvert<FluentIcon>())
     {   
         //TODO: icon.render(painter, rect, **attributes)
         icon->value<FluentIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
+    }else if(icon->canConvert<InfoBarIcon>()){
+        icon->value<InfoBarIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
     }else if(icon->canConvert<Icon>()){
         //icon.value<Icon>().fluentIcon->render(&painter, &rect, Theme::AUTO, 0, attributes);
         icon->value<Icon>().fluentIcon->render(painter, rect, Theme::AUTO, 0, attributes);
@@ -381,4 +384,35 @@ void Action::setIcon(QVariant *icon)
         QIcon i = icon->value<QIcon>();
         QAction::setIcon(i);
     }
+}
+
+
+void InfoBarIcon::render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes)
+{
+    FluentIconBase::render(painter, rect, theme, indexes, attributes);
+}
+
+/*
+~InfoBarIcon::InfoBarIcon()
+{
+    if(this->_icon != nullptr){
+        delete this->_icon;
+    }
+}
+*/
+
+QString InfoBarIcon::path(Theme theme)
+{
+    QString color;
+    if(theme == Theme::AUTO){
+        color = isDarkTheme() ? QString("dark") : QString("light"); 
+    }else{
+        if(theme == Theme::DARK){
+            color = QString("dark");
+        }else if(theme == Theme::LIGHT){
+            color = QString("light");
+        }
+    }
+    qDebug() << QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
+    return QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
 }

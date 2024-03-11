@@ -1,8 +1,17 @@
 #pragma once
 
-#include <QtCore>
-#include <QtGui>
-#include <QtWidgets>
+#include <QtCore/QEasingCurve>
+#include <QtCore/QEvent>
+#include <QtCore/QObject>
+#include <QtCore/QPropertyAnimation>
+#include <QtCore/QPoint>
+#include <QtCore/QPointF>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QEnterEvent>
+#include <QtGui/QColor>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QGraphicsDropShadowEffect>
 
 //namespace Qfw{
 

@@ -6,16 +6,12 @@ IconWidget::IconWidget(QWidget *parent) : QWidget(parent)
     this->setIcon(&icon);
 }
 
-IconWidget::IconWidget(QVariant icon, QWidget *parent)
+
+IconWidget::IconWidget(QVariant *icon, QWidget *parent) : QWidget(parent)
 {
-    if(icon.canConvert<FluentIcon>()){
-        IconWidget(icon.value<FluentIcon>(), parent);
-    }else if(icon.canConvert<QIcon>()){
-        IconWidget(icon.value<QIcon>(), parent);
-    }else if(icon.canConvert<QString>()){
-        IconWidget(icon.value<QString>(), parent);
-    }
+    this->setIcon(icon);
 }
+
 
 IconWidget::IconWidget(FluentIcon icon, QWidget *parent) : QWidget(parent)
 {

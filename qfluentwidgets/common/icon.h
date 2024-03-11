@@ -5,12 +5,20 @@
 #include <QtGui/QIconEngine>
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>
-#include <QVariant>
+#include <QtCore/QVariant>
 #include <QtWidgets/QAction>
-#include <QMetaType>
+#include <QtCore/QMetaType>
 #include "config.h"
 
 //namespace Qfw{
+
+
+const static QMap<QString, QString> InfoBarIconMap = {
+    {"INFORMATION", "Info"},
+    {"SUCCESS", "Success"},
+    {"WARNING", "Warning"},
+    {"ERROR", "Error"}
+};
 
 const static std::map<QString, QString> FluentIconMap = {
         {"UP", "One"},
@@ -285,3 +293,15 @@ private:
 QString getIconColor(Theme theme, bool reverse);
 //void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect);
 //QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> attributes = {});
+
+
+class InfoBarIcon : public FluentIconBase{
+public:
+    InfoBarIcon(){};
+    void render(QPainter *painter, QRect rect, Theme theme, int indexes, std::map<QString, QString> *attributes) override;
+    QString path(Theme theme) override;
+};
+
+
+Q_DECLARE_METATYPE(InfoBarIcon)
+Q_DECLARE_METATYPE(InfoBarIcon*)

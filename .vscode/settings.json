@@ -138,6 +138,9 @@
         "qlist": "cpp",
         "qplaintextedit": "cpp",
         "qguiapplication": "cpp",
-        "qstring": "cpp"
+        "qstring": "cpp",
+        "qpropertyanimation": "cpp",
+        "qdesktopservices": "cpp",
+        "qclipboard": "cpp"
     }
 }

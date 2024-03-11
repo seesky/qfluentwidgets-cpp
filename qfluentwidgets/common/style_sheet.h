@@ -3,14 +3,14 @@
 #include "config.h"
 #include <map>
 #include <QtCore>
+#include <QtCore/QVariant>
 #include <QtCore/QRect>
 #include <QtGui/QIcon>
 #include <QtGui/QIconEngine>
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>
-#include <QtCore/QVariant>
-#include <QMetaType>
-#include <QList>
+#include <QtCore/QMetaType>
+#include <QtCore/QList>
 
 const static QMap<QString, QString> CustomStyleSheetMap = {
     {"DARK_QSS_KEY", "darkCustomQss"},

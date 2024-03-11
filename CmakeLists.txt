@@ -301,6 +301,27 @@ target_link_libraries(
 
 
 
+add_executable(
+  flyout_test
+  qfluentwidgets/test/flyout_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(flyout_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  flyout_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
 
 add_executable(
   acrylic_brush_test

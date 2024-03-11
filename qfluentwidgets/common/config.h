@@ -8,8 +8,8 @@
 #include <QtGui/QColor>
 #include <QtCore/QString>
 #include <QtCore/QObject>
-#include <QVariant>
-#include <QFile>
+#include <QtCore/QVariant>
+#include <QtCore/QFile>
 #include <boost/any.hpp>
 
 //namespace Qfw{

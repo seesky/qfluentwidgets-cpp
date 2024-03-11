@@ -36,6 +36,8 @@
 #include <QtGui/QHoverEvent>
 #include <QtGui/QFontMetrics>
 #include <QtGui/QKeySequence>
+#include <QtGui/QScreen>
+#include <QtGui/QClipboard>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMenu>
@@ -50,6 +52,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QStyledItemDelegate>
 #include <QtWidgets/QStyleOptionViewItem>
+#include <QtWidgets/QPlainTextEdit>
 
 Q_DECLARE_METATYPE(QListWidgetItem *)
 

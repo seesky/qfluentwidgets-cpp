@@ -1,6 +1,7 @@
 #pragma once
 
-#include <QtWidgets>
+#include <QtGui/QFont>
+#include <QtWidgets/QWidget>
 
 class Font{
 public:

@@ -5,7 +5,8 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QRadioButton>
-#include <QVariant>
+#include <QtCore/QVariant>
+#include <QDesktopServices>
 
 class PushButton : public QPushButton{
     Q_OBJECT

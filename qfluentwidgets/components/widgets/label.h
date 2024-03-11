@@ -75,7 +75,7 @@ class BodyLabel : public FluentLabelBase{
     Q_OBJECT
 public:
     BodyLabel(QWidget *parent) : FluentLabelBase(parent){};
-    BodyLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent){};
+    BodyLabel(QString text, QWidget *parent = nullptr) : FluentLabelBase(text, parent){};
 
     QFont getFont() override; 
 };
@@ -139,7 +139,7 @@ public:
     ImageLabel(QPixmap image, QWidget *parent);
     virtual void _postInit(){};
     void setBorderRadius(int topLeft, int topRight, int bottomLeft, int bottomRight);
-    void setImage(QVariant image);
+    void setImage(QVariant *image);
     void scaledToWidth(int width);
     void scaledToHeight(int height);
     bool isNull();

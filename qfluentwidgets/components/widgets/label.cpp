@@ -186,7 +186,8 @@ ImageLabel::ImageLabel(QString image, QWidget *parent) : QLabel(parent)
 {
     this->image = QImage();
     this->setBorderRadius(0, 0, 0, 0);
-    this->setImage(QVariant::fromValue<QString>(image));
+    QVariant *imageQVariant = new QVariant(QVariant::fromValue<QString>(image));
+    this->setImage(imageQVariant);
     this->_postInit();
 }
 
@@ -194,7 +195,8 @@ ImageLabel::ImageLabel(QImage image, QWidget *parent) : QLabel(parent)
 {
     this->image = QImage();
     this->setBorderRadius(0, 0, 0, 0);
-    this->setImage(QVariant::fromValue<QImage>(image));
+    QVariant *imageQVariant = new QVariant(QVariant::fromValue<QImage>(image));
+    this->setImage(imageQVariant);
     this->_postInit();
 }
 
@@ -202,7 +204,8 @@ ImageLabel::ImageLabel(QPixmap image, QWidget *parent) : QLabel(parent)
 {
     this->image = QImage();
     this->setBorderRadius(0, 0, 0, 0);
-    this->setImage(QVariant::fromValue<QPixmap>(image));
+    QVariant *imageQVariant = new QVariant(QVariant::fromValue<QPixmap>(image));
+    this->setImage(imageQVariant);
     this->_postInit();
 }
 
@@ -222,24 +225,25 @@ void ImageLabel::setBorderRadius(int topLeft, int topRight, int bottomLeft, int 
     this->update();
 }
 
-void ImageLabel::setImage(QVariant image)
+void ImageLabel::setImage(QVariant* image)
 {
-    if(image.isValid() && image.canConvert<QImage>()){
-        this->image = image.value<QImage>();
+    if(image->isValid() && image->canConvert<QImage>()){
+        this->image = image->value<QImage>();
     }else{
         this->image = QImage();
     }
 
-    if(image.canConvert<QString>()){
-        QImageReader reader(image.value<QString>());
+    if(image->canConvert<QString>()){
+        qDebug() << image->value<QString>();
+        QImageReader reader(image->value<QString>());
         if(reader.supportsAnimation()){
-            QMovie* _m = new QMovie(image.value<QString>());
+            QMovie* _m = new QMovie(image->value<QString>());
             this->setMovie(_m);
         }else{
             this->image = reader.read();
         }
-    }else if(image.canConvert<QPixmap>()){
-        this->image = image.value<QPixmap>().toImage();
+    }else if(image->canConvert<QPixmap>()){
+        this->image = image->value<QPixmap>().toImage();
     }
 
     this->setFixedSize(this->image.size());
@@ -253,7 +257,9 @@ void ImageLabel::scaledToWidth(int width)
         return;
     }
 
-    int h = int(width / this->image.width() * this->image.height()); //TODO:特殊关注
+    int _width = this->image.width();
+    int _height = this->image.height();
+    int h = int((float)width / this->image.width() * this->image.height()); //TODO:特殊关注
     this->setFixedSize(width, h);
 
     if(this->movie()){
@@ -289,7 +295,8 @@ void ImageLabel::mouseReleaseEvent(QMouseEvent *event)
 
 void ImageLabel::setPixmap(QPixmap pixmap)
 {
-    this->setImage(QVariant::fromValue<QPixmap>(pixmap));
+    QVariant *imageQVariant = new QVariant(QVariant::fromValue<QPixmap>(pixmap));
+    this->setImage(imageQVariant);
 }
 
 QPixmap ImageLabel::pixmap()

@@ -32,6 +32,8 @@
 #include <QtWidgets/QListView>
 #include <QtWidgets/QLabel>
 #include <QSharedPointer>
+#include <QtMath>
+#include <QtGui/QScreen>
 
 #include "../../common/icon.h"
 #include "../../common/style_sheet.h"
