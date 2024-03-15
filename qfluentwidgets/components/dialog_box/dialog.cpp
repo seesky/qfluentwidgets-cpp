@@ -57,7 +57,7 @@ void Dialog::_adjustText()
     int w, chars;
     if(this->isWindow()){
         if(this->parent()){
-            w = qMax(this->titleLabel->width(), this->parentWidget()->width()); //TODO特殊关注
+            w = qMax(this->titleLabel->width(), ((QWidget *)this->parent())->width()); //TODO特殊关注
             chars = qMax(qMin(w / 9, 140), 30);
         }else{
             chars = 100;
@@ -130,9 +130,9 @@ void Dialog::setTitleBarVisible(bool isVisible)
 }
 
 
-MessageBox::MessageBox(QString title, QString content, QWidget *parent) : MaskDialogBase(parent)
+MessageBoxF::MessageBoxF(QString title, QString content, QWidget *parent) : MaskDialogBase(parent)
 {
-    this->_setUpUi(title, content, this);
+    this->_setUpUi(title, content, this->widget);
 
     this->setShadowEffect(60, std::tuple<int,int>(0, 10), QColor(0, 0, 0, 50));
     this->setMaskColor(QColor(0, 0, 0, 76));
@@ -149,7 +149,7 @@ MessageBox::MessageBox(QString title, QString content, QWidget *parent) : MaskDi
 
 
 
-void MessageBox::_setUpUi(QString title, QString content, QWidget *parent)
+void MessageBoxF::_setUpUi(QString title, QString content, QWidget *parent)
 {
     this->content = content;
     this->titleLabel = new QLabel(title, parent);
@@ -166,7 +166,7 @@ void MessageBox::_setUpUi(QString title, QString content, QWidget *parent)
     this->__initWidget();
 }
 
-void MessageBox::__initWidget()
+void MessageBoxF::__initWidget()
 {
     this->__setQss();
     this->__initLayout();
@@ -179,22 +179,22 @@ void MessageBox::__initWidget()
 
     this->_adjustText();
 
-    connect(this->yesButton, &PrimaryPushButton::clicked, this, &MessageBox::__onYesButtonClicked);
-    connect(this->cancelButton, &QPushButton::clicked, this, &MessageBox::__onCancelButtonClicked);
+    connect(this->yesButton, &PrimaryPushButton::clicked, this, &MessageBoxF::__onYesButtonClicked);
+    connect(this->cancelButton, &QPushButton::clicked, this, &MessageBoxF::__onCancelButtonClicked);
 }
 
-void MessageBox::_adjustText()
+void MessageBoxF::_adjustText()
 {
     int w, chars;
     if(this->isWindow()){
         if(this->parent()){
-            w = qMax(this->titleLabel->width(), this->parentWidget()->width()); //TODO:特殊关注
+            w = qMax(this->titleLabel->width(), ((QWidget *)this->parent())->width()); //TODO:特殊关注
             chars = qMax(qMin(w / 9, 140), 30);
         }else{
             chars = 100;
         }
     }else{
-        w = qMax(this->titleLabel->width(), this->parentWidget()->width()); //TODO:特殊关注
+        w = qMax(this->titleLabel->width(), ((QWidget *)this->parent())->width()); //TODO:特殊关注
         chars = qMax(qMin(w / 9, 100), 30);
     }
 
@@ -202,7 +202,7 @@ void MessageBox::_adjustText()
 }
 
 
-void MessageBox::__initLayout()
+void MessageBoxF::__initLayout()
 {
     this->vBoxLayout->setSpacing(0);
     this->vBoxLayout->setContentsMargins(0, 0, 0, 0);
@@ -221,19 +221,19 @@ void MessageBox::__initLayout()
     this->buttonLayout->addWidget(this->cancelButton, 1, Qt::AlignVCenter);
 }
 
-void MessageBox::__onCancelButtonClicked()
+void MessageBoxF::__onCancelButtonClicked()
 {
     this->reject();
     emit(this->cancelSignal());
 }
 
-void MessageBox::__onYesButtonClicked()
+void MessageBoxF::__onYesButtonClicked()
 {
     this->accept();
     emit(this->yesSignal());
 }
 
-void MessageBox::__setQss()
+void MessageBoxF::__setQss()
 {
     this->titleLabel->setObjectName(QString("titleLabel"));
     this->contentLabel->setObjectName(QString("contentLabel"));
@@ -246,7 +246,7 @@ void MessageBox::__setQss()
     this->cancelButton->adjustSize();
 }
 
-void MessageBox::setContentCopyable(bool isCopyable)
+void MessageBoxF::setContentCopyable(bool isCopyable)
 {
     if(isCopyable){
         this->contentLabel->setTextInteractionFlags(Qt::TextInteractionFlag::TextSelectableByMouse);
@@ -255,7 +255,7 @@ void MessageBox::setContentCopyable(bool isCopyable)
     }
 }
 
-bool MessageBox::eventFilter(QObject *obj, QEvent *e)
+bool MessageBoxF::eventFilter(QObject *obj, QEvent *e)
 {
     if(obj == this->window()){
         if(e->type() == QEvent::Resize){

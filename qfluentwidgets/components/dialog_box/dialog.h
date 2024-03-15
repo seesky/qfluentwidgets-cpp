@@ -49,10 +49,10 @@ public slots:
 
 
 
-class MessageBox : public MaskDialogBase{
+class MessageBoxF : public MaskDialogBase{
     Q_OBJECT
 public:
-    MessageBox(QString title, QString content, QWidget *parent);
+    MessageBoxF(QString title, QString content, QWidget *parent);
     void _setUpUi(QString title, QString content, QWidget *parent);
     void __initWidget();
     void _adjustText();

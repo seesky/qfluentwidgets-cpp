@@ -324,6 +324,48 @@ target_link_libraries(
 
 
 add_executable(
+  folder_list_dialog_test
+  qfluentwidgets/test/folder_list_dialog_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(folder_list_dialog_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  folder_list_dialog_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
+add_executable(
+  message_dialog_test
+  qfluentwidgets/test/message_dialog_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(message_dialog_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  message_dialog_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
+add_executable(
   acrylic_brush_test
   qfluentwidgets/test/acrylic_brush_test.cpp
   ${HEADER_FILES} 

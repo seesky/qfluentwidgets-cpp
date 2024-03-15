@@ -2,7 +2,7 @@
 
 #include "config.h"
 #include <map>
-#include <QtCore>
+//#include <QtCore>
 #include <QtCore/QVariant>
 #include <QtCore/QRect>
 #include <QtGui/QIcon>

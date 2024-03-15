@@ -25,6 +25,7 @@
 #include <QtCore/QPoint>
 #include <QtCore/QTimer>
 #include <QtCore/QParallelAnimationGroup>
+#include <QtCore/QMimeData>
 #include <QtGui/QIcon>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>

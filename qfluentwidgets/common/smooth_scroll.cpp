@@ -46,7 +46,7 @@ void SmoothScroll::wheelEvent(QWheelEvent *e)
         this->scrollStamps->pop_front();
     }
 
-    float accerationRatio = qMin(this->scrollStamps->length() / 15, 1);
+    float accerationRatio = qMin(float(this->scrollStamps->length()) / 15, float(1));
     if(!this->lastWheelEvent)
     {
         this->lastWheelEvent = new QWheelEvent(*e);

@@ -141,6 +141,9 @@
         "qstring": "cpp",
         "qpropertyanimation": "cpp",
         "qdesktopservices": "cpp",
-        "qclipboard": "cpp"
+        "qclipboard": "cpp",
+        "qparallelanimationgroup": "cpp",
+        "qmimedata": "cpp",
+        "qicon": "cpp"
     }
 }
