@@ -366,6 +366,27 @@ target_link_libraries(
 
 
 add_executable(
+  teaching_tip_test
+  qfluentwidgets/test/teaching_tip_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(teaching_tip_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  teaching_tip_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
+add_executable(
   acrylic_brush_test
   qfluentwidgets/test/acrylic_brush_test.cpp
   ${HEADER_FILES} 
