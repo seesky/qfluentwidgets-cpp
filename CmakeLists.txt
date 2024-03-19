@@ -26,6 +26,7 @@ FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 
 file(GLOB HEADER_FILES
     "qfluentwidgets/common/*.h"
+    "qfluentwidgets/components/layout/*.h"
     "qfluentwidgets/components/date_time/*.h"
     "qfluentwidgets/components/dialog_box/*.h"
     "qfluentwidgets/components/material/*.h"
@@ -38,6 +39,7 @@ file(GLOB HEADER_FILES
 
 file(GLOB SOURCE_FILES
     "qfluentwidgets/common/*.cpp"
+    "qfluentwidgets/components/layout/*.cpp"
     "qfluentwidgets/components/date_time/*.cpp"
     "qfluentwidgets/components/dialog_box/*.cpp"
     "qfluentwidgets/components/material/*.cpp"
@@ -376,6 +378,27 @@ target_link_options(teaching_tip_test PRIVATE "-Wl,--whole-archive")
 
 target_link_libraries(
   teaching_tip_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
+add_executable(
+  flow_layout_test
+  qfluentwidgets/test/flow_layout_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(flow_layout_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  flow_layout_test
   Qt5::Widgets
   Qt5::Core
   Qt5::Gui
