@@ -106,7 +106,7 @@ public:
     Flyout(FlyoutViewBase *view, QWidget *parent, bool isDeleteOnClose);
     void setShadowEffect(int blurRadius, std::tuple<int,int> offset);
     void closeEvent(QCloseEvent *event) override;
-    void exec(QPoint pos, FlyoutAnimationType aniType);
+    virtual void exec(QPoint pos, FlyoutAnimationType aniType);
     static Flyout* make(FlyoutViewBase *view, QVariant target, QWidget *parent, FlyoutAnimationType aniType, bool isDeleteOnClose);
     static Flyout* create(QString title, QString content, QVariant *icon, QVariant *image, bool isClosable, QVariant target, QWidget *parent, FlyoutAnimationType aniType, bool isDeleteOnClose);
     void fadeOut();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore>
+#include <QtCore/QVariant>
 #include <QtCore/Qt>
 #include <QtCore/QThread>
 #include <QtCore/QRect>
@@ -13,7 +14,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
-#include <QScreen>
+#include <QtGui/QScreen>
 #include "../../common/image_utils.h"
 
 static bool isAcrylicAvailable = true;
@@ -78,7 +79,7 @@ public:
     void grabImage(QRect rect);
     void setImage(QVariant image);
     void setClipPath(QPainterPath path);
-    QImage textureImage();
+    QImage *textureImage();
     void paint();
 
     QWidget *device;

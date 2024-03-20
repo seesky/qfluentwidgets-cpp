@@ -410,6 +410,28 @@ target_link_libraries(
 
 
 add_executable(
+  acrylic_flyout_test
+  qfluentwidgets/test/acrylic_flyout_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+)
+target_link_options(acrylic_flyout_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  acrylic_flyout_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)
+
+
+
+add_executable(
   acrylic_brush_test
   qfluentwidgets/test/acrylic_brush_test.cpp
   ${HEADER_FILES} 
@@ -455,5 +477,24 @@ target_link_libraries(
   Dwmapi
 )
 
+add_executable(
+  avatar_widget_test
+  qfluentwidgets/test/avatar_widget_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(avatar_widget_test PRIVATE "-Wl,--whole-archive")
 
 
+target_link_libraries(
+  avatar_widget_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  jsoncpp
+  Dwmapi
+)

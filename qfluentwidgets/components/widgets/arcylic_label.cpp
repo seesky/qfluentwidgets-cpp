@@ -192,16 +192,17 @@ void AcrylicBrush::setClipPath(QPainterPath path)
     this->device->update();
 }
 
-QImage AcrylicBrush::textureImage()
+QImage *AcrylicBrush::textureImage()
 {
-    QImage texture = QImage(64, 64, QImage::Format_ARGB32_Premultiplied);
-    texture.fill(this->luminosityColor);
+    QImage *texture = new QImage(64, 64, QImage::Format_ARGB32_Premultiplied);
+    texture->fill(this->luminosityColor);
 
-    QPainter *painter = new QPainter(&texture);
-    painter->fillRect(texture.rect(), this->tintColor);
+    //QPainter *painter = new QPainter(&texture);
+    QPainter painter(texture);
+    painter.fillRect(texture->rect(), this->tintColor);
 
-    painter->setOpacity(this->noiseOpacity);
-    painter->drawImage(texture.rect(), this->noiseImage);
+    painter.setOpacity(this->noiseOpacity);
+    painter.drawImage(texture->rect(), this->noiseImage);
 
     return texture;
 }
@@ -210,17 +211,20 @@ void AcrylicBrush::paint()
 {
     QWidget *device = this->device;
 
-    QPainter *painter = new QPainter(device);
-    painter->setRenderHints(QPainter::Antialiasing);
+    //QPainter *painter = new QPainter(device);
+    QPainter painter(device);
+    painter.setRenderHints(QPainter::Antialiasing);
 
     if(!this->clipPath.isEmpty()){
-        painter->setClipPath(this->clipPath);
+        painter.setClipPath(this->clipPath);
     }
 
-    QPixmap image = this->image.scaled(device->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-    painter->drawPixmap(0, 0, image);
+    QSize ds = device->size();
+    QPixmap image = this->image.scaled(ds, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    painter.drawPixmap(0, 0, image);
 
-    painter->fillRect(device->rect(), QBrush(this->textureImage()));
-
+    QRect r = device->rect();
+    QBrush b = QBrush(*(this->textureImage()));
+    painter.fillRect(r, b);
 }
 

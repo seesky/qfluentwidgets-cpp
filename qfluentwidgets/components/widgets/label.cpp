@@ -205,6 +205,7 @@ ImageLabel::ImageLabel(QPixmap image, QWidget *parent) : QLabel(parent)
     this->image = QImage();
     this->setBorderRadius(0, 0, 0, 0);
     QVariant *imageQVariant = new QVariant(QVariant::fromValue<QPixmap>(image));
+    qDebug() << QString(imageQVariant->typeName());
     this->setImage(imageQVariant);
     this->_postInit();
 }
@@ -227,11 +228,6 @@ void ImageLabel::setBorderRadius(int topLeft, int topRight, int bottomLeft, int 
 
 void ImageLabel::setImage(QVariant* image)
 {
-    if(image->isValid() && image->canConvert<QImage>()){
-        this->image = image->value<QImage>();
-    }else{
-        this->image = QImage();
-    }
 
     if(image->canConvert<QString>()){
         qDebug() << image->value<QString>();
@@ -423,8 +419,8 @@ void AvatarWidget::paintEvent(QPaintEvent *e)
 
     QImage _image = this->image.scaled(this->size()*this->devicePixelRatioF(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 
-    int iw = image.width();
-    int ih = image.height();
+    int iw = _image.width();
+    int ih = _image.height();
     int d = this->getRadius() * 2 * this->devicePixelRatioF();
     int x = (iw - d) / 2;
     int y = (ih - d) / 2;
