@@ -133,6 +133,7 @@ private:
 class TransparentToolButton : public ToolButton{
     Q_OBJECT
 public:
+    TransparentToolButton(QWidget *parent) : ToolButton(parent){};
     TransparentToolButton(FluentIcon *icon, QWidget *parent);
     TransparentToolButton(QIcon *icon, QWidget *parent);
     TransparentToolButton(QString icon, QWidget *parent);

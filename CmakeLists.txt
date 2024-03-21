@@ -26,6 +26,7 @@ FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 
 file(GLOB HEADER_FILES
     "qfluentwidgets/common/*.h"
+    "qfluentwidgets/multimedia/*.h"
     "qfluentwidgets/components/layout/*.h"
     "qfluentwidgets/components/date_time/*.h"
     "qfluentwidgets/components/dialog_box/*.h"
@@ -39,6 +40,7 @@ file(GLOB HEADER_FILES
 
 file(GLOB SOURCE_FILES
     "qfluentwidgets/common/*.cpp"
+    "qfluentwidgets/multimedia/*.cpp"
     "qfluentwidgets/components/layout/*.cpp"
     "qfluentwidgets/components/date_time/*.cpp"
     "qfluentwidgets/components/dialog_box/*.cpp"
@@ -51,7 +53,7 @@ file(GLOB SOURCE_FILES
 )
 
 
-find_package(Qt5 COMPONENTS Core Gui Widgets Svg Xml REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets Svg Xml Multimedia MultimediaWidgets REQUIRED)
 add_executable(
   button_test
   qfluentwidgets/test/button_test.cpp
@@ -69,7 +71,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -92,7 +96,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -115,7 +121,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -140,7 +148,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -164,7 +174,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -187,7 +199,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -211,7 +225,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -234,7 +250,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -256,7 +274,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -277,7 +297,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -297,7 +319,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -319,7 +343,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -341,7 +367,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -362,7 +390,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -383,7 +413,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -404,7 +436,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -425,7 +459,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -449,7 +485,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -473,7 +511,9 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
-  jsoncpp
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   Dwmapi
 )
 
@@ -495,6 +535,34 @@ target_link_libraries(
   Qt5::Gui
   Qt5::Svg
   Qt5::Xml
+  jsoncpp  
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  Dwmapi
+)
+
+
+
+add_executable(
+  media_player_test
+  qfluentwidgets/test/media_player_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(media_player_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  media_player_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
   jsoncpp
   Dwmapi
 )

@@ -144,6 +144,8 @@
         "qclipboard": "cpp",
         "qparallelanimationgroup": "cpp",
         "qmimedata": "cpp",
-        "qicon": "cpp"
+        "qicon": "cpp",
+        "qfileinfo": "cpp",
+        "qgraphicsvideoitem": "cpp"
     }
 }
