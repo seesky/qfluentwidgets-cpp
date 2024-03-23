@@ -121,7 +121,7 @@ public:
     void hideToolTip();
     void showToolTip();
     void setToolTipDelay(int delay);
-    bool _canShowToolTip();
+    virtual bool _canShowToolTip();
 
     bool isEnter;
     ToolTip *_tooltip;

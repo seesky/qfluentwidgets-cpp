@@ -50,7 +50,7 @@ public:
 class TransparentPushButton : public PushButton{
     Q_OBJECT
 public:
-    TransparentPushButton(){};
+    TransparentPushButton(QWidget *parent) : PushButton(parent){};
     TransparentPushButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon) {};
     TransparentPushButton(FluentIcon *icon, QString text, QWidget *parent) : PushButton(icon, text, parent){};
     void _postInit() override {};
@@ -59,7 +59,7 @@ public:
 class ToggleButton : public PushButton{
     Q_OBJECT
 public:
-    ToggleButton(){};
+    ToggleButton(QWidget *parent) : PushButton(parent){};
     ToggleButton(QString text, QWidget *parent, QVariant *icon) : PushButton(text, parent, icon){
         this->_postInit();
     };
@@ -73,7 +73,7 @@ public:
 class TransparentTogglePushButton : public ToggleButton{
     Q_OBJECT
 public:
-    TransparentTogglePushButton(){};
+    TransparentTogglePushButton(QWidget *parent) : ToggleButton(parent){};
     TransparentTogglePushButton(QString text, QWidget *parent, QVariant *icon) : ToggleButton(text, parent, icon){};
     TransparentTogglePushButton(FluentIcon *icon, QString text, QWidget *parent) : ToggleButton(icon, text, parent){};
 };
@@ -155,6 +155,7 @@ public:
 class ToggleToolButton : public ToolButton{
     Q_OBJECT
 public:
+    ToggleToolButton(QWidget *parent) : ToolButton(parent){};
     ToggleToolButton(FluentIcon *icon, QWidget *parent);
     ToggleToolButton(QIcon *icon, QWidget *parent);
     ToggleToolButton(QString icon, QWidget *parent);
@@ -166,6 +167,7 @@ private:
 class TransparentToggleToolButton : public ToggleToolButton{
     Q_OBJECT
 public:
+    TransparentToggleToolButton(QWidget *parent) : ToggleToolButton(parent){};
     TransparentToggleToolButton(FluentIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
     TransparentToggleToolButton(QIcon *icon, QWidget *parent) : ToggleToolButton(icon, parent){};
     TransparentToggleToolButton(QString icon, QWidget *parent) : ToggleToolButton(icon, parent){};
@@ -501,7 +503,7 @@ signals:
 class PillPushButton : public ToggleButton{
     Q_OBJECT
 public:
-    PillPushButton(){};
+    PillPushButton(QWidget *parent) : ToggleButton(parent){};
     PillPushButton(QString text, QWidget *parent, QVariant *icon) : ToggleButton(text, parent, icon){};
     PillPushButton(FluentIcon *icon, QString text, QWidget *parent) : ToggleButton(icon, text, parent){};
 

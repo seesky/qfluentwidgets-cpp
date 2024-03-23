@@ -357,9 +357,15 @@ QIcon *RoundMenu::_createItemIcon(QVariant *w)
 
         auto ac = qobject_cast<Action *>(qvQaction);
         if(ac != nullptr){
-            Icon *iii= (Icon *)(ac->icon());
-            QVariant qvIcon = QVariant::fromValue<Icon>(*iii);
-            this->fie = new FluentIconEngine(&qvIcon, false);
+            if(ac->icon() == nullptr){
+                QVariant qvQIcon = QVariant::fromValue<QIcon>(QIcon());
+                this->fie = new FluentIconEngine(&qvQIcon, false);
+            }else{
+                Icon *iii= (Icon *)(ac->icon());
+                QVariant qvIcon = QVariant::fromValue<Icon>(*iii);
+                this->fie = new FluentIconEngine(&qvIcon, false);
+            }
+
         }else{
             QIcon iii= qvQaction->icon();
             QVariant qvQIcon = QVariant::fromValue<QIcon>(iii);

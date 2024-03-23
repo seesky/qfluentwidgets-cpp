@@ -369,7 +369,8 @@ QIcon *Action::icon()
         return icon;
     }
 
-    return Action::icon();
+    QIcon *i = new QIcon(QAction::icon());
+    return i;
 }
 
 void Action::setIcon(QVariant *icon)
