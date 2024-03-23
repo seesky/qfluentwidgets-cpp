@@ -54,7 +54,8 @@ void SubMenuItemWidget::paintEvent(QPaintEvent *event)
 
 bool MenuItemDelegate::_isSeparator(QModelIndex index) const
 {
-    return index.model()->data(index, Qt::DecorationRole) == "seperator";
+    bool isSeparator = index.model()->data(index, Qt::DecorationRole).value<QString>() == QString("seperator");
+    return isSeparator;
 }
 
 void MenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -64,7 +65,7 @@ void MenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     
     painter->save();
 
-    int c = isDarkTheme() ? 0 : 255;
+    int c = !isDarkTheme() ? 0 : 255;
     QPen *pen = new QPen(QColor(c, c, c, 25), 1);
     pen->setCosmetic(true);
     painter->setPen(*pen);
@@ -285,7 +286,8 @@ bool RoundMenu::_hasItemIcon()
     }
 
     QList<RoundMenu *>::iterator _it;
-    for (_it = this->_subMenus->begin(); _it != this->_subMenus->end(); ++it) {
+    qDebug() << this->_subMenus->length();
+    for (_it = this->_subMenus->begin(); _it != this->_subMenus->end(); ++_it) {
         RoundMenu * value = *_it;
         /*
         if(value->icon()->canConvert<Icon>()){ //TODO:特殊关注，保存的是引用
@@ -505,25 +507,25 @@ void RoundMenu::insertMenu(QAction *before, RoundMenu *menu)
 std::tuple<QListWidgetItem *, SubMenuItemWidget*> RoundMenu::_createSubMenuItem(RoundMenu *menu)
 {
     this->_subMenus->append(menu);
-    QVariant qvRoundMenu = QVariant::fromValue<RoundMenu *>(menu);
-    QListWidgetItem item = QListWidgetItem(*(this->_createItemIcon(&qvRoundMenu)), menu->title());
+    QVariant *qvRoundMenu = new QVariant(QVariant::fromValue<RoundMenu *>(menu));
+    QListWidgetItem *item = new QListWidgetItem(*(this->_createItemIcon(qvRoundMenu)), menu->title());
     
     int w;
     if(!this->_hasItemIcon()){
         w = 60 + this->view->fontMetrics().width(menu->title());
     }else{
-        item.setText(QString(" ") + item.text());
-        w = 72 + this->view->fontMetrics().width(item.text());
+        item->setText(QString(" ") + item->text());
+        w = 72 + this->view->fontMetrics().width(item->text());
     }
 
-    menu->_setParentMenu(this, &item);
-    item.setSizeHint(QSize(w, this->itemHeight));
-    item.setData(Qt::UserRole, qvRoundMenu);
-    SubMenuItemWidget *_w = new SubMenuItemWidget((QMenu *)(&menu), &item, this); //TODO:特殊关注
+    menu->_setParentMenu(this, item);
+    item->setSizeHint(QSize(w, this->itemHeight));
+    item->setData(Qt::UserRole, *qvRoundMenu);
+    SubMenuItemWidget *_w = new SubMenuItemWidget((QMenu *)(menu), item, this); //TODO:特殊关注
     connect(_w, &SubMenuItemWidget::showMenuSig, this, &RoundMenu::_showSubMenu);
-    _w->resize(item.sizeHint());
+    _w->resize(item->sizeHint());
 
-    return std::tuple<QListWidgetItem *, SubMenuItemWidget*>(&item, _w);
+    return std::tuple<QListWidgetItem *, SubMenuItemWidget*>(item, _w);
 }
 
 
@@ -544,24 +546,37 @@ void RoundMenu::_onShowMenuTimeOut()
     //TODO:没有实现
     //QMenu *w = (QMenu *)(this->view->itemWidget(this->lastHoverSubMenuItem));
 
-    //auto w = qobject_cast<RoundMenu *>(this->view->itemWidget(this->lastHoverSubMenuItem));
+    auto rm = qobject_cast<SubMenuItemWidget *>(this->view->itemWidget(this->lastHoverSubMenuItem));
+
+    if(rm != nullptr){
+        if(((RoundMenu *)rm->menu)->parentMenu->isHidden()){
+            return;
+        }
+
+        QPoint pos = rm->mapToGlobal(QPoint(rm->width()+5, -5));
+        ((RoundMenu *)rm->menu)->exec(&pos, true, MenuAnimationType::DROP_DOWN);
+    }
     //w->parentMenu
     
 }
 
-void RoundMenu::addSeparator()
-{
-    auto asa = qobject_cast<QAbstractScrollArea*>(this->view);
-    //QMargins m = QMargins(0, 20, 0, 20);
-    
-    int w = this->view->width() - this->view->viewport()->contentsMargins().left() - this->view->viewport()->contentsMargins().right();
 
-    QListWidgetItem item = QListWidgetItem();
-    item.setFlags(Qt::NoItemFlags);
-    item.setSizeHint(QSize(w, 9));
-    this->view->addItem(&item);
-    item.setData(Qt::DecorationRole, QVariant::fromValue<QString>(QString("seperator")));
+QAction *RoundMenu::addSeparator()
+{
+    QMargins m =  this->view->getPublicViewportMargins();
+    int left = m.left();
+    int right = m.right();
+    int w = this->view->width() - m.left() - m.right();
+    QListWidgetItem *item = new QListWidgetItem();
+    item->setFlags(Qt::NoItemFlags);
+    item->setSizeHint(QSize(w, 9));
+    this->view->addItem(item);
+
+
+    QVariant *qv = new QVariant(QVariant::fromValue<QString>(QString("seperator")));
+    item->setData(Qt::DecorationRole, *qv);
     this->adjustSize();
+    return nullptr;
 }
 
 
@@ -769,26 +784,28 @@ QListWidgetItem *MenuActionListWidget::takeItem(int row)
 
 void MenuActionListWidget::adjustSize(QPoint *pos = nullptr, MenuAnimationType aniType = MenuAnimationType::NONE)
 {
-    QSize *size = new QSize();
+    QSize size = QSize();
+    qDebug() << this->count();
     for(int i = 0; i < this->count(); i++){
+        QListWidgetItem *iiii = this->item(i);
         QSize s = this->item(i)->sizeHint();
-        size->setWidth(qMax(qMax(s.width(), size->width()), 1));
-        size->setHeight(qMax(size->height() + s.height(), 1));
+        size.setWidth(qMax(qMax(s.width(), size.width()), 1));
+        size.setHeight(qMax(size.height() + s.height(), 1));
     }
 
     std::tuple<int, int> asize = MenuActionListAnimationManager().make(aniType, this)->availableViewSize(pos);
     this->viewport()->adjustSize();
 
     QMargins m = this->viewportMargins();
-    *size += QSize(m.left()+m.right()+2, m.top()+m.bottom());
-    size->setHeight(qMin(std::get<1>(asize), size->height() + 3));
-    size->setWidth(qMax(qMin(std::get<0>(asize), size->width()), this->minimumWidth()));
+    size += QSize(m.left()+m.right()+2, m.top()+m.bottom());
+    size.setHeight(qMin(std::get<1>(asize), size.height() + 3));
+    size.setWidth(qMax(qMin(std::get<0>(asize), size.width()), this->minimumWidth()));
 
     if(this->maxVisibleItems() > 0){
-        size->setHeight(qMin(size->height(), this->maxVisibleItems() * this->_itemHeight + m.top() + m.bottom() + 3));
+        size.setHeight(qMin(size.height(), this->maxVisibleItems() * this->_itemHeight + m.top() + m.bottom() + 3));
     }
 
-    this->setFixedSize(*size);
+    this->setFixedSize(size);
 }
 
 void MenuActionListWidget::setItemHeight(int height)
@@ -806,6 +823,11 @@ void MenuActionListWidget::setItemHeight(int height)
 
     this->_itemHeight = height;
     this->adjustSize();
+}
+
+QMargins MenuActionListWidget::getPublicViewportMargins()
+{
+    return this->viewportMargins();
 }
 
 void MenuActionListWidget::publicSetViewportMargins(int left, int top, int right, int bottom)

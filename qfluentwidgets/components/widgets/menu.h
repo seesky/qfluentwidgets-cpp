@@ -162,6 +162,7 @@ public:
     void adjustSize(QPoint *pos, MenuAnimationType aniType);
     void setItemHeight(int height);
     void setMaxVisibleItems(int num);
+    QMargins getPublicViewportMargins();
     void publicSetViewportMargins(int left, int top, int right, int bottom);
     bool publicEvent(QEvent *e);
     int maxVisibleItems();
@@ -205,7 +206,7 @@ public:
     void addMenu(RoundMenu *menu);
     void insertMenu(QAction *before, RoundMenu *menu);
     std::tuple<QListWidgetItem *, SubMenuItemWidget*> _createSubMenuItem(RoundMenu *menu);
-    void addSeparator();
+    QAction *addSeparator();
     void _closeParentMenu();
     void _hideMenu(bool isHideBySystem);
     void hideEvent(QHideEvent *e);
