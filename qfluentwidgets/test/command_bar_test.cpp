@@ -146,6 +146,62 @@ public slots:
 };
 
 
+class CommandBarsView2 : public WindowsFramelessWindow{
+public:
+
+    QHBoxLayout *vBoxLayout;
+    ImageLabel *imageLabel;
+    CommandBarsView2(QWidget *parent) : WindowsFramelessWindow(parent){
+        this->setTitleBar(new StandardTitleBar(this));
+        this->vBoxLayout = new QHBoxLayout(this);
+
+        this->imageLabel = new ImageLabel(QString("resource/pink_memory.jpg"), this);
+
+        this->imageLabel->scaledToWidth(380);
+        connect(this->imageLabel, &ImageLabel::clicked, this, &CommandBarsView2::showCommandBar);
+        this->vBoxLayout->addWidget(this->imageLabel);
+
+        this->vBoxLayout->setContentsMargins(0, 80, 0, 0);
+        this->setStyleSheet(QString("CommandBarsView2{background: white}"));
+        this->setWindowTitle(QString("Click Image 👇️🥵"));
+        this->setWindowIcon(QIcon("qfluentwidgets/images/logo.png"));
+    }
+
+public slots:
+    void showCommandBar(){
+        CommandBarView *view = new CommandBarView(this);
+
+        FluentIcon *shareIcon = new FluentIcon();
+        shareIcon->setIconName("SHARE");
+        view->addAction(new Action(shareIcon, QString("Share"), this));
+
+        FluentIcon *saveIcon = new FluentIcon();
+        saveIcon->setIconName("SAVE");
+        view->addAction(new Action(saveIcon, QString("Save"), this));
+
+        FluentIcon *deleteIcon = new FluentIcon();
+        deleteIcon->setIconName("DELETE");
+        view->addAction(new Action(deleteIcon, QString("Delete"), this));
+
+        FluentIcon *appIcon = new FluentIcon();
+        appIcon->setIconName("APPLICATION");
+        Action *appAction = new Action(appIcon, QString("App"), this);
+        appAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
+        view->addHiddenAction(appAction);
+
+        FluentIcon *settingsIcon = new FluentIcon();
+        settingsIcon->setIconName("SETTING");
+        Action *settingsAction = new Action(settingsIcon, QString("Settings"), this);
+        settingsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+        view->addHiddenAction(settingsAction);
+
+        view->resizeToSuitableWidth();
+
+        Flyout::make(view, QVariant::fromValue<QWidget*>(this->imageLabel), this, FlyoutAnimationType::FADE_IN, true);
+
+    }
+};
+
 
 int main(int argc, char *argv[])
 {
@@ -156,5 +212,7 @@ int main(int argc, char *argv[])
     QApplication *app = new QApplication(argc, argv);
     CommandBarsView1 *w = new CommandBarsView1();
     w->show();
+    CommandBarsView2 *w1 = new CommandBarsView2(nullptr);
+    w1->show();
     return app->exec();
 }
