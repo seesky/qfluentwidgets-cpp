@@ -23,21 +23,21 @@ public:
     CommandBarsView1() : QWidget(){
         this->hBoxLayout = new QHBoxLayout(this);
         this->commandBar = new CommandBar(this);
-        //this->dropDownButton = this->createDropDownButton();
+        this->dropDownButton = this->createDropDownButton();
 
         this->hBoxLayout->addWidget(this->commandBar, 0);
 
         this->commandBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
         
-        /*
+        
         FluentIcon *addIcon = new FluentIcon();
         addIcon->setIconName("ADD");
         this->addButton(addIcon, QString("Add"));
         this->commandBar->addSeparator();
         
         
-        */
+        
         FluentIcon *editIcon = new FluentIcon();
         editIcon->setIconName("EDIT");
         Action *editAction = new Action(editIcon, QString("Edit"), nullptr);
@@ -45,7 +45,7 @@ public:
         editAction->setCheckable(true);
         this->commandBar->addAction(editAction);
         
-        /*
+        
         FluentIcon *copyIcon = new FluentIcon();
         copyIcon->setIconName("COPY");
         this->addButton(copyIcon, QString("Copy"));
@@ -73,7 +73,7 @@ public:
         Action *settingsAction = new Action(settingsIcon, QString("Settings"), nullptr);
         settingsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
         this->commandBar->addHiddenAction(settingsAction);
-        */
+        
         
         this->resize(240, 40);
         this->setWindowTitle(QString("Drag window"));

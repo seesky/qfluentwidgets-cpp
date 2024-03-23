@@ -57,7 +57,7 @@ bool CommandButton::isIconOnly() const
 
 void CommandButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state)
 {
-    qDebug() << "";
+    qDebug() << icon->typeName();
 }
 
 QString CommandButton::text() const
@@ -87,15 +87,31 @@ void CommandButton::setAction(QAction *action)
 void CommandButton::_onActionChanged()
 {
     QAction *action = this->action();
-    QVariant *iconQ = new QVariant();
-    iconQ->setValue(action->icon());
-    this->setIcon(iconQ);  //TODO:特殊关注
+    auto ac = qobject_cast<Action*>(action);
 
-    this->setText(action->text());
-    this->setToolTip(action->toolTip());
-    this->setEnabled(action->isEnabled());
-    this->setCheckable(action->isCheckable());
-    this->setChecked(action->isChecked());
+    if(ac != nullptr){
+        QVariant *iconQ = new QVariant();
+        QIcon *i = ac->icon();
+        Icon* ii = (Icon*)(i);
+        iconQ->setValue<Icon>(*ii);
+        this->setIcon(iconQ);  //TODO:特殊关注
+        this->setText(ac->text());
+        this->setToolTip(ac->toolTip());
+        this->setEnabled(ac->isEnabled());
+        this->setCheckable(ac->isCheckable());
+        this->setChecked(ac->isChecked());
+    }else{
+        QVariant *iconQ = new QVariant();
+        iconQ->setValue(action->icon());
+        this->setIcon(iconQ);  //TODO:特殊关注
+
+        this->setText(action->text());
+        this->setToolTip(action->toolTip());
+        this->setEnabled(action->isEnabled());
+        this->setCheckable(action->isCheckable());
+        this->setChecked(action->isChecked());
+    }
+    
 }
 
 

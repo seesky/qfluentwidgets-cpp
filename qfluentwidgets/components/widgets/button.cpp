@@ -444,6 +444,15 @@ void PrimaryToolButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect,
         }
         FluentIcon i = icon->value<FluentIcon>();
         qi = QVariant::fromValue<QIcon>(*(i.icon(theme, QColor())));
+    }else if(icon->canConvert<Icon>() && isEnabled()){
+        Theme theme;
+        if(!isDarkTheme()){
+            theme = Theme::DARK;
+        }else{
+            theme = Theme::LIGHT;
+        }
+        Icon i = icon->value<Icon>();
+        qi = QVariant::fromValue<QIcon>(*(i.fluentIcon->icon(theme, QColor())));
     }else if(!isEnabled()){
         painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
         if(icon->canConvert<FluentIcon>()){

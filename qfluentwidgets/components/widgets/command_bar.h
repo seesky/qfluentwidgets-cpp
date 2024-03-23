@@ -31,7 +31,9 @@ class CommandToolTipFilter;
 class CommandButton : public TransparentToggleToolButton{
     Q_OBJECT
 public:
-    CommandButton(QWidget *parent) : TransparentToggleToolButton(parent){};
+    CommandButton(QWidget *parent) : TransparentToggleToolButton(parent){
+        this->_postInit();
+    };
     CommandButton(FluentIcon *icon, QWidget *parent) : TransparentToggleToolButton(icon, parent){
         this->_postInit();
     };
