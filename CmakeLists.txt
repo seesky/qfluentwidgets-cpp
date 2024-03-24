@@ -27,6 +27,7 @@ FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 file(GLOB HEADER_FILES
     "qfluentwidgets/common/*.h"
     "qfluentwidgets/multimedia/*.h"
+    "qfluentwidgets/components/navigation/*.h"
     "qfluentwidgets/components/layout/*.h"
     "qfluentwidgets/components/date_time/*.h"
     "qfluentwidgets/components/dialog_box/*.h"
@@ -41,6 +42,7 @@ file(GLOB HEADER_FILES
 file(GLOB SOURCE_FILES
     "qfluentwidgets/common/*.cpp"
     "qfluentwidgets/multimedia/*.cpp"
+    "qfluentwidgets/components/navigation/*.cpp"
     "qfluentwidgets/components/layout/*.cpp"
     "qfluentwidgets/components/date_time/*.cpp"
     "qfluentwidgets/components/dialog_box/*.cpp"
@@ -662,6 +664,31 @@ target_link_options(widget_menu_test PRIVATE "-Wl,--whole-archive")
 
 target_link_libraries(
   widget_menu_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
+
+
+add_executable(
+  breadcrumb_bar_test
+  qfluentwidgets/test/breadcrumb_bar_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(breadcrumb_bar_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  breadcrumb_bar_test
   Qt5::Widgets
   Qt5::Core
   Qt5::Gui
