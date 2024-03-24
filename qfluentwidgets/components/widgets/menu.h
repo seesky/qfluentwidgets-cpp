@@ -522,6 +522,7 @@ public:
 class SystemTrayMenu : public RoundMenu{
     Q_OBJECT
 public:
+    SystemTrayMenu(QString title, QWidget *parent) : RoundMenu(title, parent){};
     void showEvent(QShowEvent *event);
 };
 
@@ -529,5 +530,5 @@ public:
 class CheckableSystemTrayMenu : public CheckableMenu{
     Q_OBJECT
 public:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 };
