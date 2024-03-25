@@ -146,6 +146,8 @@
         "qmimedata": "cpp",
         "qicon": "cpp",
         "qfileinfo": "cpp",
-        "qgraphicsvideoitem": "cpp"
+        "qgraphicsvideoitem": "cpp",
+        "qstyleditemdelegate": "cpp",
+        "qsizepolicy": "cpp"
     }
 }
