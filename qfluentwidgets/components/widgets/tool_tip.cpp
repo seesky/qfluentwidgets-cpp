@@ -115,7 +115,7 @@ QPoint ToolTipPositionManager::position(ToolTip *tooltip, QWidget *parent)
 
     QRect rect = QApplication::screenAt(QCursor::pos())->availableGeometry();
     int x = qMax(rect.left(), qMin(pos.x(), rect.right() - tooltip->width() - 4));
-    int y = qMax(rect.top(), qMax(pos.y(), rect.bottom() - tooltip->height() - 4));
+    int y = qMax(rect.top(), qMin(pos.y(), rect.bottom() - tooltip->height() - 4));
     return QPoint(x, y);
 }
 
@@ -174,7 +174,7 @@ QPoint BottomToolTipManager::_pos(ToolTip *tooltip, QWidget *parent)
 {
     QPoint pos = parent->mapToGlobal(QPoint());
     int x = pos.x() + parent->width() / 2 - tooltip->width() / 2;
-    int y = pos.y() + tooltip->height();
+    int y = pos.y() + parent->height();
     return QPoint(x, y);
 }
 
@@ -191,7 +191,7 @@ QPoint LeftToolTipManager::_pos(ToolTip *tooltip, QWidget *parent)
 QPoint RightToolTipManager::_pos(ToolTip *tooltip, QWidget *parent)
 {
     QPoint pos = parent->mapToGlobal(QPoint());
-    int x = pos.x() + tooltip->width();
+    int x = pos.x() + parent->width();
     int y = pos.y() + (parent->height() - tooltip->height()) / 2;
     return QPoint(x, y);
 }
@@ -219,7 +219,7 @@ QPoint BottomRightToolTipManager::_pos(ToolTip *tooltip, QWidget *parent)
 {
     QPoint pos = parent->mapToGlobal(QPoint());
     int x = pos.x() + parent->width() - tooltip->width() + tooltip->layout()->contentsMargins().right();
-    int y = pos.y() + tooltip->height();
+    int y = pos.y() + parent->height();
     return QPoint(x, y);
 }
 
@@ -228,7 +228,7 @@ QPoint BottomLeftToolTipManager::_pos(ToolTip *tooltip, QWidget *parent)
 {
     QPoint pos = parent->mapToGlobal(QPoint());
     int x = pos.x() - tooltip->layout()->contentsMargins().left();
-    int y = pos.y() + tooltip->height();
+    int y = pos.y() + parent->height();
     return QPoint(x, y);
 }
 
