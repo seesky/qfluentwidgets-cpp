@@ -11,7 +11,10 @@
 #include "config.h"
 
 //namespace Qfw{
-
+const static QMap<QString, QString> SpinIconMap = {
+    {"UP", "Up"},
+    {"DOWN", "Down"}
+};
 
 const static QMap<QString, QString> InfoBarIconMap = {
     {"INFORMATION", "Info"},
@@ -305,3 +308,14 @@ public:
 
 Q_DECLARE_METATYPE(InfoBarIcon)
 Q_DECLARE_METATYPE(InfoBarIcon*)
+
+
+class SpinIcon : public FluentIconBase{
+public:
+    SpinIcon(){};
+    QString path(Theme theme) override;
+};
+
+
+Q_DECLARE_METATYPE(SpinIcon)
+Q_DECLARE_METATYPE(SpinIcon*)

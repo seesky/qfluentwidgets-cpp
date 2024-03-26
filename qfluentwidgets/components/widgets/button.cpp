@@ -321,6 +321,15 @@ ToolButton::ToolButton(FluentIcon *icon, QWidget *parent) : QToolButton(parent)
     delete __icon;
 }
 
+ToolButton::ToolButton(SpinIcon *icon, QWidget *parent) : QToolButton(parent)
+{
+    this->initialize(parent);
+    QVariant *__icon = new QVariant();
+    __icon->setValue<SpinIcon>(*icon);
+    this->setIcon(__icon);
+    delete __icon;
+}
+
 ToolButton::ToolButton(QIcon *icon, QWidget *parent) : QToolButton(parent)
 {
     this->initialize(parent);
@@ -418,6 +427,8 @@ void ToolButton::paintEvent(QPaintEvent *event)
 }
 
 TransparentToolButton::TransparentToolButton(FluentIcon *icon, QWidget *parent) : ToolButton(icon, parent){}
+
+TransparentToolButton::TransparentToolButton(SpinIcon *icon, QWidget *parent) : ToolButton(icon, parent){}
 
 TransparentToolButton::TransparentToolButton(QIcon *icon, QWidget *parent) : ToolButton(icon, parent){}
 

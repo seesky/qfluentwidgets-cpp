@@ -6,7 +6,7 @@
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QRadioButton>
 #include <QtCore/QVariant>
-#include <QDesktopServices>
+#include <QtGui/QDesktopServices>
 
 class PushButton : public QPushButton{
     Q_OBJECT
@@ -109,6 +109,7 @@ public:
     void initialize(QWidget *parent);
     ToolButton(QWidget *parent);
     ToolButton(FluentIcon *icon, QWidget *parent);
+    ToolButton(SpinIcon *icon, QWidget *parent);
     ToolButton(QIcon *icon, QWidget *parent);
     ToolButton(QString icon, QWidget *parent);
     ~ToolButton();
@@ -135,6 +136,7 @@ class TransparentToolButton : public ToolButton{
 public:
     TransparentToolButton(QWidget *parent) : ToolButton(parent){};
     TransparentToolButton(FluentIcon *icon, QWidget *parent);
+    TransparentToolButton(SpinIcon *icon, QWidget *parent);
     TransparentToolButton(QIcon *icon, QWidget *parent);
     TransparentToolButton(QString icon, QWidget *parent);
 private:

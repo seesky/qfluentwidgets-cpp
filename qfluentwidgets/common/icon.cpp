@@ -108,6 +108,8 @@ void MIcon::drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QSt
         icon->value<FluentIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
     }else if(icon->canConvert<InfoBarIcon*>()){
         icon->value<InfoBarIcon*>()->render(painter, rect, Theme::AUTO, 0, attributes);
+    }else if(icon->canConvert<SpinIcon>()){
+        icon->value<SpinIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
     }else if(icon->canConvert<Icon>()){
         //icon.value<Icon>().fluentIcon->render(&painter, &rect, Theme::AUTO, 0, attributes);
         icon->value<Icon>().fluentIcon->render(painter, rect, Theme::AUTO, 0, attributes);
@@ -419,4 +421,10 @@ QString InfoBarIcon::path(Theme theme)
     }
     qDebug() << QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
     return QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
+}
+
+
+QString SpinIcon::path(Theme theme)
+{
+    return QString("qfluentwidgets/images/spin_box/%1_%2.svg").arg(SpinIconMap.value(this->iconName)).arg(getIconColor(theme, false));
 }

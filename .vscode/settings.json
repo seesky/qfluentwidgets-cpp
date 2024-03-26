@@ -148,6 +148,8 @@
         "qfileinfo": "cpp",
         "qgraphicsvideoitem": "cpp",
         "qstyleditemdelegate": "cpp",
-        "qsizepolicy": "cpp"
+        "qsizepolicy": "cpp",
+        "qdoublespinbox": "cpp",
+        "qtoolbutton": "cpp"
     }
 }
