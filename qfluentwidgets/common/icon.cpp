@@ -106,8 +106,8 @@ void MIcon::drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QSt
     {   
         //TODO: icon.render(painter, rect, **attributes)
         icon->value<FluentIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
-    }else if(icon->canConvert<InfoBarIcon>()){
-        icon->value<InfoBarIcon>().render(painter, rect, Theme::AUTO, 0, attributes);
+    }else if(icon->canConvert<InfoBarIcon*>()){
+        icon->value<InfoBarIcon*>()->render(painter, rect, Theme::AUTO, 0, attributes);
     }else if(icon->canConvert<Icon>()){
         //icon.value<Icon>().fluentIcon->render(&painter, &rect, Theme::AUTO, 0, attributes);
         icon->value<Icon>().fluentIcon->render(painter, rect, Theme::AUTO, 0, attributes);
@@ -229,10 +229,13 @@ void FluentIconBase::render(QPainter *painter, QRect rect, Theme theme = Theme::
     QString iconStr = this->path(theme);
     QIcon *icon;
     if(iconStr.endsWith(".svg")){
+
         if(attributes){
             iconStr = writeSvg(iconStr, indexes, *attributes);
+            drawSvgIcon2engine(iconStr, painter, rect);
+        }else{
+            drawSvgIcon(iconStr, painter, rect);
         }
-        drawSvgIcon(iconStr, painter, rect);
     }else{
         icon = new QIcon(iconStr);
         rect = QRectF(rect).toRect();

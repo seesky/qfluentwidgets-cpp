@@ -18,14 +18,15 @@ void InfoIconWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     QRect rect = QRect(10, 10, 15, 15);
-    if(this->icon->iconName != InfoBarIconMap.key(QString("INFORMATION"))){
-        QVariant _icon = QVariant::fromValue<InfoBarIcon*>(this->icon);
-        MIcon().drawIcon( &_icon, &painter, rect, nullptr, QIcon::State::Off);  //TODO:需要确认是否正确的渲染
+    if(this->icon->iconName != QString("INFORMATION")){
+        QVariant *_icon = new QVariant(QVariant::fromValue<InfoBarIcon*>(this->icon));
+        MIcon().drawIcon(_icon, &painter, rect, nullptr, QIcon::State::Off);  //TODO:需要确认是否正确的渲染
     }else{
-        QVariant _icon = QVariant::fromValue<InfoBarIcon*>(this->icon);
-        std::map<QString, QString> attributes;
-        attributes[QString("fill")] = QString((ThemeColor().themeColor())->name());
-        MIcon().drawIcon( &_icon, &painter, rect, &attributes, QIcon::State::Off); 
+        QVariant *_icon = new QVariant(QVariant::fromValue<InfoBarIcon*>(this->icon));
+        //std::map<QString, QString> attributes;
+        //qDebug() << QString((ThemeColor().themeColor())->name());
+        //attributes[QString("fill")] = QString((ThemeColor().themeColor())->name());
+        MIcon().drawIcon(_icon, &painter, rect, nullptr, QIcon::State::Off); 
     }
 }
 
@@ -125,7 +126,7 @@ void InfoBar::__setQss()
 {
     this->titleLabel->setObjectName(QString("titleLabel"));
     this->contentLabel->setObjectName(QString("contentLabel"));
-    this->setProperty("type", InfoBarIconMap.key(this->icon->iconName));
+    this->setProperty("type", QVariant::fromValue<QString>(InfoBarIconMap.value(this->icon->iconName)));
     FluentStyleSheet().apply(this, FluentStyleSheetMap.value("INFO_BAR"), Theme::AUTO);
 }
 
@@ -150,7 +151,7 @@ void InfoBar::_adjustText()
     this->adjustSize();
 }
 
-void InfoBar::addWidget(QWidget *widget, int stretch)
+void InfoBar::addWidget(QWidget *widget, int stretch= 0)
 {
     this->widgetLayout->addSpacing(6);
     Qt::AlignmentFlag align = this->orient == Qt::Vertical ? Qt::AlignTop : Qt::AlignVCenter;
@@ -198,8 +199,8 @@ void InfoBar::showEvent(QShowEvent *event)
     }
 
     if(this->position != InfoBarPosition::NONE){
-        //manager = InfoBarManager.make(self.position)
-        //manager.add(self)
+        InfoBarManager *manager = InfoBarManager::make(this->position);
+        manager->add(this);
     }
 
     if(this->parent()){
@@ -240,37 +241,39 @@ InfoBar* InfoBar::success(QString title, QString content, Qt::Orientation orient
 {
     InfoBarIcon *_icon = new InfoBarIcon();
     _icon->setIconName(QString("SUCCESS"));
-    return new InfoBar(_icon, title, content, orient, isClosable, duration, position, parent);
+    return InfoBar::_new(_icon, title, content, orient, isClosable, duration, position, parent);
 }
 
 InfoBar* InfoBar::info(QString title, QString content, Qt::Orientation orient, bool isClosable, int duration, InfoBarPosition position, QWidget *parent)
 {
     InfoBarIcon *_icon = new InfoBarIcon();
     _icon->setIconName(QString("INFORMATION"));
-    return new InfoBar(_icon, title, content, orient, isClosable, duration, position, parent);
+    return InfoBar::_new(_icon, title, content, orient, isClosable, duration, position, parent);
 }
 
 InfoBar* InfoBar::warning(QString title, QString content, Qt::Orientation orient, bool isClosable, int duration, InfoBarPosition position, QWidget *parent)
 {
     InfoBarIcon *_icon = new InfoBarIcon();
     _icon->setIconName(QString("WARNING"));
-    return new InfoBar(_icon, title, content, orient, isClosable, duration, position, parent);
+    return InfoBar::_new(_icon, title, content, orient, isClosable, duration, position, parent);
 }
 
 InfoBar* InfoBar::error(QString title, QString content, Qt::Orientation orient, bool isClosable, int duration, InfoBarPosition position, QWidget *parent)
 {
     InfoBarIcon *_icon = new InfoBarIcon();
     _icon->setIconName(QString("ERROR"));
-    return new InfoBar(_icon, title, content, orient, isClosable, duration, position, parent);
+    return InfoBar::_new(_icon, title, content, orient, isClosable, duration, position, parent);
 }
 
 
 
 InfoBarManager::InfoBarManager() : QObject()
 {
+    /*
     if(this->__initialized){
         return;
     }
+    */
 
     this->spacing = 16;
     this->margin = 24;
@@ -278,7 +281,7 @@ InfoBarManager::InfoBarManager() : QObject()
     this->aniGroups = QMap<QObject*, QParallelAnimationGroup*>();
     this->slideAnis = QList<QPropertyAnimation*>();
     this->dropAnis = QList<QPropertyAnimation*>();
-    this->__initialized = true;
+    //this->__initialized = true;
 }
 
 
@@ -452,14 +455,9 @@ QPoint TopInfoBarManager::_pos(InfoBar *infoBar, QSize parentSize = QSize())
 {
     QObject *p = infoBar->parent();
     QSize _parentSize;
-    if(parentSize == QSize()){
-        _parentSize = ((QWidget *)p)->size();  //TODO:特殊关注
-    }else{
-        _parentSize = parentSize;
-    }
-    //QSize _parentSize = parentSize == QSize() ? p->size() : parentSize;
 
-    int x = (((QWidget *)infoBar->parent())->width() - ((QWidget *)infoBar)->width() / 2);
+
+    int x = (((QWidget *)infoBar->parent())->width() - ((QWidget *)infoBar)->width()) / 2;
     int y = this->margin;
 
     int index = this->infoBars.value(p)->indexOf(infoBar);
@@ -600,7 +598,7 @@ QPoint BottomLeftInfoBarManager::_pos(InfoBar *infoBar, QSize parentSize)
         _parentSize = parentSize;
     }
 
-    int y = parentSize.height() - infoBar->height() - this->margin;
+    int y = _parentSize.height() - infoBar->height() - this->margin;
     int index = this->infoBars.value(p)->indexOf(infoBar);
 
     for(int i = 0; i < index; i++){
@@ -636,8 +634,8 @@ QPoint BottomInfoBarManager::_pos(InfoBar *infoBar, QSize parentSize)
         _parentSize = parentSize;
     }
 
-    int x = (parentSize.width() - infoBar->width()) / 2;
-    int y = parentSize.height() - infoBar->height() - this->margin;
+    int x = (_parentSize.width() - infoBar->width()) / 2;
+    int y = _parentSize.height() - infoBar->height() - this->margin;
     int index = this->infoBars.value(p)->indexOf(infoBar);
 
     for(int i = 0; i < index; i++){
