@@ -343,6 +343,10 @@ QIcon MIcon::toQIcon(QVariant *icon)
         return *(icon->value<FluentIcon>().icon());
     }
 
+    if(icon->canConvert<SpinIcon>()){
+        return *(icon->value<SpinIcon>().icon());
+    }
+
     return icon->value<QIcon>();
 }
 
@@ -426,5 +430,6 @@ QString InfoBarIcon::path(Theme theme)
 
 QString SpinIcon::path(Theme theme)
 {
+    qDebug() << QString("qfluentwidgets/images/spin_box/%1_%2.svg").arg(SpinIconMap.value(this->iconName)).arg(getIconColor(theme, false));
     return QString("qfluentwidgets/images/spin_box/%1_%2.svg").arg(SpinIconMap.value(this->iconName)).arg(getIconColor(theme, false));
 }
