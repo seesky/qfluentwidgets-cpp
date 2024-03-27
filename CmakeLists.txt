@@ -855,3 +855,32 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+
+
+
+
+add_executable(
+  label_test
+  qfluentwidgets/test/label_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(label_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  label_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)

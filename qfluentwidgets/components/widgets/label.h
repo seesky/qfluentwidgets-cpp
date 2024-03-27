@@ -64,9 +64,8 @@ public:
 class CaptionLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    CaptionLabel(QWidget *parent) : FluentLabelBase(parent){};
-    CaptionLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent){};
-
+    CaptionLabel(QWidget *parent);
+    CaptionLabel(QString text, QWidget *parent);
     QFont getFont() override; 
 };
 
@@ -74,9 +73,8 @@ public:
 class BodyLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    BodyLabel(QWidget *parent) : FluentLabelBase(parent){};
-    BodyLabel(QString text, QWidget *parent = nullptr) : FluentLabelBase(text, parent){};
-
+    BodyLabel(QWidget *parent);
+    BodyLabel(QString text, QWidget *parent = nullptr);
     QFont getFont() override; 
 };
 
@@ -84,9 +82,8 @@ public:
 class StrongBodyLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    StrongBodyLabel(QWidget *parent) : FluentLabelBase(parent){};
-    StrongBodyLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent){};
-
+    StrongBodyLabel(QWidget *parent);
+    StrongBodyLabel(QString text, QWidget *parent);
     QFont getFont() override; 
 };
 
@@ -94,9 +91,8 @@ public:
 class SubtitleLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    SubtitleLabel(QWidget *parent) : FluentLabelBase(parent){};
+    SubtitleLabel(QWidget *parent);
     SubtitleLabel(QString text, QWidget *parent);
-
     QFont getFont() override; 
 };
 
@@ -104,9 +100,8 @@ public:
 class TitleLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    TitleLabel(QWidget *parent) : FluentLabelBase(parent){};
-    TitleLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent){};
-
+    TitleLabel(QWidget *parent);
+    TitleLabel(QString text, QWidget *parent);
     QFont getFont() override; 
 };
 
@@ -114,18 +109,16 @@ public:
 class LargeTitleLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    LargeTitleLabel(QWidget *parent) : FluentLabelBase(parent){};
-    LargeTitleLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent){};
-
+    LargeTitleLabel(QWidget *parent);
+    LargeTitleLabel(QString text, QWidget *parent);
     QFont getFont() override; 
 };
 
 class DisplayLabel : public FluentLabelBase{
     Q_OBJECT
 public:
-    DisplayLabel(QWidget *parent) : FluentLabelBase(parent){};
-    DisplayLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent){};
-
+    DisplayLabel(QWidget *parent);
+    DisplayLabel(QString text, QWidget *parent);
     QFont getFont() override; 
 };
 

@@ -129,15 +129,61 @@ void FluentLabelBase::setUnderline(bool isUnderline)
     this->setFont(font);
 }
 
+CaptionLabel::CaptionLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+CaptionLabel::CaptionLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
 
 QFont CaptionLabel::getFont()
 {
     return Font().getFont(12, QFont::Normal);
 }
 
+
+BodyLabel::BodyLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+
+BodyLabel::BodyLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+
 QFont BodyLabel::getFont()
 {
     return Font().getFont(14, QFont::Normal);
+}
+
+
+StrongBodyLabel::StrongBodyLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+StrongBodyLabel::StrongBodyLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
 }
 
 
@@ -146,6 +192,12 @@ QFont StrongBodyLabel::getFont()
     return Font().getFont(14, QFont::DemiBold);
 }
 
+SubtitleLabel::SubtitleLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
 
 SubtitleLabel::SubtitleLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
 {
@@ -159,16 +211,64 @@ QFont SubtitleLabel::getFont()
     return Font().getFont(20, QFont::DemiBold);
 }
 
+
+TitleLabel::TitleLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+
+TitleLabel::TitleLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+
 QFont TitleLabel::getFont()
 {
     return Font().getFont(28, QFont::DemiBold);
 }
 
 
+LargeTitleLabel::LargeTitleLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+LargeTitleLabel::LargeTitleLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
 QFont LargeTitleLabel::getFont()
 {
     return Font().getFont(40, QFont::DemiBold);
 }
+
+
+DisplayLabel::DisplayLabel(QWidget *parent) : FluentLabelBase(parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
+
+DisplayLabel::DisplayLabel(QString text, QWidget *parent) : FluentLabelBase(text, parent)
+{
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LABEL"), Theme::AUTO);
+    this->setFont(this->getFont());
+    this->setTextColor(QColor(0, 0, 0), QColor(255, 255, 255));
+}
+
 
 QFont DisplayLabel::getFont()
 {
