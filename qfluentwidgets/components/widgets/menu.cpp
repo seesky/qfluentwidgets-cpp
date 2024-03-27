@@ -840,6 +840,11 @@ bool MenuActionListWidget::publicEvent(QEvent *e)
     this->event(e);
 }
 
+bool MenuActionListWidget::event(QEvent *e)
+{
+    return QListWidget::event(e);
+}
+
 void MenuActionListWidget::setMaxVisibleItems(int num)
 {
     this->_maxVisibleItems = num;

@@ -75,7 +75,6 @@ public:
     CompleterMenu(LineEdit *lineEdit);
     bool setCompletion(QAbstractItemModel *model);
     void setItems(QStringList *items);
-    void _onItemClicked(QListWidgetItem *item);
     bool eventFilter(QObject *watched, QEvent *event);
     void __onItemSelected(QString text);
     bool popup();
@@ -84,6 +83,9 @@ public:
     LineEdit *lineEdit;
 signals:
     void activated(const QString &text);
+
+public slots:
+    void _onItemClicked(QListWidgetItem *item);
 };
 
 class SearchLineEdit : public LineEdit{

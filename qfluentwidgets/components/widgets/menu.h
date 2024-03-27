@@ -165,6 +165,7 @@ public:
     QMargins getPublicViewportMargins();
     void publicSetViewportMargins(int left, int top, int right, int bottom);
     bool publicEvent(QEvent *e);
+    bool event(QEvent *e) override;
     int maxVisibleItems();
     int heightForAnimation(QPoint *pos, MenuAnimationType aniType);
     int itemsHeight();
@@ -251,7 +252,7 @@ signals:
 public slots:
     void _showSubMenu(QListWidgetItem *item);
     void _onActionChanged();
-    void _onItemClicked(QListWidgetItem *item);
+    virtual void _onItemClicked(QListWidgetItem *item);
     void _onItemEntered(QListWidgetItem *item);
     void _onShowMenuTimeOut();
 };

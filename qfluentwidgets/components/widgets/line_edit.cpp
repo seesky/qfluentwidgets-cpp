@@ -219,7 +219,7 @@ CompleterMenu::CompleterMenu(LineEdit *lineEdit) : RoundMenu(QString(), nullptr)
 bool CompleterMenu::setCompletion(QAbstractItemModel *model)
 {
     QStringList *items = new QStringList();
-    for(int i = 0; i < model->columnCount(); i++){
+    for(int i = 0; i < model->rowCount(); i++){
         for(int j = 0; j < model->columnCount(); j++){
             items->append(model->data(model->index(i, j)).value<QString>()); //特殊关注
         }
@@ -259,7 +259,7 @@ bool CompleterMenu::eventFilter(QObject *watched, QEvent *event)
     }
 
     this->lineEdit->event(event);
-    this->view->publicEvent(event);
+    this->view->event(event);
 
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
     if(keyEvent->key() == Qt::Key_Escape){
@@ -321,6 +321,7 @@ bool CompleterMenu::popup()
     this->view->setFocusPolicy(Qt::NoFocus);
     this->setFocusPolicy(Qt::NoFocus);
     p->setFocus();
+    return true;
 }
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) : LineEdit(parent)
