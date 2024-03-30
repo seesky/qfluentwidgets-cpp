@@ -7,7 +7,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QMainWindow>
-#include <QScreen>
+#include <QtGui/QScreen>
 #include "../titlebar/titlebar.h"
 #include "../utils/win32_utils.h"
 #include "window_effect.h"

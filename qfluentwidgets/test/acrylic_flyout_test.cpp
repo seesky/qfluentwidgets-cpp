@@ -1,5 +1,4 @@
 #include <iostream>
-#include <QtCore>
 #include <QtWidgets>
 #include <QtCore/Qt>
 #include "../../qfluentwidgets/components/material/acrylic_flyout.h"

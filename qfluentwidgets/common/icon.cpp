@@ -1,14 +1,15 @@
 #include "icon.h"
 #include "config.h"
 #include <QFile>
-#include <QtCore>
+//#include <QtCore>
+#include <QtDebug>
 #include <QtXml/QDomDocument>
 
 //namespace Qfw{
 
 void drawSvgIcon(QString icon, QPainter *painter, const QRect &rect)
 {   
-    qDebug() << icon;
+    //qDebug() << icon;
     QSvgRenderer *renderer = new QSvgRenderer(icon);
     renderer->render(painter, QRectF(rect));
     /*
@@ -101,7 +102,7 @@ QString writeSvg(QString iconPath, int indexes = 0, std::map<QString, QString> a
 
 void MIcon::drawIcon(QVariant *icon, QPainter *painter, QRect rect, std::map<QString, QString> *attributes, QIcon::State state = QIcon::State::Off)
 {
-    qDebug() << icon->typeName();
+    //qDebug() << icon->typeName();
     if(icon->canConvert<FluentIcon>())
     {   
         //TODO: icon.render(painter, rect, **attributes)
@@ -423,13 +424,13 @@ QString InfoBarIcon::path(Theme theme)
             color = QString("light");
         }
     }
-    qDebug() << QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
+    //qDebug() << QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
     return QString("qfluentwidgets/images/info_bar/%1_%2.svg").arg(InfoBarIconMap.value(this->iconName)).arg(color);
 }
 
 
 QString SpinIcon::path(Theme theme)
 {
-    qDebug() << QString("qfluentwidgets/images/spin_box/%1_%2.svg").arg(SpinIconMap.value(this->iconName)).arg(getIconColor(theme, false));
+    //qDebug() << QString("qfluentwidgets/images/spin_box/%1_%2.svg").arg(SpinIconMap.value(this->iconName)).arg(getIconColor(theme, false));
     return QString("qfluentwidgets/images/spin_box/%1_%2.svg").arg(SpinIconMap.value(this->iconName)).arg(getIconColor(theme, false));
 }

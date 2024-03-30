@@ -309,24 +309,312 @@ void DropShadowAnimation::_onAniFinished()
 }
 
 
-/*
-template<typename T>
-void FluentAnimationProperObject::registerManager(FluentAnimationProperty propertyType)
+
+FluentAnimationProperObject::FluentAnimationProperObject(QWidget *parent) : QObject(parent)
 {
-    if (objects.find(propertyType) == objects.end()) {
-        //objects[propertyType] = propertyType;
+
+}
+
+
+int FluentAnimationProperObject::getValue()
+{
+    return 0;
+}
+
+
+void FluentAnimationProperObject::setValue()
+{
+
+}
+
+
+class AngleObject;
+class OpacityObject;
+class PositionObject;
+class ScaleObject;
+FluentAnimationProperObject* FluentAnimationProperObject::create(QString propertyType, QWidget *parent)
+{
+
+    if(propertyType == QString("POSITION")){
+        return new AngleObject(parent);
+    }else if(propertyType == QString("SCALE")){
+        return new OpacityObject(parent);
+    }else if(propertyType == QString("ANGLE")){
+        return new PositionObject(parent);
+    }else if(propertyType == QString("OPACITY")){
+        return new ScaleObject(parent);
+    }else{
+        return nullptr;
     }
 }
 
-void* FluentAnimationProperObject::create(FluentAnimationProperty propertyType)
+
+
+PositionObject::PositionObject(QWidget *parent) : FluentAnimationProperObject(parent)
 {
-    if(objects.find(propertyType) == objects.end()){
-        throw std::runtime_error("PropertyType has not been registered");
-    }
-    return this->objects.at(propertyType);
+    this->_position = QPoint();
 }
 
-*/
+QPoint PositionObject::getValue()
+{
+    return this->_position;
+}
+
+void PositionObject::setValue(QPoint pos)
+{
+    this->_position = pos;
+    ((QWidget*)this->parent())->update();
+}
 
 
-//}
+ScaleObject::ScaleObject(QWidget *parent) : FluentAnimationProperObject(parent)
+{
+    this->_scale = 1;
+}
+
+float ScaleObject::getValue()
+{
+    return this->_scale;
+}
+
+
+void ScaleObject::setValue(float scale)
+{
+    this->_scale = scale;
+    ((QWidget *)this->parent())->update();
+}
+
+
+AngleObject::AngleObject(QWidget *parent) : FluentAnimationProperObject(parent)
+{
+    this->_angle = 0;
+}
+
+float AngleObject::getValue()
+{
+    return this->_angle;
+}
+
+void AngleObject::setValue(float angle)
+{
+    this->_angle = angle;
+    ((QWidget *)this->parent())->update();
+}
+
+
+OpacityObject::OpacityObject(QWidget *parent) : FluentAnimationProperObject(parent)
+{
+    this->_opacity = 0;
+}
+
+
+float OpacityObject::getValue()
+{
+    return this->_opacity;
+}
+
+void OpacityObject::setValue(float opacity)
+{
+    this->_opacity = opacity;
+    ((QWidget *)this->parent())->update();
+}
+
+
+
+
+FluentAnimation::FluentAnimation(QWidget *parent) : QPropertyAnimation(parent)
+{
+    this->setSpeed(FluentAnimationSpeed::FAST);
+    this->setEasingCurve(*(this->curve()));
+}
+
+QEasingCurve *FluentAnimation::createBezierCurve(int x1, int y1, int x2, int y2)
+{
+    QEasingCurve *curve = new QEasingCurve(QEasingCurve::BezierSpline);
+    curve->addCubicBezierSegment(QPointF(x1, y1), QPointF(x2, y2), QPointF(1, 1));
+    return curve;
+}
+
+
+QEasingCurve *FluentAnimation::curve()
+{
+    return FluentAnimation::createBezierCurve(0, 0, 1, 1);
+}
+
+void FluentAnimation::setSpeed(FluentAnimationSpeed speed)
+{
+    this->setDuration(this->speedToDuration(speed));
+}
+
+
+int FluentAnimation::speedToDuration(FluentAnimationSpeed speed)
+{
+    return 100;
+}
+
+
+void FluentAnimation::startAnimation(QVariant *endValue, QVariant *startValue = nullptr)
+{
+    this->stop();
+
+    if(!startValue->isValid()){
+        this->setStartValue(*(this->value()));
+    }else{
+        this->setStartValue(*startValue);
+    }
+
+    this->setEndValue(*endValue);
+    this->start();
+}
+
+
+QVariant *FluentAnimation::value()
+{
+    auto positionObject = qobject_cast<PositionObject*>(this->targetObject());
+    auto scaleObject = qobject_cast<ScaleObject*>(this->targetObject());
+    auto angleObject = qobject_cast<AngleObject*>(this->targetObject());
+    auto opacityObject = qobject_cast<OpacityObject*>(this->targetObject());
+
+
+    if(positionObject != nullptr){
+        return new QVariant(QVariant::fromValue<QPoint>(positionObject->getValue()));
+    }
+    
+    if(scaleObject != nullptr){
+        return new QVariant(QVariant::fromValue<float>(scaleObject->getValue()));
+    }
+
+    if(angleObject != nullptr){
+        return new QVariant(QVariant::fromValue<float>(angleObject->getValue()));
+    }
+
+    if(opacityObject != nullptr){
+        return new QVariant(QVariant::fromValue<float>(opacityObject->getValue()));
+    }
+}
+
+
+void FluentAnimation::setValue(QVariant *value)
+{
+    auto positionObject = qobject_cast<PositionObject*>(this->targetObject());
+    auto scaleObject = qobject_cast<ScaleObject*>(this->targetObject());
+    auto angleObject = qobject_cast<AngleObject*>(this->targetObject());
+    auto opacityObject = qobject_cast<OpacityObject*>(this->targetObject());
+
+
+    if(positionObject != nullptr){
+        positionObject->setValue(value->value<QPoint>());
+    }
+    
+    if(scaleObject != nullptr){
+        scaleObject->setValue(value->value<float>());
+    }
+
+    if(angleObject != nullptr){
+        angleObject->setValue(value->value<float>());
+    }
+
+    if(opacityObject != nullptr){
+        opacityObject->setValue(value->value<float>());
+    }
+}
+
+
+
+FluentAnimation *FluentAnimation::create(FluentAnimationType aniType, QString propertyType, FluentAnimationSpeed speed = FluentAnimationSpeed::FAST, QVariant *value= nullptr, QWidget *parent = nullptr)
+{
+    FluentAnimationProperObject *obj = FluentAnimationProperObject::create(propertyType, parent);
+    FluentAnimation *ani;
+
+    switch (aniType)
+    {
+    case FluentAnimationType::FADE_IN_OUT:
+        ani = new FadeInOutAnimation(parent);
+        break;
+    case FluentAnimationType::FAST_DISMISS:
+        ani = new FastDismissAnimation(parent);
+        break;
+    case FluentAnimationType::FAST_INVOKE:
+        ani = new FastInvokeAnimation(parent);
+        break;
+    case FluentAnimationType::POINT_TO_POINT:
+        ani = new PointToPointAnimation(parent);
+        break;
+    case FluentAnimationType::SOFT_DISMISS:
+        ani = new SoftDismissAnimation(parent);
+        break;
+    case FluentAnimationType::STRONG_INVOKE:
+        ani = new StrongInvokeAnimation(parent);
+        break;
+    default:
+        ani = nullptr;
+        break;
+    }
+
+    if(ani != nullptr){
+        ani->setSpeed(speed);
+        ani->setTargetObject(obj);
+        ani->setPropertyName(FluentAnimationPropertyMap.value(propertyType).toUtf8());
+
+        if(value != nullptr){
+            ani->setValue(value);
+        }
+
+        return ani;
+    }
+
+}
+
+
+QEasingCurve *FastInvokeAnimation::curve()
+{
+    return FastInvokeAnimation::createBezierCurve(0, 0, 0, 1);
+}
+
+int FastInvokeAnimation::speedToDuration(FluentAnimationSpeed speed)
+{
+    if(speed == FluentAnimationSpeed::FAST){
+        return 187;
+    }
+
+    if(speed == FluentAnimationSpeed::MEDIUM){
+        return 333;
+    }
+
+    return 500;
+}
+
+
+
+QEasingCurve *StrongInvokeAnimation::curve()
+{
+    return StrongInvokeAnimation::createBezierCurve(0.13, 1.62, 0, 0.92);
+}
+
+int StrongInvokeAnimation::speedToDuration(FluentAnimationSpeed speed)
+{
+    return 667;
+}
+
+
+QEasingCurve *SoftDismissAnimation::curve()
+{
+    return StrongInvokeAnimation::createBezierCurve(1, 0, 1, 1);
+}
+
+int SoftDismissAnimation::speedToDuration(FluentAnimationSpeed speed)
+{
+    return 167;
+}
+
+
+QEasingCurve *PointToPointAnimation::curve()
+{
+    return StrongInvokeAnimation::createBezierCurve(0.55, 0.55, 0, 1);
+}
+
+
+int FadeInOutAnimation::speedToDuration(FluentAnimationSpeed speed)
+{
+    return 83;
+}

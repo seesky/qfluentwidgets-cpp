@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore/Qt>
+#include <QtCore/QVariant>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QPoint>
 #include <QtCore/QParallelAnimationGroup>

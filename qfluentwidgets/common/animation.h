@@ -135,29 +135,136 @@ enum class FluentAnimationType{
     FADE_IN_OUT = 5
 };
 
-enum class FluentAnimationProperty{
-    POSITION = 0,
-    SCALE = 1,
-    ANGLE = 2,
-    OPACITY = 3
+
+const static QMap<QString, QString> FluentAnimationPropertyMap = {
+    {"POSITION", "position"},
+    {"SCALE", "scale"},
+    {"ANGLE", "angle"},
+    {"OPACITY", "opacity"}
 };
 
-/*
+
 class FluentAnimationProperObject : public QObject{
     Q_OBJECT
 public:
-    FluentAnimationProperObject();
+    FluentAnimationProperObject(QWidget *parent);
     int getValue();
     void setValue();
-    //FluentAnimationProperObject::registerManager<MyClass1>("Class1");
-    //MyClass1* obj1 = reinterpret_cast<MyClass1*>(Manager::objects["Class1"]);
-    template<typename T>
-    void registerManager(FluentAnimationProperty propertyType);
-    void* create(FluentAnimationProperty propertyType);
-
-private:
-    std::map<FluentAnimationProperty, void*> objects;
+    static FluentAnimationProperObject* create(QString propertyType, QWidget *parent);
 };
-*/
+
     
-//}
+class PositionObject : public FluentAnimationProperObject{
+    Q_OBJECT
+    Q_PROPERTY(QPoint position READ getValue WRITE setValue)
+public:
+    PositionObject(QWidget *parent);
+    QPoint getValue();
+    void setValue(QPoint pos);
+
+    QPoint _position;
+};
+
+
+class ScaleObject : public FluentAnimationProperObject{
+    Q_OBJECT
+    Q_PROPERTY(float scale READ getValue WRITE setValue)
+public:
+    ScaleObject(QWidget *parent);
+    float getValue();
+    void setValue(float scale);
+
+    float _scale;
+};
+
+
+
+class AngleObject : public FluentAnimationProperObject{
+    Q_OBJECT
+    Q_PROPERTY(float angle READ getValue WRITE setValue)
+public:
+    AngleObject(QWidget *parent);
+    float getValue();
+    void setValue(float angle);
+
+    float _angle;
+};
+
+
+class OpacityObject : public FluentAnimationProperObject{
+    Q_OBJECT
+    Q_PROPERTY(float opacity READ getValue WRITE setValue)
+public:
+    OpacityObject(QWidget *parent);
+    float getValue();
+    void setValue(float opacity);
+
+    float _opacity;
+};
+
+
+class FluentAnimation : public QPropertyAnimation{
+    Q_OBJECT
+public:
+    FluentAnimation(QWidget *parent);
+    static QEasingCurve *createBezierCurve(int x1, int y1, int x2, int y2);
+    static QEasingCurve *curve();
+    void setSpeed(FluentAnimationSpeed speed);
+    int speedToDuration(FluentAnimationSpeed speed);
+    void startAnimation(QVariant *endValue, QVariant *startValue);
+    QVariant *value();
+    void setValue(QVariant *value);
+    static FluentAnimation *create(FluentAnimationType aniType, QString propertyType, FluentAnimationSpeed speed, QVariant *value, QWidget *parent);
+
+};
+
+
+class FastInvokeAnimation : public FluentAnimation{
+    Q_OBJECT
+public:
+    FastInvokeAnimation(QWidget *parent) : FluentAnimation(parent){};
+    static QEasingCurve *curve();
+    int speedToDuration(FluentAnimationSpeed speed);
+};
+
+
+class StrongInvokeAnimation : public FluentAnimation{
+    Q_OBJECT
+public:
+    StrongInvokeAnimation(QWidget *parent) : FluentAnimation(parent){};
+    static QEasingCurve *curve();
+    int speedToDuration(FluentAnimationSpeed speed);
+};
+
+
+
+class FastDismissAnimation : public FluentAnimation{
+    Q_OBJECT
+public:
+    FastDismissAnimation(QWidget *parent) : FluentAnimation(parent){};
+};
+
+
+class SoftDismissAnimation : public FluentAnimation{
+    Q_OBJECT
+public:
+    SoftDismissAnimation(QWidget *parent) : FluentAnimation(parent){};
+    static QEasingCurve *curve();
+    int speedToDuration(FluentAnimationSpeed speed);
+};
+
+
+class PointToPointAnimation : public FluentAnimation{
+    Q_OBJECT
+public:
+    PointToPointAnimation(QWidget *parent) : FluentAnimation(parent){};
+    static QEasingCurve *curve();
+};
+
+
+class FadeInOutAnimation : public FluentAnimation{
+    Q_OBJECT
+public:
+    FadeInOutAnimation(QWidget *parent) : FluentAnimation(parent){};
+    int speedToDuration(FluentAnimationSpeed speed);
+};

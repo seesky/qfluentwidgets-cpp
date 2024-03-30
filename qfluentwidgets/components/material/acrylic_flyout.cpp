@@ -107,7 +107,7 @@ void AcrylicFlyoutView::_updateAcrylicColor()
 }
 
 
-AcrylicFlyout::AcrylicFlyout(FlyoutViewBase *view, QWidget *parent, bool isDeleteOnClose) : Flyout(view, parent, isDeleteOnClose)
+AcrylicFlyout::AcrylicFlyout(FlyoutViewBase *view, QWidget *parent, bool isDeleteOnClose = true) : Flyout(view, parent, isDeleteOnClose)
 {
 
 }

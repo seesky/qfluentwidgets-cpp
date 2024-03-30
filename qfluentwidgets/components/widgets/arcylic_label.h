@@ -1,6 +1,7 @@
 #pragma once
 
-#include <QtCore>
+#include <QtCore/Qt>
+#include <QtCore/QDebug>
 #include <QtCore/QVariant>
 #include <QtCore/Qt>
 #include <QtCore/QThread>

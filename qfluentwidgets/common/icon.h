@@ -2,6 +2,7 @@
 #include <string>
 #include <QtCore/QRect>
 #include <QtGui/QIcon>
+#include <QtCore/QVariant>
 #include <QtGui/QIconEngine>
 #include <QtGui/QPainter>
 #include <QtSvg/QSvgRenderer>

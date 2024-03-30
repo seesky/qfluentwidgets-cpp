@@ -4,11 +4,6 @@
 #include <vector>
 #include <stdexcept>
 #include <experimental/filesystem>
-#include <string>
-#include <QColor>
-#include <QVariant>
-#include <QFile>
-#include <QDir>
 #include "json/json.h"
 
 bool ConfigValidator::validate(QVariant *value)

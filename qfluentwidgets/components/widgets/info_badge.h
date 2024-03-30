@@ -13,11 +13,12 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QSizePolicy>
-#include <QDebug>
+#include <QtCore/QDebug>
 
 #include "../../common/font.h"
 #include "../../common/icon.h"
 #include "../../common/style_sheet.h"
+#include "../../components/navigation/navigation_widget.h"
 
 const static QMap<QString, QString> InfoLevel = {
     {"INFOAMTION", "Info"},
@@ -116,6 +117,15 @@ public:
 
     QWidget *target;
     InfoBadge *badge;
+};
+
+
+class NavigationItemInfoBadgeManager : public InfoBadgeManager{
+    Q_OBJECT
+public:
+    NavigationItemInfoBadgeManager(QWidget *target, InfoBadge *badge) : InfoBadgeManager(target, badge){};
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    QPoint position() override;
 };
 
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore/QEasingCurve>
+#include <QtCore/QVariant>
 #include <QtCore/Qt>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QScrollArea>

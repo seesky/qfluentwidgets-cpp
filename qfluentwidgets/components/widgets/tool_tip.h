@@ -2,6 +2,7 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QObject>
+#include <QtCore/QVariant>
 #include <QtCore/QPoint>
 #include <QtCore/QTimer>
 #include <QtCore/Qt>

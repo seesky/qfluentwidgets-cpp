@@ -5,12 +5,17 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <boost/any.hpp>
 #include <QtGui/QColor>
 #include <QtCore/QString>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <QtCore/QFile>
-#include <boost/any.hpp>
+#include <QtCore/QVariant>
+#include <QtGui/QColor>
+#include <QtCore/QFile>
+#include <QtCore/QDir>
+
 
 //namespace Qfw{
 

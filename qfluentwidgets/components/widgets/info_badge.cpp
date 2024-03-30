@@ -424,6 +424,9 @@ InfoBadgeManager *InfoBadgeManager::make(InfoBadgePosition postion, QWidget *tar
     case InfoBadgePosition::LEFT:
         return new LeftInfoBadgeManager(target, badge);
         break;
+    case InfoBadgePosition::NAVIGATION_ITEM:
+        return new NavigationItemInfoBadgeManager(target, badge);
+        break;
     default:
         return new TopRightInfoBadgeManager(target, badge);
         break;
@@ -435,6 +438,44 @@ QPoint InfoBadgeManager::position()
 {
     return QPoint();
 }
+
+
+bool NavigationItemInfoBadgeManager::eventFilter(QObject *watched, QEvent *event)
+{
+    if(watched == this->target){
+        if(event->type() == QEvent::Show){
+            this->badge->show();
+        }
+    }
+
+    return InfoBadgeManager::eventFilter(watched, event);
+}
+
+
+QPoint NavigationItemInfoBadgeManager::position() //TODO:特殊关注
+{   
+    QWidget *target = this->target;
+    this->badge->setVisible(target->isVisible());
+
+    auto t = qobject_cast<NavigationWidget*>(target);
+    if(t->isCompacted){
+        return t->geometry().topRight() - QPoint(this->badge->width() + 2, -2);
+    }
+
+    int x, y;
+    auto ntw = qobject_cast<NavigationTreeWidget*>(target);
+    if(ntw != nullptr){
+        int dx = ntw->isLeaf() ? 10 : 35;
+        x = ntw->geometry().right() - this->badge->width() - dx;
+        y = ntw->y() + 18 - this->badge->height() / 2; 
+    }else{
+        x = target->geometry().right() - this->badge->width() - 10;
+        y = target->geometry().center().y() - this->badge->height() / 2;
+    }
+
+    return QPoint(x, y);
+}
+
 
 
 QPoint TopRightInfoBadgeManager::position()

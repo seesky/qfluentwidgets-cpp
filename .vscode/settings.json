@@ -150,6 +150,13 @@
         "qstyleditemdelegate": "cpp",
         "qsizepolicy": "cpp",
         "qdoublespinbox": "cpp",
-        "qtoolbutton": "cpp"
+        "qtoolbutton": "cpp",
+        "qexception": "cpp",
+        "qrect": "cpp",
+        "qradiobutton": "cpp",
+        "qdir": "cpp",
+        "quuid": "cpp",
+        "qdesktopwidget": "cpp",
+        "qstackedwidget": "cpp"
     }
 }
