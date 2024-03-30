@@ -13,6 +13,7 @@ MaskDialogBase::MaskDialogBase(QWidget *parent) : QDialog(parent)
 
     int c = isDarkTheme() ? 0 : 255;
     this->windowMask->resize(this->size());
+    qDebug() << QString("background:rgba(%1, %2, %3, 0.6)").arg(c).arg(c).arg(c);
     this->windowMask->setStyleSheet(QString("background:rgba(%1, %2, %3, 0.6)").arg(c).arg(c).arg(c));
     this->_hBoxLayout->addWidget(this->widget);
     this->setShadowEffect(60, std::tuple<int, int>(0, 10), QColor(0, 0, 0, 100));
@@ -34,7 +35,8 @@ void MaskDialogBase::setShadowEffect(int blurRadius, std::tuple<int,int> offset,
 
 void MaskDialogBase::setMaskColor(QColor color)
 {
-    this->windowMask->setStyleSheet(QString("background:rgba(%1, %2, %3, 0.6)").arg(color.red()).arg(color.green()).arg(color.alpha()));
+    qDebug() << QString("background:rgba(%1, %2, %3, %4)").arg(color.red()).arg(color.blue()).arg(color.green()).arg(color.alpha());
+    this->windowMask->setStyleSheet(QString("background:rgba(%1, %2, %3, %4)").arg(color.red()).arg(color.blue()).arg(color.green()).arg(color.alpha()));
 }
 
 void MaskDialogBase::showEvent(QShowEvent *e)

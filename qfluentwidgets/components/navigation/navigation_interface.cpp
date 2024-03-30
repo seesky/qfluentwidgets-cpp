@@ -1,7 +1,7 @@
 #include "navigation_interface.h"
 
 
-NavigationInterface::NavigationInterface(QWidget *parent, bool showMenuButton, bool showReturnButton, bool collapsible) : QWidget(parent)
+NavigationInterface::NavigationInterface(QWidget *parent = nullptr, bool showMenuButton = true, bool showReturnButton = false, bool collapsible = true) : QWidget(parent)
 {
     this->panel = new NavigationPanel(this, false);
     this->panel->setMenuButtonVisible(showMenuButton && collapsible);
@@ -40,7 +40,7 @@ void NavigationInterface::insertWidget(int index, QString routeKey, NavigationWi
 }
 
 
-void NavigationInterface::addSeparator(NavigationItemPosition position)
+void NavigationInterface::addSeparator(NavigationItemPosition position = NavigationItemPosition::TOP)
 {
     this->insertSeparator(-1, position);
 }

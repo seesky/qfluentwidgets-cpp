@@ -196,7 +196,7 @@ class NavigationFlyoutMenu : public ScrollArea{
     Q_OBJECT
 public:
     NavigationFlyoutMenu(NavigationTreeWidget *tree, QWidget *parent);
-    void _initNode(NavigationFlyoutMenu *root);
+    void _initNode(QVariant *root);
 
     int _suitableWidth();
     QList<NavigationTreeWidget *> *visibleTreeNodes();

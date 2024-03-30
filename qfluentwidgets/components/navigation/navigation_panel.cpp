@@ -186,7 +186,7 @@ void NavigationPanel::insertWidget(int index, QString routeKey, NavigationWidget
 
     this->_registerWidget(routeKey, parentRouteKey, widget, onClick, tooltip);
     if(!parentRouteKey.isNull()){
-        ((NavigationTreeWidget*)this->widget(routeKey))->insertChild(index, (NavigationTreeWidget*)widget); //TODO:特殊关注
+        ((NavigationTreeWidget*)this->widget(parentRouteKey))->insertChild(index, (NavigationTreeWidget*)widget); //TODO:特殊关注
     }else{
         this->_insertWidgetToLayout(index, widget, position);
     }
@@ -380,9 +380,9 @@ void NavigationPanel::collapse()
     QList<NavigationItem *> list = this->items.values();
     for(int i = 0; i < list.length(); i++){
         NavigationItem *w = list.at(i);
-        auto a = qobject_cast<NavigationTreeWidgetBase*>(w->widget);
+        auto a = qobject_cast<NavigationTreeWidget*>(w->widget);
         if(a != nullptr && a->isRoot()){
-            a->setExpanded(false);
+            a->setExpanded(false, true);
         } 
     }
 
@@ -450,7 +450,7 @@ void NavigationPanel::_showFlyoutNavigationMenu(NavigationTreeWidget *widget)
         return;
     }
 
-    QHBoxLayout *layout;
+    QHBoxLayout *layout = new QHBoxLayout();
 
     if(this->_canDrawAcrylic()){
         AcrylicFlyoutViewBase *view = new AcrylicFlyoutViewBase(nullptr);

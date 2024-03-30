@@ -3,6 +3,7 @@
 #include <QtCore/QEasingCurve>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/Qt>
+#include <QtCore/QDebug>
 #include <QtCore/QEvent>
 #include <QtGui/QColor>
 #include <QtGui/QResizeEvent>

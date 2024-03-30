@@ -416,8 +416,8 @@ void NavigationTreeWidget::insertChild(int index, NavigationWidget *child)
  
     NavigationTreeWidget *p = static_cast<NavigationTreeWidget *>(this->treeParent);  //TODO:特殊关注类型转换
     while(p != nullptr){
-        connect(((NavigationTreeWidget*)child)->expandAni, &QPropertyAnimation::valueChanged, this, [this](QVariant g){ //TODO:特殊关注
-            g.value<NavigationTreeWidget*>()->setFixedSize(g.value<NavigationTreeWidget*>()->sizeHint());  
+        connect(((NavigationTreeWidget*)child)->expandAni, &QPropertyAnimation::valueChanged, this, [this, p](){ //TODO:特殊关注
+            p->setFixedSize(p->sizeHint()); 
         });
         p = (NavigationTreeWidget*)p->treeParent;
     }
@@ -427,7 +427,8 @@ void NavigationTreeWidget::insertChild(int index, NavigationWidget *child)
     }
 
     index += 1;
-    this->treeChildren.insert(index, (NavigationTreeWidget*)child);
+    this->treeChildren.push_back((NavigationTreeWidget*)child);
+    //this->treeChildren.insert(index, (NavigationTreeWidget*)child);
     this->vBoxLayout->insertWidget(index, child, 0, Qt::AlignTop);
 }
 
@@ -588,8 +589,10 @@ NavigationFlyoutMenu::NavigationFlyoutMenu(NavigationTreeWidget *tree, QWidget *
     this->vBoxLayout->setSpacing(5);
     this->vBoxLayout->setContentsMargins(5, 8, 5, 8);
 
-    for(int i = 0; i < this->treeChildren.length(); i++){
-        NavigationTreeWidget *node = this->treeChildren.at(i)->clone();
+
+
+    for(int i = 0; i < tree->treeChildren.length(); i++){
+        NavigationTreeWidget *node = tree->treeChildren.at(i)->clone();
         connect(node, &NavigationTreeWidget::expanded, this, [this](){
             this->_adjustViewSize(true);
         });
@@ -598,36 +601,71 @@ NavigationFlyoutMenu::NavigationFlyoutMenu(NavigationTreeWidget *tree, QWidget *
         this->vBoxLayout->addWidget(node);
     }
 
-    this->_initNode(this);
+    this->_initNode(new QVariant(QVariant::fromValue<NavigationFlyoutMenu*>(this)));
     this->_adjustViewSize(false);
 }
 
-void NavigationFlyoutMenu::_initNode(NavigationFlyoutMenu *root)
+void NavigationFlyoutMenu::_initNode(QVariant *root)
 {
-    for(int i = 0; i < root->treeChildren.length(); i++){
-        root->treeChildren.at(i)->nodeDepth -= 1;
-        root->treeChildren.at(i)->setCompacted(false);
+    if(root->canConvert<NavigationFlyoutMenu*>()){
+        NavigationFlyoutMenu* _root = root->value<NavigationFlyoutMenu*>();
+        for(int i = 0; i < _root->treeChildren.length(); i++){
+            _root->treeChildren.at(i)->nodeDepth -= 1;
+            _root->treeChildren.at(i)->setCompacted(false);
 
-        if(root->treeChildren.at(i)->isLeaf()){
-            connect(root->treeChildren.at(i), &NavigationTreeWidget::clicked, this->window(), [this](){
-                ((Flyout*)this->window())->fadeOut(); //TODO:特殊关注是Flyout类型吗
-            });
+            if(_root->treeChildren.at(i)->isLeaf()){
+                connect(_root->treeChildren.at(i), &NavigationTreeWidget::clicked, this->window(), [this](){
+                    ((Flyout*)this->window())->fadeOut(); //TODO:特殊关注是Flyout类型吗
+                });
+            }
+
+
+            auto _c = qobject_cast<NavigationFlyoutMenu*>(_root->treeChildren.at(i));
+            if(_c != nullptr){
+                this->_initNode(new QVariant(QVariant::fromValue<NavigationFlyoutMenu*>(_c)));
+            }else{
+                auto _c = qobject_cast<NavigationTreeWidget*>(_root->treeChildren.at(i));
+                this->_initNode(new QVariant(QVariant::fromValue<NavigationTreeWidget*>(_c)));
+            }
+        }
+    }else if(root->canConvert<NavigationTreeWidget*>()){
+        NavigationTreeWidget* _root = root->value<NavigationTreeWidget*>();
+        for(int i = 0; i < _root->treeChildren.length(); i++){
+            _root->treeChildren.at(i)->nodeDepth -= 1;
+            _root->treeChildren.at(i)->setCompacted(false);
+
+            if(_root->treeChildren.at(i)->isLeaf()){
+                connect(_root->treeChildren.at(i), &NavigationTreeWidget::clicked, this->window(), [this](){
+                    ((Flyout*)this->window())->fadeOut(); //TODO:特殊关注是Flyout类型吗
+                });
+            }
+
+
+            auto _c = qobject_cast<NavigationFlyoutMenu*>(_root->treeChildren.at(i));
+            if(_c != nullptr){
+                this->_initNode(new QVariant(QVariant::fromValue<NavigationFlyoutMenu*>(_c)));
+            }else{
+                auto _c = qobject_cast<NavigationTreeWidget*>(_root->treeChildren.at(i));
+                this->_initNode(new QVariant(QVariant::fromValue<NavigationTreeWidget*>(_c)));
+            }
         }
     }
+    
 }
 
 
 int NavigationFlyoutMenu::_suitableWidth()
 {
     int w = 0;
-    for(int i = 0; i < this->visibleTreeNodes()->length(); i++){
-        if(!this->visibleTreeNodes()->at(i)->isHidden()){
-            w = qMax(w, this->visibleTreeNodes()->at(i)->suitableWidth() + 10);
+    QList<NavigationTreeWidget*> *list = this->visibleTreeNodes();
+    for(int i = 0; i < list->length(); i++){
+        if(!list->at(i)->isHidden()){
+            w = qMax(w, list->at(i)->suitableWidth() + 10);
         }
     }
 
     QWidget *window = (QWidget *)this->window()->parent();
-    return qMin(window->width() / 2 -25, w) + 10;
+    return qMin(window->width() / 2 - 25, w) + 10;
 }
 
 QList<NavigationTreeWidget *> *NavigationFlyoutMenu::visibleTreeNodes()
@@ -638,7 +676,6 @@ QList<NavigationTreeWidget *> *NavigationFlyoutMenu::visibleTreeNodes()
 
     while(!queue.isEmpty()){
         NavigationTreeWidget *node = queue.takeFirst();
-        queue.pop_front();
         nodes->append(node);
         for(int i = 0; i < node->treeChildren.length(); i++){
             if(!node->treeChildren.at(i)->isHidden()){
@@ -655,9 +692,10 @@ void NavigationFlyoutMenu::_adjustViewSize(bool _emit)
 {
     int w = this->_suitableWidth();
 
-    for(int i = 0; i < this->visibleTreeNodes()->length(); i++){
-        this->visibleTreeNodes()->at(i)->setFixedWidth(w - 10);
-        this->visibleTreeNodes()->at(i)->itemWidget->setFixedWidth(w - 10);
+    QList<NavigationTreeWidget*> *list = this->visibleTreeNodes();
+    for(int i = 0; i < list->length(); i++){
+        list->at(i)->setFixedWidth(w - 10);
+        list->at(i)->itemWidget->setFixedWidth(w - 10);
     }
 
     this->view->setFixedSize(w, this->view->sizeHint().height());
