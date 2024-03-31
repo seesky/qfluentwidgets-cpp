@@ -203,12 +203,18 @@ void SegmentedWidget::paintEvent(QPaintEvent *event)
 SegmentedToolWidget::SegmentedToolWidget(QWidget *parent) : SegmentedWidget(parent)
 {
     SegmentedWidget::setAttribute(Qt::WA_StyledBackground, true);
+    items = new QMap<QString, SegmentedToolItem*>();
 }
 
 
 SegmentedToolItem *SegmentedToolWidget::addItem(QString routeKey, QVariant *icon, std::function<void()> onClick)
 {
     return this->insertItem(-1, routeKey, icon, onClick);
+}
+
+void SegmentedToolWidget::addWidget(QString routeKey, SegmentedToolItem *widget, std::function<void()> onClick)
+{
+    this->insertWidget(-1, routeKey, widget, onClick);
 }
 
 void SegmentedToolWidget::insertWidget(int index, QString routeKey, SegmentedToolItem *widget, std::function<void()> onClick)
@@ -227,6 +233,44 @@ void SegmentedToolWidget::insertWidget(int index, QString routeKey, SegmentedToo
 
     (*this->items)[routeKey] = widget;
     this->hBoxLayout->insertWidget(index, widget, 1);
+}
+
+
+void SegmentedToolWidget::removeWidget(QString routeKey)
+{
+    if(!this->items->contains(routeKey)){
+        return;
+    }
+
+    SegmentedToolItem *item = this->items->value(routeKey);
+    this->items->remove(routeKey);
+    this->hBoxLayout->removeWidget(item);
+    qrouter->remove(routeKey);
+    item->deleteLater();
+}
+
+
+void SegmentedToolWidget::clear()
+{
+    QMap<QString, SegmentedToolItem*>::iterator i;
+    for (i = this->items->begin(); i != this->items->end(); ++i) {
+        this->hBoxLayout->removeWidget(i.value());
+        qrouter->remove(i.key());
+        i.value()->deleteLater();
+    }
+
+    this->items->clear();
+}
+
+
+SegmentedToolItem *SegmentedToolWidget::currentItem()
+{
+    qDebug() << this->_currentRouteKey;
+    if(this->_currentRouteKey.isNull()){
+        return nullptr;
+    }
+
+    return this->widget(this->_currentRouteKey);
 }
 
 
@@ -254,6 +298,177 @@ SegmentedToolItem *SegmentedToolWidget::_createItem(QVariant *icon)
 }
 
 
+void SegmentedToolWidget::setCurrentItem(QString routeKey)
+{
+    if(!this->items->contains(routeKey)){
+        return;
+    }
+
+    this->_currentRouteKey = routeKey;
+    this->slideAni->startAnimation(new QVariant(QVariant::fromValue<int>(this->widget(routeKey)->x())), new QVariant());
+
+    QMap<QString, SegmentedToolItem*>::iterator i;
+    for (i = this->items->begin(); i != this->items->end(); ++i) {
+        i.value()->setSelected(i.key() == routeKey);
+    }
+}
+
+
+void SegmentedToolWidget::setItemFontSize(int size)
+{
+    QMap<QString, SegmentedToolItem*>::iterator i;
+    for (i = this->items->begin(); i != this->items->end(); ++i) {
+        QFont font = i.value()->font();
+        font.setPixelSize(size);
+        i.value()->setFont(font);
+        i.value()->adjustSize();
+    }
+}
+
+SegmentedToolItem *SegmentedToolWidget::widget(QString routeKey)
+{
+    if(!this->items->contains(routeKey)){
+        return nullptr;
+    }
+
+    return this->items->value(routeKey);
+}
+
+void SegmentedToolWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    SegmentedToolItem *item =  this->currentItem();
+    if(item != nullptr){
+        this->slideAni->setValue(new QVariant(QVariant::fromValue<int>(item->x())));
+    }
+}
+
+void SegmentedToolWidget::_onItemClicked()
+{
+    SegmentedToolItem *item = (SegmentedToolItem *)this->sender();
+    this->setCurrentItem(item->property("routeKey").value<QString>());
+}
+
+SegmentedToggleToolWidget::SegmentedToggleToolWidget(QWidget *parent) : SegmentedToolWidget(parent)
+{
+    items = new QMap<QString, SegmentedToggleToolItem*>();
+}
+
+SegmentedToggleToolItem *SegmentedToggleToolWidget::addItem(QString routeKey, QVariant *icon, std::function<void()> onClick)
+{
+    return this->insertItem(-1, routeKey, icon, onClick);
+}
+
+
+void SegmentedToggleToolWidget::addWidget(QString routeKey, SegmentedToggleToolItem *widget, std::function<void()> onClick)
+{
+    this->insertWidget(-1, routeKey, widget, onClick);
+}
+
+
+SegmentedToggleToolItem *SegmentedToggleToolWidget::insertItem(int index, QString routeKey, QVariant *icon, std::function<void()> onClick)
+{
+    if(this->items->contains(routeKey)){
+        return nullptr;
+    }
+
+    SegmentedToggleToolItem *item = this->_createItem(icon);
+    this->insertWidget(index, routeKey, item, onClick);
+    return item;
+}
+
+
+void SegmentedToggleToolWidget::insertWidget(int index, QString routeKey, SegmentedToggleToolItem *widget, std::function<void()> onClick)
+{
+    if(this->items->contains(routeKey)){
+        return;
+    }
+
+    widget->setProperty("routeKey", new QVariant(QVariant::fromValue<QString>(routeKey)));
+    connect(widget, &SegmentedToggleToolItem::itemClicked, this, &Pivot::_onItemClicked);
+    if(onClick != nullptr){
+        connect(widget, &SegmentedToggleToolItem::itemClicked, this, [onClick](){
+            onClick();
+        });
+    }
+
+    (*this->items)[routeKey] = widget;
+    this->hBoxLayout->insertWidget(index, widget, 1);
+}
+
+
+
+void SegmentedToggleToolWidget::removeWidget(QString routeKey)
+{
+    if(!this->items->contains(routeKey)){
+        return;
+    }
+
+    SegmentedToggleToolItem *item = this->items->value(routeKey);
+    this->items->remove(routeKey);
+    this->hBoxLayout->removeWidget(item);
+    qrouter->remove(routeKey);
+    item->deleteLater();
+}
+
+
+void SegmentedToggleToolWidget::clear()
+{
+    QMap<QString, SegmentedToggleToolItem*>::iterator i;
+    for (i = this->items->begin(); i != this->items->end(); ++i) {
+        this->hBoxLayout->removeWidget(i.value());
+        qrouter->remove(i.key());
+        i.value()->deleteLater();
+    }
+
+    this->items->clear();
+}
+
+
+SegmentedToggleToolItem *SegmentedToggleToolWidget::currentItem()
+{
+    qDebug() << this->_currentRouteKey;
+    if(this->_currentRouteKey.isNull()){
+        return nullptr;
+    }
+
+    return this->widget(this->_currentRouteKey);
+}
+
+void SegmentedToggleToolWidget::setItemFontSize(int size)
+{
+    QMap<QString, SegmentedToggleToolItem*>::iterator i;
+    for (i = this->items->begin(); i != this->items->end(); ++i) {
+        QFont font = i.value()->font();
+        font.setPixelSize(size);
+        i.value()->setFont(font);
+        i.value()->adjustSize();
+    }
+}
+
+
+SegmentedToggleToolItem *SegmentedToggleToolWidget::widget(QString routeKey)
+{
+    if(!this->items->contains(routeKey)){
+        return nullptr;
+    }
+
+    return this->items->value(routeKey);
+}
+
+
+void SegmentedToggleToolWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    SegmentedToggleToolItem *item =  this->currentItem();
+    if(item != nullptr){
+        this->slideAni->setValue(new QVariant(QVariant::fromValue<int>(item->x())));
+    }
+}
+
+
 
 SegmentedToggleToolItem *SegmentedToggleToolWidget::_createItem(QVariant *icon)
 {
@@ -263,6 +478,22 @@ SegmentedToggleToolItem *SegmentedToggleToolWidget::_createItem(QVariant *icon)
     }else if(icon->canConvert<QIcon>()){
         QIcon _icon = icon->value<QIcon>();
         return new SegmentedToggleToolItem(&_icon, nullptr);
+    }
+}
+
+
+void SegmentedToggleToolWidget::setCurrentItem(QString routeKey)
+{
+    if(!this->items->contains(routeKey)){
+        return;
+    }
+
+    this->_currentRouteKey = routeKey;
+    this->slideAni->startAnimation(new QVariant(QVariant::fromValue<int>(this->widget(routeKey)->x())), new QVariant());
+
+    QMap<QString, SegmentedToggleToolItem*>::iterator i;
+    for (i = this->items->begin(); i != this->items->end(); ++i) {
+        i.value()->setSelected(i.key() == routeKey);
     }
 }
 
@@ -282,6 +513,13 @@ void SegmentedToggleToolWidget::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::PenStyle::NoPen);
     painter.setBrush(*(ThemeColor().themeColor()));
 
-    PivotItem * item = this->currentItem();
+    SegmentedToggleToolItem * item = this->currentItem();
     painter.drawRoundedRect(QRectF(this->slideAni->value()->value<int>(), 0, item->width(), item->height()), 4, 4);
+}
+
+
+void SegmentedToggleToolWidget::_onItemClicked()
+{
+    SegmentedToggleToolItem *item = (SegmentedToggleToolItem *)this->sender();
+    this->setCurrentItem(item->property("routeKey").value<QString>());
 }

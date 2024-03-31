@@ -76,17 +76,47 @@ class SegmentedToolWidget : public SegmentedWidget{
 public:
     SegmentedToolWidget(QWidget *parent);
     SegmentedToolItem *addItem(QString routeKey, QVariant *icon, std::function<void()> onClick);
+    void addWidget(QString routeKey, SegmentedToolItem *widget, std::function<void()> onClick);
     SegmentedToolItem *insertItem(int index, QString routeKey, QVariant *icon, std::function<void()> onClick);
-    SegmentedToolItem *_createItem(QVariant *icon);
     void insertWidget(int index, QString routeKey, SegmentedToolItem *widget, std::function<void()> onClick);
+    void removeWidget(QString routeKey);
+    void clear();
+    SegmentedToolItem *currentItem();
+    SegmentedToolItem *_createItem(QVariant *icon);
+    void setCurrentItem(QString routeKey);
+    void setItemFontSize(int size);
+    SegmentedToolItem *widget(QString routeKey);
+    void resizeEvent(QResizeEvent *event) override;
+
 
     QMap<QString, SegmentedToolItem*> *items;
+
+public slots:
+    void _onItemClicked();
 };
 
 
 class SegmentedToggleToolWidget : public SegmentedToolWidget{
     Q_OBJECT
 public:
+    SegmentedToggleToolWidget(QWidget *parent);
+    SegmentedToggleToolItem *addItem(QString routeKey, QVariant *icon, std::function<void()> onClick);
+    void addWidget(QString routeKey, SegmentedToggleToolItem *widget, std::function<void()> onClick);
+    SegmentedToggleToolItem *insertItem(int index, QString routeKey, QVariant *icon, std::function<void()> onClick);
+    void insertWidget(int index, QString routeKey, SegmentedToggleToolItem *widget, std::function<void()> onClick);
+    void removeWidget(QString routeKey);
+    void clear();
+    SegmentedToggleToolItem *currentItem();
     SegmentedToggleToolItem *_createItem(QVariant *icon);
+    void setCurrentItem(QString routeKey);
+    void setItemFontSize(int size);
+    SegmentedToggleToolItem *widget(QString routeKey);
+    void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+
+
+    QMap<QString, SegmentedToggleToolItem*> *items;
+
+public slots:
+    void _onItemClicked();
 };
