@@ -6,13 +6,13 @@ TitleBarButton::TitleBarButton(QWidget *parent) : QAbstractButton(parent)
     setFixedSize(46, 32);
     this->_state = TitleBarButtonState::NORMAL;
 
-    this->_normalColor = new QColor(0, 0, 0);
-    this->_hoverColor = new QColor(0, 0, 0);
-    this->_pressedClor = new QColor(0, 0, 0);
+    this->_normalColor = QColor(0, 0, 0);
+    this->_hoverColor = QColor(0, 0, 0);
+    this->_pressedClor = QColor(0, 0, 0);
 
-    this->_normalBgColor = new QColor(0, 0, 0, 0);
-    this->_hoverBgColor = new QColor(0, 0, 0, 26);
-    this->_PressedBgColor = new QColor(0, 0, 0, 51);
+    this->_normalBgColor = QColor(0, 0, 0, 0);
+    this->_hoverBgColor = QColor(0, 0, 0, 26);
+    this->_PressedBgColor = QColor(0, 0, 0, 51);
 }
 
 void TitleBarButton::setState(TitleBarButtonState state)
@@ -26,36 +26,70 @@ bool TitleBarButton::isPressed()
     return this->_state == TitleBarButtonState::PRESSED;
 }
 
-QColor *TitleBarButton::getNormalColor()
+QColor TitleBarButton::getNormalColor()
 {
     return this->_normalColor;
 }
 
-void TitleBarButton::setHoverColor(QColor *color)
+
+QColor TitleBarButton::getHoverColor()
+{
+    return this->_hoverBgColor;
+}
+
+QColor TitleBarButton::getPressedColor()
+{
+    return this->_pressedClor;
+}
+
+QColor TitleBarButton::getNormalBackgroundColor()
+{
+    return this->_normalBgColor;
+}
+
+QColor TitleBarButton::getHoverBackgroundColor()
+{
+    return this->_hoverBgColor;
+}
+
+QColor TitleBarButton::getPressedBackgroundColor()
+{
+    return this->_PressedBgColor;
+}
+
+
+void TitleBarButton::setNormalColor(QColor color)
+{
+    this->_normalColor = color;
+    this->update();
+}
+
+
+void TitleBarButton::setHoverColor(QColor color)
 {
     this->_hoverColor = color;
     this->update();
 }
 
-void TitleBarButton::setPressedColor(QColor *color)
+void TitleBarButton::setPressedColor(QColor color)
 {
     this->_pressedClor = color;
     this->update();
 }
 
-void TitleBarButton::setNormalBackgroundColor(QColor *color)
+void TitleBarButton::setNormalBackgroundColor(QColor color)
 {
     this->_normalBgColor = color;
     this->update();
 }
 
-void TitleBarButton::setHoverBackgroundColor(QColor *color)
+void TitleBarButton::setHoverBackgroundColor(QColor color)
 {
     this->_hoverBgColor = color;
     this->update();
 }
 
-void TitleBarButton::setPressedBackgroundColor(QColor *color)
+void TitleBarButton::setPressedBackgroundColor(QColor color)
 {
     this->_PressedBgColor = color;
     this->update();
@@ -83,14 +117,14 @@ void TitleBarButton::mousePressEvent(QMouseEvent *event)
     QAbstractButton::mousePressEvent(event);
 }
 
-std::tuple<QColor*, QColor*> TitleBarButton::_getColors()
+std::tuple<QColor, QColor> TitleBarButton::_getColors()
 {
     if(this->_state == TitleBarButtonState::NORMAL){
-        return std::tuple<QColor *, QColor *>(this->_normalColor, this->_normalBgColor);
+        return std::tuple<QColor, QColor>(this->_normalColor, this->_normalBgColor);
     }else if(this->_state == TitleBarButtonState::HOVER){
-        return std::tuple<QColor *, QColor *>(this->_hoverColor, this->_hoverBgColor);
+        return std::tuple<QColor, QColor>(this->_hoverColor, this->_hoverBgColor);
     }
-    return std::tuple<QColor *, QColor *>(this->_pressedClor, this->_PressedBgColor);
+    return std::tuple<QColor, QColor>(this->_pressedClor, this->_PressedBgColor);
 }
 
 
@@ -112,15 +146,15 @@ void SvgTitleBarButton::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    std::tuple<QColor *, QColor *> c = this->_getColors();
-    QColor *color = std::get<0>(c);
-    QColor *bgColor = std::get<1>(c);
+    std::tuple<QColor, QColor> c = this->_getColors();
+    QColor color = std::get<0>(c);
+    QColor bgColor = std::get<1>(c);
 
-    painter.setBrush(*bgColor);
+    painter.setBrush(bgColor);
     painter.setPen(Qt::NoPen);
     painter.drawRect(this->rect());
 
-    QString color_name = color->name();
+    QString color_name = color.name();
     QDomNodeList pathNodes = this->_svgDom->elementsByTagName("path");
     int indexes = pathNodes.length();
     for(int i = 0; i < indexes; i++){
@@ -136,16 +170,16 @@ void SvgTitleBarButton::paintEvent(QPaintEvent *e)
 void MinimizeButton::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    std::tuple<QColor *, QColor *> c = this->_getColors();
-    QColor *color = std::get<0>(c);
-    QColor *bgColor = std::get<1>(c);
+    std::tuple<QColor, QColor> c = this->_getColors();
+    QColor color = std::get<0>(c);
+    QColor bgColor = std::get<1>(c);
 
-    painter.setBrush(*bgColor);
+    painter.setBrush(bgColor);
     painter.setPen(Qt::NoPen);
     painter.drawRect(this->rect());
 
     painter.setBrush(Qt::NoBrush);
-    QPen *pen = new QPen(*color, 1);
+    QPen *pen = new QPen(color, 1);
     pen->setCosmetic(true);
     painter.setPen(*pen);
     painter.drawLine(18, 16, 28, 16);
@@ -169,16 +203,16 @@ void MaximizeButton::setMaxState(bool isMax)
 void MaximizeButton::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    std::tuple<QColor *, QColor *> c = this->_getColors();
-    QColor *color = std::get<0>(c);
-    QColor *bgColor = std::get<1>(c);
+    std::tuple<QColor, QColor> c = this->_getColors();
+    QColor color = std::get<0>(c);
+    QColor bgColor = std::get<1>(c);
 
-    painter.setBrush(*bgColor);
+    painter.setBrush(bgColor);
     painter.setPen(Qt::NoPen);
     painter.drawRect(this->rect());
 
     painter.setBrush(Qt::NoBrush);
-    QPen *pen = new QPen(*color, 1);
+    QPen *pen = new QPen(color, 1);
     pen->setCosmetic(true);
     painter.setPen(*pen);
 
@@ -202,8 +236,8 @@ void MaximizeButton::paintEvent(QPaintEvent *e)
 
 CloseButton::CloseButton(QWidget *parent) : SvgTitleBarButton("qfluentwidgets/images/close.svg", parent)
 {
-    setHoverColor(new QColor(Qt::white));
-    setPressedColor(new QColor(Qt::white));
-    setHoverBackgroundColor(new QColor(232, 17, 35));
-    setPressedBackgroundColor(new QColor(241, 112, 122));
+    setHoverColor(QColor(Qt::white));
+    setPressedColor(QColor(Qt::white));
+    setHoverBackgroundColor(QColor(232, 17, 35));
+    setPressedBackgroundColor(QColor(241, 112, 122));
 }

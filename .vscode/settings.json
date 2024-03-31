@@ -157,6 +157,7 @@
         "qdir": "cpp",
         "quuid": "cpp",
         "qdesktopwidget": "cpp",
-        "qstackedwidget": "cpp"
+        "qstackedwidget": "cpp",
+        "*.moc": "cpp"
     }
 }

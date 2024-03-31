@@ -42,7 +42,6 @@ NavigationBarPushButton::NavigationBarPushButton(QVariant *icon, QString text, b
 {
     this->iconAni = new IconSlideAnimation(this);
     this->_selectedIcon = selectedIcon;
-    this->_selectedIcon = selectedIcon;
     this->_isSelectedTextVisible = true;
 
     this->setFixedSize(64, 58);
@@ -124,7 +123,7 @@ void NavigationBarPushButton::paintEvent(QPaintEvent *event)
     if(selectedIcon->canConvert<FluentIcon>() && this->isSelected){
         std::map<QString, QString> attributes;
         attributes[QString("fill")] = ThemeColor().themeColor()->name();
-        selectedIcon->value<FluentIcon>().render(&painter, rect, Theme::AUTO, 0, nullptr);
+        selectedIcon->value<FluentIcon>().render(&painter, rect, Theme::AUTO, 0, &attributes);
     }else if(this->isSelected){
         MIcon().drawIcon(selectedIcon, &painter, rect, nullptr, QIcon::State::Off);
     }else{
@@ -284,6 +283,9 @@ void NavigationBar::_insertWidgetToLayout(int index, NavigationWidget *widget, N
     }else if(position == NavigationItemPosition::SCROLL){
         widget->setParent(this->scrollWidget);
         this->scrollLayout->insertWidget(index, widget, 0, Qt::AlignTop | Qt::AlignHCenter);
+    }else{
+        widget->setParent(this);
+        this->bottomLayout->insertWidget(index, widget, 0, Qt::AlignBottom | Qt::AlignHCenter);
     }
 
     widget->show();

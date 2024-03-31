@@ -1,7 +1,7 @@
 #include "qframe_less_window.h"
 
 
-WindowsFramelessWindow::WindowsFramelessWindow(QWidget *parent) 
+WindowsFramelessWindow::WindowsFramelessWindow(QWidget *parent) : QWidget(parent)
 {
     this->windowEffect = new WindowsWindowEffect(this);
     this->titleBar = new TitleBar(this);

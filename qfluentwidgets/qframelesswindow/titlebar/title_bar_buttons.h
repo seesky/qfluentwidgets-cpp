@@ -22,34 +22,40 @@ enum class TitleBarButtonState{
 
 class TitleBarButton : public QAbstractButton{
     Q_OBJECT
+    Q_PROPERTY(QColor normalColor READ getNormalColor WRITE setNormalColor)
+    Q_PROPERTY(QColor hoverColor READ getHoverColor WRITE setHoverColor)
+    Q_PROPERTY(QColor pressedColor READ getPressedColor WRITE setPressedColor)
+    Q_PROPERTY(QColor normalBackgroundColor READ getNormalBackgroundColor WRITE setNormalBackgroundColor)
+    Q_PROPERTY(QColor hoverBackgroundColor READ getHoverBackgroundColor WRITE setHoverBackgroundColor)
+    Q_PROPERTY(QColor pressedBackgroundColor READ getPressedBackgroundColor WRITE setPressedBackgroundColor)
 public:
     TitleBarButton(QWidget *parent);
     void setState(TitleBarButtonState state);
     bool isPressed();
-    QColor *getNormalColor();
-    QColor *getHoverColor();
-    QColor *getPressedColor();
-    QColor *getNormalBackgroundColor();
-    QColor *getHoverBackgroundColor();
-    QColor *getPressedBackgroundColor();
-    void setNormalColor(QColor *color);
-    void setHoverColor(QColor *color);
-    void setPressedColor(QColor *color);
-    void setNormalBackgroundColor(QColor *color);
-    void setHoverBackgroundColor(QColor *color);
-    void setPressedBackgroundColor(QColor *color);
+    QColor getNormalColor();
+    QColor getHoverColor();
+    QColor getPressedColor();
+    QColor getNormalBackgroundColor();
+    QColor getHoverBackgroundColor();
+    QColor getPressedBackgroundColor();
+    void setNormalColor(QColor color);
+    void setHoverColor(QColor color);
+    void setPressedColor(QColor color);
+    void setNormalBackgroundColor(QColor color);
+    void setHoverBackgroundColor(QColor color);
+    void setPressedBackgroundColor(QColor color);
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
-    std::tuple<QColor*, QColor*> _getColors();
+    std::tuple<QColor, QColor> _getColors();
 
     TitleBarButtonState _state;
-    QColor *_normalColor;
-    QColor *_hoverColor;
-    QColor *_pressedClor;
-    QColor *_normalBgColor;
-    QColor *_hoverBgColor;
-    QColor *_PressedBgColor; 
+    QColor _normalColor;
+    QColor _hoverColor;
+    QColor _pressedClor;
+    QColor _normalBgColor;
+    QColor _hoverBgColor;
+    QColor _PressedBgColor; 
 private:
 };
 
