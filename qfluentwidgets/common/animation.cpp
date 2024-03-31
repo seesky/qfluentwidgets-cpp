@@ -336,13 +336,13 @@ FluentAnimationProperObject* FluentAnimationProperObject::create(QString propert
 {
 
     if(propertyType == QString("POSITION")){
-        return new AngleObject(parent);
-    }else if(propertyType == QString("SCALE")){
-        return new OpacityObject(parent);
-    }else if(propertyType == QString("ANGLE")){
         return new PositionObject(parent);
-    }else if(propertyType == QString("OPACITY")){
+    }else if(propertyType == QString("SCALE")){
         return new ScaleObject(parent);
+    }else if(propertyType == QString("ANGLE")){
+        return new AngleObject(parent);
+    }else if(propertyType == QString("OPACITY")){
+        return new OpacityObject(parent);
     }else{
         return nullptr;
     }
@@ -528,27 +528,27 @@ FluentAnimation *FluentAnimation::create(FluentAnimationType aniType, QString pr
 
     switch (aniType)
     {
-    case FluentAnimationType::FADE_IN_OUT:
-        ani = new FadeInOutAnimation(parent);
-        break;
-    case FluentAnimationType::FAST_DISMISS:
-        ani = new FastDismissAnimation(parent);
-        break;
-    case FluentAnimationType::FAST_INVOKE:
-        ani = new FastInvokeAnimation(parent);
-        break;
-    case FluentAnimationType::POINT_TO_POINT:
-        ani = new PointToPointAnimation(parent);
-        break;
-    case FluentAnimationType::SOFT_DISMISS:
-        ani = new SoftDismissAnimation(parent);
-        break;
-    case FluentAnimationType::STRONG_INVOKE:
-        ani = new StrongInvokeAnimation(parent);
-        break;
-    default:
-        ani = nullptr;
-        break;
+        case FluentAnimationType::FADE_IN_OUT:
+            ani = new FadeInOutAnimation(parent);
+            break;
+        case FluentAnimationType::FAST_DISMISS:
+            ani = new FastDismissAnimation(parent);
+            break;
+        case FluentAnimationType::FAST_INVOKE:
+            ani = new FastInvokeAnimation(parent);
+            break;
+        case FluentAnimationType::POINT_TO_POINT:
+            ani = new PointToPointAnimation(parent);
+            break;
+        case FluentAnimationType::SOFT_DISMISS:
+            ani = new SoftDismissAnimation(parent);
+            break;
+        case FluentAnimationType::STRONG_INVOKE:
+            ani = new StrongInvokeAnimation(parent);
+            break;
+        default:
+            ani = nullptr;
+            break;
     }
 
     if(ani != nullptr){

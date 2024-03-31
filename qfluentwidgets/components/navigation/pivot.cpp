@@ -134,7 +134,7 @@ void Pivot::setCurrentItem(QString routeKey)
     }
 
     this->_currentRouteKey = routeKey;
-    this->slideAni->startAnimation(new QVariant(QVariant::fromValue<int>(this->widget(routeKey)->x())), nullptr);
+    this->slideAni->startAnimation(new QVariant(QVariant::fromValue<int>(this->widget(routeKey)->x())), new QVariant());
 
     QMap<QString, PivotItem*>::iterator i;
     for (i = this->items->begin(); i != this->items->end(); ++i) {

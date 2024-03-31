@@ -2,6 +2,7 @@
 
 #include <QtCore/QEasingCurve>
 #include <QtCore/QEvent>
+#include <QtCore/QDebug>
 #include <QtCore/QObject>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QPoint>
