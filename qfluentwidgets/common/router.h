@@ -4,6 +4,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QVariant>
 #include <QtCore/QObject>
+#include <QtCore/QDebug>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QStackedWidget>
 
@@ -37,18 +38,26 @@ public:
 class Router : public QObject{
     Q_OBJECT
 public:
-    Router(QWidget *parent);
+    static Router* getInstance();
     void setDefaultRouteKey(QStackedWidget *stacked, QString routeKey);
     void push(QStackedWidget *stacked, QString routeKey);
     void pop();
     bool remove(QString routeKey);
 
+    
     QList<RouteItem*> history;
     QMap<QStackedWidget*, StackedHistory*> *stackHistories; 
+
+
+private:
+    Router(QWidget *parent);
+    Router(const Router&) = delete;
+    Router& operator=(const Router&) = delete;
+    static Router* instance;
 
 signals:
     void emptyChanged(bool);
 };
 
 
-static Router *qrouter = new Router(nullptr);
+static Router *qrouter = Router::getInstance();

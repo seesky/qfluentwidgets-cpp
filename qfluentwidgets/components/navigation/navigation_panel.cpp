@@ -39,7 +39,7 @@ NavigationPanel::NavigationPanel(QWidget *parent, bool isMinimalEnabled = false)
     this->menuButton = new NavigationToolButton(new QVariant(QVariant::fromValue<FluentIcon>(*menuButtonIcon)), this);
 
     FluentIcon *returnButtonIcon = new FluentIcon();
-    returnButtonIcon->setIconName(QString("MENU"));
+    returnButtonIcon->setIconName(QString("RETURN"));
     this->returnButton = new NavigationToolButton(new QVariant(QVariant::fromValue<FluentIcon>(*returnButtonIcon)), this);
 
     this->vBoxLayout = new NavigationItemLayout(this);
@@ -84,7 +84,10 @@ void NavigationPanel::__initWidget()
 
     connect(this->menuButton, &NavigationToolButton::clicked, this, &NavigationPanel::toggle);
     connect(this->expandAni, &QPropertyAnimation::finished, this, &NavigationPanel::_onExpandAniFinished);
-    connect(this->history, &Router::emptyChanged, this->returnButton, &NavigationToolButton::setDisabled);
+    //connect(this->history, &Router::emptyChanged, this->returnButton, &NavigationToolButton::setDisabled);
+    connect(this->history, &Router::emptyChanged, this->returnButton, [this](bool a){
+        this->returnButton->setDisabled(a);
+    });
     connect(this->returnButton, &NavigationToolButton::clicked, this->history, &Router::pop);
 
     this->returnButton->installEventFilter(new ToolTipFilter(this->returnButton, 1000, ToolTipPosition::TOP));

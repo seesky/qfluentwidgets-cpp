@@ -1,5 +1,6 @@
 #include "router.h"
 
+Router* Router::instance = nullptr;
 
 RouteItem::RouteItem(QStackedWidget *stacked, QString routeKey)
 {
@@ -37,9 +38,12 @@ bool StackedHistory::isEmpty()
 
 bool StackedHistory::push(QString routeKey)
 {
-    if(this->history.takeLast() == routeKey){
+    qDebug() << this->history.last();
+    qDebug() << this->history.length();
+    if(this->history.last() == routeKey){
         return false;
     }
+    qDebug() << this->history.length();
 
     this->history.append(routeKey);
     return true;
@@ -80,7 +84,7 @@ void StackedHistory::remove(QString routeKey)
 
 QString StackedHistory::top()
 {
-    return this->history.takeLast();
+    return this->history.last();
 }
 
 void StackedHistory::setDefaultRouteKey(QString routeKey)
@@ -99,10 +103,19 @@ void StackedHistory::goToTop()
 
 Router::Router(QWidget *parent) : QObject(parent)
 {
+    instance = nullptr;
     this->history = QList<RouteItem*>();
     this->stackHistories = new QMap<QStackedWidget*, StackedHistory*>();
 }
 
+
+Router* Router::getInstance()
+{
+    if(instance == nullptr){
+        instance = new Router(nullptr);
+    }
+    return instance;
+}
 
 void Router::setDefaultRouteKey(QStackedWidget *stacked, QString routeKey)
 {
@@ -127,6 +140,7 @@ void Router::push(QStackedWidget *stacked, QString routeKey)
         this->history.append(item);
     }
 
+    qDebug() << this->history.length();
     emit(this->emptyChanged(this->history.isEmpty()));
 }
 
@@ -136,9 +150,9 @@ void Router::pop()
     if(this->history.isEmpty()){
         return;
     }
-
+    
     RouteItem *item = this->history.takeLast();
-    this->history.pop_back();
+    //this->history.pop_back();
     emit(this->emptyChanged(this->history.isEmpty()));
     this->stackHistories->value(item->stacked)->pop();
 }
