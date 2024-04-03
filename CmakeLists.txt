@@ -25,6 +25,7 @@ INCLUDE_DIRECTORIES(C://msys64//mingw64//include//opencv4//opencv2)
 FIND_LIBRARY(COMM_LIB comm C://msys64//mingw64//lib NO_DEFAULT_PATH)
 
 file(GLOB HEADER_FILES
+    "qfluentwidgets/window/*.h"
     "qfluentwidgets/common/*.h"
     "qfluentwidgets/multimedia/*.h"
     "qfluentwidgets/components/navigation/*.h"
@@ -40,6 +41,7 @@ file(GLOB HEADER_FILES
 )
 
 file(GLOB SOURCE_FILES
+    "qfluentwidgets/window/*.cpp"
     "qfluentwidgets/common/*.cpp"
     "qfluentwidgets/multimedia/*.cpp"
     "qfluentwidgets/components/navigation/*.cpp"
@@ -1111,6 +1113,32 @@ target_link_options(segmented_widget_test PRIVATE "-Wl,--whole-archive")
 
 target_link_libraries(
   segmented_widget_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
+
+
+
+add_executable(
+  tab_view_test
+  qfluentwidgets/test/tab_view_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(tab_view_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  tab_view_test
   Qt5::Widgets
   Qt5::Core
   Qt5::Gui

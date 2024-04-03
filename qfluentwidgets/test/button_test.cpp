@@ -17,10 +17,10 @@ public:
 class CustomTitleBar : public StandardTitleBar{
 public:
     CustomTitleBar(QWidget *parent) : StandardTitleBar(parent){
-        this->minBtn->setHoverColor(new QColor(Qt::white));
-        this->minBtn->setHoverBackgroundColor(new QColor(0, 100, 182));
-        this->minBtn->setPressedColor(new QColor(Qt::white));
-        this->minBtn->setPressedBackgroundColor(new QColor(54, 57, 65));
+        this->minBtn->setHoverColor(QColor(Qt::white));
+        this->minBtn->setHoverBackgroundColor(QColor(0, 100, 182));
+        this->minBtn->setPressedColor(QColor(Qt::white));
+        this->minBtn->setPressedBackgroundColor(QColor(54, 57, 65));
 
         this->maxBtn->setStyleSheet(QString("TitleBarButton {qproperty-hoverColor: white;qproperty-hoverBackgroundColor: rgb(0, 100, 182);qproperty-pressedColor: white;qproperty-pressedBackgroundColor: rgb(54, 57, 65);}"));
     };

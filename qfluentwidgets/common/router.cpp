@@ -38,12 +38,9 @@ bool StackedHistory::isEmpty()
 
 bool StackedHistory::push(QString routeKey)
 {
-    qDebug() << this->history.last();
-    qDebug() << this->history.length();
     if(this->history.last() == routeKey){
         return false;
     }
-    qDebug() << this->history.length();
 
     this->history.append(routeKey);
     return true;
@@ -140,7 +137,6 @@ void Router::push(QStackedWidget *stacked, QString routeKey)
         this->history.append(item);
     }
 
-    qDebug() << this->history.length();
     emit(this->emptyChanged(this->history.isEmpty()));
 }
 

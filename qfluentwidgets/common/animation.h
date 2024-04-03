@@ -70,10 +70,9 @@ public:
     QColor *_disabledBackgroundColor();
     void _updateBackgroundColor();
     QColor *getBackgroundColor();
-    void setBackgroundColor(QColor *color);
+    void setBackgroundColor(QColor color);
     QColor *backgroundColor();
 
-private:
     bool isHover;
     bool isPressed;
     BackgroundColorObject *bgColorObject;
@@ -83,13 +82,12 @@ private:
 class BackgroundColorObject : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor)
 public:
-    BackgroundColorObject();
     BackgroundColorObject(BackgroundAnimationWidget *parent);
-    QColor *backgroundColor();
-    void backgroundColor(QColor *color);
-private:
-    QColor *_backgroundColor;
+    QColor getBackgroundColor();
+    void setBackgroundColor(QColor color);
+    QColor _backgroundColor;
 };
 
 class DropShadowAnimation : public QPropertyAnimation

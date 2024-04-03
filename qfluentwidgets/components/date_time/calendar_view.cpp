@@ -827,7 +827,6 @@ void CalendarView::setShadowEffect(int blurRadius = 30, std::tuple<int, int> off
 void CalendarView::_onDayViewTitleClicked()
 {
     this->stackedWidget->setCurrentWidget(this->monthView);
-    qDebug() << this->dayView->currentPageDate();
     this->monthView->setDate(this->dayView->currentPageDate());
 }
 

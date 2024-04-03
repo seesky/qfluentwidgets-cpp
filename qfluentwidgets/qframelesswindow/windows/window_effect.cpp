@@ -35,7 +35,7 @@ void WindowsWindowEffect::setAcrylicEffect(HWND hWnd, QString gradientColor = QS
     HRESULT hr = DwmSetWindowAttribute(hWnd, this->winCompAttrData.Attrib, this->winCompAttrData.pvData, this->winCompAttrData.cbData);
 }
 
-void WindowsWindowEffect::setMicaEffect(HWND hWnd, bool isDarkMode, bool isAlt)
+void WindowsWindowEffect::setMicaEffect(HWND hWnd, bool isDarkMode = false, bool isAlt = false)
 {
     if(!isGreaterEqualWin11()){
         return;

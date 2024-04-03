@@ -20,7 +20,7 @@ public:
     void mousePressEvent(QMouseEvent *event);
     bool _isDragRegion(QPoint *pos);
     bool _hasButtonPressed();
-    bool canDrag(QPoint *pos);
+    virtual bool canDrag(QPoint *pos);
     void setDoubleClickEnabled(bool isEnabled);
 
     MinimizeButton *minBtn;

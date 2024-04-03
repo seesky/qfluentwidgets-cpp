@@ -75,6 +75,17 @@ void TranslateYAnimation::_onRelease(QMouseEvent *e)
     ani->start();
 }
 
+BackgroundAnimationWidget::BackgroundAnimationWidget()
+{
+    this->isHover = false;
+    this->isPressed = false;
+    this->bgColorObject = new BackgroundColorObject(this);
+    this->backgroundColorAni = new QPropertyAnimation(this->bgColorObject, "backgroundColor", this);
+    this->backgroundColorAni->setDuration(120);
+    this->installEventFilter(this);
+    //TOOD: qconfig.themeChanged.connect(self._updateBackgroundColor)
+}
+
 BackgroundAnimationWidget::BackgroundAnimationWidget(int *args, char **kwargs)
 {
     this->isHover = false;
@@ -94,9 +105,9 @@ bool BackgroundAnimationWidget::eventFilter(QObject *obj, QEvent *e)
         {
             if(this->isEnabled())
             {
-                this->setBackgroundColor(this->_normalBackgroundColor());
+                this->setBackgroundColor(QColor(*(this->_normalBackgroundColor())));
             }else{
-                this->setBackgroundColor(this->_disabledBackgroundColor());
+                this->setBackgroundColor(QColor(*(this->_disabledBackgroundColor())));
             }
         }
     }
@@ -185,12 +196,12 @@ void BackgroundAnimationWidget::_updateBackgroundColor()
 
 QColor *BackgroundAnimationWidget::getBackgroundColor()
 {
-    return this->bgColorObject->backgroundColor();
+    return new QColor(this->bgColorObject->getBackgroundColor());
 }
 
-void  BackgroundAnimationWidget::setBackgroundColor(QColor *color)
+void  BackgroundAnimationWidget::setBackgroundColor(QColor color)
 {
-    this->bgColorObject->backgroundColor(color);
+    this->bgColorObject->setBackgroundColor(color);
 }
 
 
@@ -199,20 +210,20 @@ QColor *BackgroundAnimationWidget::backgroundColor()
     return this->getBackgroundColor();
 }
 
-BackgroundColorObject::BackgroundColorObject(BackgroundAnimationWidget *parent)
+BackgroundColorObject::BackgroundColorObject(BackgroundAnimationWidget *parent) : QWidget(parent)
 {
-    this->_backgroundColor = parent->_normalBackgroundColor();
+    this->_backgroundColor = QColor(*(parent->_normalBackgroundColor()));
 }
 
 
 
 
-QColor *BackgroundColorObject::backgroundColor()
+QColor BackgroundColorObject::getBackgroundColor()
 {
     return this->_backgroundColor;
 }
 
-void BackgroundColorObject::backgroundColor(QColor *color)
+void BackgroundColorObject::setBackgroundColor(QColor color)
 {
     this->_backgroundColor = color;
     QWidget::update();

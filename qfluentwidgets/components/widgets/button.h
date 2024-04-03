@@ -238,6 +238,10 @@ public:
         this->_menu = nullptr;
         this->arrowAni = new TranslateYAnimation(this, 2);
     };
+    DropDownToolButton(QString icon, QWidget *parent) : ToolButton(icon, parent){
+        this->_menu = nullptr;
+        this->arrowAni = new TranslateYAnimation(this, 2);
+    };
     void mouseReleaseEvent(QMouseEvent *e) override;
     void _drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state) override;
     void paintEvent(QPaintEvent *event) override;
@@ -260,6 +264,7 @@ class TransparentDropDownToolButton : public DropDownToolButton{
     Q_OBJECT
 public:
     TransparentDropDownToolButton(FluentIcon *icon, QWidget *parent): DropDownToolButton(icon, parent){};
+    TransparentDropDownToolButton(QString icon, QWidget *parent) : DropDownToolButton(icon, parent){};
 };
 
 
