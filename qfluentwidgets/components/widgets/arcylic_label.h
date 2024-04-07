@@ -18,7 +18,7 @@
 #include <QtGui/QScreen>
 #include "../../common/image_utils.h"
 
-static bool isAcrylicAvailable = true;
+static bool isAcrylicAvailable = false;  //TODO:需要动态判断是否支持
 
 bool checkAcrylicAvailability();
 
@@ -76,7 +76,7 @@ public:
     void setBlurRadius(int radius);
     void setTintColor(QColor color);
     void setLuminosityColor(QColor color);
-    bool isAvailabel();
+    bool isAvailable();
     void grabImage(QRect rect);
     void setImage(QVariant image);
     void setClipPath(QPainterPath path);

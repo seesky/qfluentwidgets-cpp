@@ -370,7 +370,7 @@ void ImageLabel::scaledToHeight(int height)
         return;
     }
 
-    int w = int(height / this->image.height() * this->image.width());
+    int w = int(float(height) / this->image.height() * this->image.width());
     this->setFixedSize(w, height);
 
     if(this->movie()){

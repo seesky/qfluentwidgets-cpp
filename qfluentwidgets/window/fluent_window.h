@@ -151,8 +151,8 @@ class MSBackgroundColorObject : public BackgroundColorObject{
     Q_OBJECT
 public:
     MSBackgroundColorObject(MSFluentWindow *parent);
-    QColor *backgroundColor();
-    void backgroundColor(QColor *color);
+    QColor getBackgroundColor() override;
+    void setBackgroundColor(QColor color);
 };
 
 

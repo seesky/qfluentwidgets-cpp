@@ -12,6 +12,7 @@ public:
     IconWidget(QWidget *parent);
     IconWidget(QVariant *icon, QWidget *parent);
     IconWidget(FluentIcon icon, QWidget *parent);
+    IconWidget(InfoBarIcon *icon, QWidget *parent);
     IconWidget(QIcon icon, QWidget *parent);
     IconWidget(QString icon, QWidget *parent);
     QIcon getIcon();

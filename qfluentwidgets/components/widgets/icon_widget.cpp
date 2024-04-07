@@ -20,6 +20,13 @@ IconWidget::IconWidget(FluentIcon icon, QWidget *parent) : QWidget(parent)
     this->setIcon(__icon);
 }
 
+IconWidget::IconWidget(InfoBarIcon *icon, QWidget *parent)
+{
+    QVariant *__icon = new QVariant();
+    __icon->setValue<InfoBarIcon*>(icon);
+    this->setIcon(__icon);
+}
+
 IconWidget::IconWidget(QIcon icon, QWidget *parent) : QWidget(parent)
 {
     QVariant *__icon = new QVariant();

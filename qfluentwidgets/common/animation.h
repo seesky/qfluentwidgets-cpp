@@ -85,8 +85,8 @@ class BackgroundColorObject : public QWidget
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor)
 public:
     BackgroundColorObject(BackgroundAnimationWidget *parent);
-    QColor getBackgroundColor();
-    void setBackgroundColor(QColor color);
+    virtual QColor getBackgroundColor();
+    virtual void setBackgroundColor(QColor color);
     QColor _backgroundColor;
 };
 

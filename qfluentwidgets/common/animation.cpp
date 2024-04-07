@@ -309,12 +309,14 @@ bool DropShadowAnimation::eventFilter(QObject *obj, QEvent *e)
             }
         }
     }
+
+    return QPropertyAnimation::eventFilter(obj, e);
 }
 
 
 void DropShadowAnimation::_onAniFinished()
 {
-    this->finished();
+    disconnect(this, &QPropertyAnimation::finished, this, &DropShadowAnimation::_onAniFinished);
     this->shadowEffect = nullptr;
     this->parent->setGraphicsEffect(nullptr);
 }

@@ -226,7 +226,7 @@ NavigationWidget *NavigationBar::widget(QString routeKey)
 }
 
 
-NavigationBarPushButton *NavigationBar::addItem(QString routeKey, QVariant *icon, QString text, std::function<void()> onClick, bool selectable, QVariant *selectedIcon, NavigationItemPosition position)
+NavigationBarPushButton *NavigationBar::addItem(QString routeKey, QVariant *icon, QString text, std::function<void()> onClick, bool selectable, QVariant *selectedIcon = new QVariant(), NavigationItemPosition position = NavigationItemPosition::TOP)
 {
     return this->insertItem(-1, routeKey, icon, text, onClick, selectable, selectedIcon, position);
 }

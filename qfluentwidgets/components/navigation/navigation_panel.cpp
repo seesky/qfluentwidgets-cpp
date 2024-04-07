@@ -605,7 +605,7 @@ int NavigationPanel::layoutMinHeight()
 
 bool NavigationPanel::_canDrawAcrylic()
 {
-    return this->acrylicBrush->isAvailabel() && this->isAcrylicEnabled();
+    return this->acrylicBrush->isAvailable() && this->isAcrylicEnabled();
 }
 
 

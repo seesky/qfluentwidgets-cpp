@@ -363,7 +363,7 @@ MSFluentWindow::MSFluentWindow(QWidget *parent) : WindowsFramelessWindow(parent)
     this->titleBar->setAttribute(Qt::WA_StyledBackground);
 }
 
-NavigationBarPushButton *MSFluentWindow::addSubInterface(QWidget *_interface, QVariant *icon, QString text, QVariant *selectedIcon, NavigationItemPosition position, bool isTransparent)
+NavigationBarPushButton *MSFluentWindow::addSubInterface(QWidget *_interface, QVariant *icon, QString text, QVariant *selectedIcon, NavigationItemPosition position = NavigationItemPosition::TOP, bool isTransparent = true)
 {
     if(_interface->objectName().isNull())
     {
@@ -580,14 +580,14 @@ MSBackgroundColorObject::MSBackgroundColorObject(MSFluentWindow *parent) : Backg
     this->_backgroundColor = parent->_normalBackgroundColor();
 }
 
-QColor *MSBackgroundColorObject::backgroundColor()
+QColor MSBackgroundColorObject::getBackgroundColor()
 {
-    return new QColor(this->_backgroundColor);
+    return this->_backgroundColor;
 }
 
-void MSBackgroundColorObject::backgroundColor(QColor *color)
+void MSBackgroundColorObject::setBackgroundColor(QColor color)
 {
-    this->_backgroundColor = *color;
+    this->_backgroundColor = QColor(color);
     BackgroundColorObject::update();
 }
 

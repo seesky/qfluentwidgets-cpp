@@ -147,7 +147,7 @@ void AcrylicBrush::setLuminosityColor(QColor color)
     this->device->update();
 }
 
-bool AcrylicBrush::isAvailabel()
+bool AcrylicBrush::isAvailable()
 {
     return isAcrylicAvailable;
 }

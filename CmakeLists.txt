@@ -1149,3 +1149,54 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+add_executable(
+  card_widget_test
+  qfluentwidgets/test/card_widget_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(card_widget_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  card_widget_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
+
+
+
+add_executable(
+  flip_view_test
+  qfluentwidgets/test/flip_view_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(flip_view_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  flip_view_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
