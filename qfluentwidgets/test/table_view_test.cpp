@@ -20,7 +20,7 @@ public:
         this->tableView = new TableWidget(this);
 
         this->tableView->setBorderVisible(true);
-        this->tableView->setBorderRadius(8);
+        //this->tableView->setBorderRadius(8); //TODO:这个地方由于style_sheet的bug造成无法正确的设置，需要对style_sheet进行重写
 
         this->tableView->setWordWrap(false);
         this->tableView->setRowCount(60);
