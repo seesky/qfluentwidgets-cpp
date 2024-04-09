@@ -173,10 +173,10 @@ void PipsPager::_postInit()
     }else{
         this->setViewportMargins(0, 15, 0, 15);
         FluentIcon *preButtonIcon = new FluentIcon();
-        preButtonIcon->setIconName("CARE_LEFT_SOLID");
+        preButtonIcon->setIconName("CARE_UP_SOLID");
         this->preButton = new PipPagerScrollButton(preButtonIcon, this);
         FluentIcon *nextButtonIcon = new FluentIcon();
-        nextButtonIcon->setIconName("CARE_RIGHT_SOLID");
+        nextButtonIcon->setIconName("CARE_DOWN_SOLID");
         this->nextButton = new PipPagerScrollButton(nextButtonIcon, this);
         this->setFixedWidth(12);
 

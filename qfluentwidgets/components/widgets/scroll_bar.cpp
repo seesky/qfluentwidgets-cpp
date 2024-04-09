@@ -215,7 +215,7 @@ void ScrollBar::_onPageDown()
 
 void ScrollBar::_onValueChanged(int value)
 {
-    this->val = value;
+    this->setVal(value);
 }
 
 int ScrollBar::value()
@@ -273,7 +273,7 @@ bool ScrollBar::isSliderDown()
 
 void ScrollBar::setValue(int value)
 {
-    this->val = value;
+    this->setVal(value);
 }
 
 void ScrollBar::setMinimum(int min)
@@ -443,9 +443,9 @@ void ScrollBar::mouseMoveEvent(QMouseEvent *event)
         dv = event->pos().x() - this->_pressedPos.x();
     }
 
-    dv = int(dv / qMax(this->_slideLength(), 1) * (this->maximum() - this->minimum()));
-    //ScrollBar::setValue(this->value() + dv);
-    this->setValue(this->value() + dv);
+    dv = float(dv) / qMax(this->_slideLength(), 1) * (this->maximum() - this->minimum());
+    ScrollBar::setValue(this->value() + dv);
+    this->_pressedPos = event->pos();
     emit(this->sliderMoved());
 }
 
@@ -479,7 +479,7 @@ void ScrollBar::_adjustHandleSize()
 void ScrollBar::_adjustHandlePos()
 {
     int total = qMax(this->maximum() - this->minimum(), 1);
-    int delta = int(this->value() / total * this->_slideLength());
+    int delta = float(this->value()) / total * this->_slideLength();
 
     if(this->orientation() == Qt::Vertical)
     {
@@ -496,7 +496,7 @@ int ScrollBar::_grooveLength()
 {
     if(this->orientation() == Qt::Vertical)
     {
-        return this->height() -2 * this->_padding;
+        return this->height() - 2 * this->_padding;
     }
     return this->width() - 2 * this->_padding;
 }
@@ -575,7 +575,7 @@ void SmoothScrollBar::setValue(int value, bool useAni)
 
     if(!useAni)
     {
-        this->val = value;
+        this->setVal(value);
         return;
     }
 
@@ -646,21 +646,17 @@ SmoothScrollDelegate::SmoothScrollDelegate(QAbstractScrollArea *parent, bool use
     if(itemView){
         itemView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         itemView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-        parent->viewport()->installEventFilter(this);
-        this->vScrollBar->setForceHidden(true);
-        this->hScrollBar->setForceHidden(true);
-        return;
     }
 
     QListView *listView = qobject_cast<QListView *>(parent);
     if(listView){
         itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         itemView->horizontalScrollBar()->setStyleSheet("QScrollBar:horizontal{height: 0px}");
-        parent->viewport()->installEventFilter(this);
-        this->vScrollBar->setForceHidden(true);
-        this->hScrollBar->setForceHidden(true);
-        return;
     }
+
+    parent->viewport()->installEventFilter(this);
+    //this->vScrollBar->setForceHidden(true);
+    //this->hScrollBar->setForceHidden(true);
 
     //parent->viewport()->installEventFilter(this);
     //this->vScrollBar->setForceHidden(true);
@@ -669,24 +665,26 @@ SmoothScrollDelegate::SmoothScrollDelegate(QAbstractScrollArea *parent, bool use
     //TODO:parent.setHorizontalScrollBarPolicy = self.setHorizontalScrollBarPolicy
 }
 
-bool SmoothScrollDelegate::eventFilter(QObject *watched, QWheelEvent *event)
+bool SmoothScrollDelegate::eventFilter(QObject *watched, QEvent *event)
 {
+    
     if(event->type() == QEvent::Wheel)
     {
-        if(event->angleDelta().y() != 0)
+        QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
+        if(wheelEvent->angleDelta().y() != 0)
         {
             if(!this->useAni)
             {
-                this->verticalSmoothScroll->wheelEvent(event);
+                this->verticalSmoothScroll->wheelEvent(wheelEvent);
             }else{
-                this->vScrollBar->scrollValue(-event->angleDelta().y(), true);
+                this->vScrollBar->scrollValue(-wheelEvent->angleDelta().y(), true);
             }
         }else{
             if(!this->useAni)
             {
-                this->horizonSmoothScroll->wheelEvent(event);
+                this->horizonSmoothScroll->wheelEvent(wheelEvent);
             }else{
-                this->hScrollBar->scrollValue(-event->angleDelta().x(), true);
+                this->hScrollBar->scrollValue(-wheelEvent->angleDelta().x(), true);
             }
         }
         event->setAccepted(true);

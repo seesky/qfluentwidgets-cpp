@@ -93,13 +93,13 @@ public:
     void setSliderDown(bool isDown);
     void expand();
     void collapse();
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     void _adjustPos(QSize size);
     void _adjustHandleSize();
     void _adjustHandlePos();
@@ -124,7 +124,6 @@ public:
     bool _isExpanded;
     QPoint _pressedPos;
     bool _isForceHidden;
-    int val;
     QScrollBar *partnerBar;
 private:
 
@@ -173,7 +172,7 @@ class SmoothScrollDelegate : public QObject{
     Q_OBJECT
 public:
     SmoothScrollDelegate(QAbstractScrollArea *parent, bool useAni);
-    bool eventFilter(QObject *watched, QWheelEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
     void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy);
     void setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy policy);
 
