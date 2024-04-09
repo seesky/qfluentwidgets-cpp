@@ -158,6 +158,7 @@
         "quuid": "cpp",
         "qdesktopwidget": "cpp",
         "qstackedwidget": "cpp",
-        "*.moc": "cpp"
+        "*.moc": "cpp",
+        "qwheelevent": "cpp"
     }
 }

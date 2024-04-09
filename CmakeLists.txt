@@ -1200,3 +1200,55 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+
+add_executable(
+  list_view_test
+  qfluentwidgets/test/list_view_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(list_view_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  list_view_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
+
+
+
+add_executable(
+  table_view_test
+  qfluentwidgets/test/table_view_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+
+)
+
+target_link_options(table_view_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  table_view_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
