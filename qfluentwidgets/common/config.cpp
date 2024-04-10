@@ -6,6 +6,64 @@
 #include <experimental/filesystem>
 #include "json/json.h"
 
+IniSettings* IniSettings::instance = nullptr;
+QConfig* QConfig::instance = nullptr; 
+
+IniSettings::IniSettings()
+{
+    this->instance = nullptr;
+    QString fileName;
+	fileName = QCoreApplication::applicationDirPath();
+    qDebug() << fileName;
+	fileName += QString("qfluentwidgets/config/config.ini");
+    this->settings_init(fileName);
+}
+
+IniSettings* IniSettings::getInstance()
+{
+    if(instance == nullptr){
+        instance = new IniSettings();
+    }
+    return instance;
+}
+
+void IniSettings::settings_init(const QString &path)
+{
+    qDebug() << path;
+	m_iniFile = QSharedPointer<QSettings>(new QSettings(path, QSettings::IniFormat));
+	m_iniFile->setIniCodec(QTextCodec::codecForName("UTF-8"));
+}
+
+void IniSettings::setValue(const QString &section, const QString &key, const QVariant &value)
+{
+	m_iniFile->beginGroup(section);     // 设置节点名
+	m_iniFile->setValue(key, value);    //设置键名和键值
+	m_iniFile->endGroup();              // 结束当前节的操作
+}
+
+void IniSettings::removeNode(const QString &section)
+{
+	m_iniFile->remove(section);
+}
+
+void IniSettings::removeKey(const QString &section, const QString &key)
+{
+	m_iniFile->beginGroup(section);
+	m_iniFile->remove(key);
+	m_iniFile->endGroup();
+}
+
+QVariant IniSettings::getValue(const QString &section, const QString &key, const QVariant &defaultValue)
+{
+	QString path = QString("%1/%2").arg(section).arg(key);
+	QVariant result = m_iniFile->value(path, defaultValue);
+	return result;
+}
+
+
+
+/*
+
 bool ConfigValidator::validate(QVariant *value)
 {
     return true;
@@ -247,7 +305,7 @@ QMap<QString, QString> MapSerializer::deserialize(QString json)
                     maps.insert(QString::fromStdString(value[*it].asString()), QString::fromStdString(value[*it].asString()));
                     break;
                 }
-                /*
+                
                 case Json::intValue:
                 {
                     int intTmp = value[*it].asInt();
@@ -269,7 +327,7 @@ QMap<QString, QString> MapSerializer::deserialize(QString json)
                         maps.insert(std::pair<std::string, std::string>(*it, strid));
                         break;
                     }
-                */
+                
                 default:
                     {
                         break;
@@ -294,14 +352,11 @@ QColor ColorSerializer::deserialize(QString value)
     return QColor(value);
 }
 
-ConfigItem::ConfigItem(QString group, QString name, QVariant *default_, ConfigValidator *validator, ConfigSerializer *serializer, bool restart)
+ConfigItem::ConfigItem(QString group, QString name, QVariant *default_, bool restart)
 {
     this->group = group;
     this->name = name;
-    this->validator = validator;
-    this->serializer = serializer;
     this->__value = default_;
-    this->value = default_;
     this->restart = restart;
     this->defaultValue = this->validator->correct(default_);
 }
@@ -322,14 +377,14 @@ void ConfigItem::setValue(QVariant *value)
     this->__value = v;
     if(ov != v)
     {
-        emit valueChanged(v);
+        emit(this->valueChanged(v));
     }
 }
 
 
 QString ConfigItem::key()
 {
-    if(this->name != "")
+    if(!this->name.isNull())
     {
         return this->group + "." + this->name;
     }else{
@@ -338,22 +393,316 @@ QString ConfigItem::key()
 }
 
 
-QString ConfigItem::getClassName() const
+QString ConfigItem::__str__() 
 {
-    return QString(typeid(*this).name());
+    return QString("%1[value=%2]").arg(this->objectName()).arg(this->getValue()->value<QString>());
+}
+*/
+
+RangeConfigItem::RangeConfigItem(QString group, QString name, int default_, int min, int max, bool restart)
+{
+    this->group = group;
+    this->name = name;
+    this->min_value = min;
+    this->max_value = max;
+    this->defaultValue = default_;
+    this->restart = restart;
+    this->range_value[0] = min;
+    this->range_value[1] = max;
+}
+
+int RangeConfigItem::getValue()
+{
+    return this->__value;
+}
+
+void RangeConfigItem::setValue(int value)
+{
+    int v = this->correct(value);
+    int ov = this->__value;
+    this->__value = v;
+    if(ov != v){
+        emit(this->valueChanged(v));
+    }
+}
+
+QString RangeConfigItem::key()
+{
+    if(!this->name.isNull())
+    {
+        return this->group + "." + this->name;
+    }else{
+        return this->group;
+    }
 }
 
 
-QString ConfigItem::serialize()
+QString RangeConfigItem::__str__()
 {
-    return this->serializer->serialize(this->value)->value<QString>();
+    return QString("%1[value=%2]").arg(this->objectName()).arg(QString::number(this->getValue()));
+
 }
 
-void ConfigItem::deserializeFrom(QString value)
+
+bool RangeConfigItem::validate(int value)
 {
-    QVariant QVariantValue = QVariant::fromValue(value);
-    this->value = this->serializer->deserialize(&QVariantValue);
+    return (this->min_value <= value) && (value <= this->max_value);
 }
+
+int RangeConfigItem::correct(int value)
+{
+    return qMin(qMax(this->min_value, value), this->max_value);
+}
+
+int *RangeConfigItem::range()
+{
+    return this->range_value;
+}
+
+
+OptionsConfigItem::OptionsConfigItem(QString group, QString name, QString default_, const QList<QString> options, bool restart) : QObject()
+{
+    this->group = group;
+    this->name = name;
+    this->defaultValue = default_;
+    this->restart = restart;
+    this->_options = options;
+}
+
+QString OptionsConfigItem::getValue()
+{
+    return this->__value;
+}
+
+void OptionsConfigItem::setValue(QString value)
+{
+    QString v = this->correct(value);
+    QString ov = this->__value;
+    this->__value = v;
+    if(ov != v){
+        emit(this->valueChanged(v));
+    }
+}
+
+
+
+QString OptionsConfigItem::key()
+{
+    if(!this->name.isNull())
+    {
+        return this->group + "." + this->name;
+    }else{
+        return this->group;
+    }
+}
+
+
+QString OptionsConfigItem::__str__()
+{
+    return QString("%1[options=%2]").arg(this->objectName()).arg(this->getValue());
+
+}
+
+
+bool OptionsConfigItem::validate(QString value)
+{
+    return this->_options.contains(value);
+}
+
+QString OptionsConfigItem::correct(QString value)
+{
+    return this->validate(value) ? value : this->_options[0];
+}
+
+QList<QString> OptionsConfigItem::options()
+{
+    return this->_options;
+}
+
+
+ColorConfigItem::ColorConfigItem(QString group, QString name, QColor default_, bool restart)
+{
+    this->group = group;
+    this->name = name;
+    this->defaultValue = default_;
+    this->restart = restart;
+}
+
+QColor ColorConfigItem::getValue()
+{
+    return this->__value;
+}
+
+void ColorConfigItem::setValue(QColor value)
+{
+    QColor v = this->correct(value);
+    QColor ov = this->__value;
+    this->__value = v;
+    if(ov != v){
+        emit(this->valueChanged(v));
+    }
+}
+
+
+QString ColorConfigItem::key()
+{
+    if(!this->name.isNull())
+    {
+        return this->group + "." + this->name;
+    }else{
+        return this->group;
+    }
+}
+
+
+QString ColorConfigItem::__str__()
+{
+    return QString("%1[value=%2]").arg(this->objectName()).arg(this->getValue().name());
+}
+
+
+bool ColorConfigItem::validate(QColor value)
+{
+    return value.isValid();
+}
+
+QColor ColorConfigItem::correct(QColor value)
+{
+    return this->validate(value) ? QColor(value) : this->defaultValue;
+}
+
+
+QConfig::QConfig(QObject *parent) : QObject(parent)
+{
+    this->_theme = Theme::LIGHT;
+    this->_themeOptionsList = {"light", "dark", "auto"};
+    this->themeMode = new OptionsConfigItem(QString("QFluentWidgets"), QString("ThemeMode"), QString("light"), this->_themeOptionsList, false);
+    this->themeColor = new ColorConfigItem(QString("QFluentWidgets"), QString("ThemeColor"), QColor("#009faa"), false);
+}
+
+
+QConfig* QConfig::getInstance()
+{
+    if(instance == nullptr){
+        instance = new QConfig(nullptr);
+    }
+    return instance;
+}
+
+
+QVariant QConfig::get(QVariant item)
+{
+    if(item.canConvert<RangeConfigItem*>()){
+        QVariant v = iniSettings->getValue(item.value<RangeConfigItem*>()->group, item.value<RangeConfigItem*>()->name, item.value<RangeConfigItem*>()->defaultValue);
+        return v;
+    }else if(item.canConvert<OptionsConfigItem*>()){
+        QVariant v = iniSettings->getValue(item.value<OptionsConfigItem*>()->group, item.value<OptionsConfigItem*>()->name, item.value<OptionsConfigItem*>()->defaultValue);
+        return v;
+    }else if(item.canConvert<ColorConfigItem*>()){
+        QVariant v = iniSettings->getValue(item.value<ColorConfigItem*>()->group, item.value<ColorConfigItem*>()->name, item.value<ColorConfigItem*>()->defaultValue);
+        return v;
+    }
+}
+
+
+Theme QConfig::getTheme()
+{
+    return this->_theme;
+}
+
+
+bool isWindowsDarkModeActive() {
+    // Windows注册表路径，用于存储个性化设置
+    const QString regKey = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    const QString regValue = "AppsUseLightTheme"; // 当此值为0时，表示暗模式
+
+    QSettings settings(regKey, QSettings::NativeFormat);
+
+    // 查询注册表中的AppsUseLightTheme值
+    QVariant value = settings.value(regValue, 1); // 默认为1，即亮模式
+
+    // 如果值为0，则表示 Windows 处于暗模式
+    return value.toInt() == 0;
+}
+
+void QConfig::setTheme(Theme t)
+{
+    if(t == Theme::AUTO){
+        t = isWindowsDarkModeActive() ? Theme::DARK : Theme::LIGHT;
+    }
+
+    this->_theme = t;
+}
+
+
+void QConfig::set(QVariant item, QVariant value, bool save, bool copy)
+{
+    if(item.canConvert<RangeConfigItem*>()){
+        if(item.value<RangeConfigItem*>()->getValue() == value.value<int>()){
+            return;
+        }
+
+        item.value<RangeConfigItem*>()->setValue(value.value<int>());
+
+        if(save){
+            iniSettings->setValue(item.value<RangeConfigItem*>()->group, item.value<RangeConfigItem*>()->name, value);
+        }
+
+        if(item.value<RangeConfigItem*>()->restart){
+            emit(this->appRestartSig());
+        }
+    }else if(item.canConvert<OptionsConfigItem*>()){
+        if(item.value<OptionsConfigItem*>()->getValue() == value.value<QString>()){
+            return;
+        }
+
+        item.value<OptionsConfigItem*>()->setValue(value.value<QString>());
+
+        if(save){
+            iniSettings->setValue(item.value<OptionsConfigItem*>()->group, item.value<OptionsConfigItem*>()->name, value);
+        }
+
+        if(item.value<OptionsConfigItem*>()->restart){
+            emit(this->appRestartSig());
+        }
+
+        if(item.value<OptionsConfigItem*>()->group == QString("ThemeMode")){
+            if(item.value<OptionsConfigItem*>()->getValue() == QString("auto")){
+                this->setTheme(Theme::AUTO);
+                emit(this->themeChanged(Theme::AUTO));
+            }else if(item.value<OptionsConfigItem*>()->getValue() == QString("dark")){
+                this->setTheme(Theme::DARK);
+                emit(this->themeChanged(Theme::DARK));
+            }else if(item.value<OptionsConfigItem*>()->getValue() == QString("light")){
+                this->setTheme(Theme::LIGHT);
+                emit(this->themeChanged(Theme::LIGHT));
+            }
+        }
+    }else if(item.canConvert<ColorConfigItem*>()){
+        if(item.value<ColorConfigItem*>()->getValue() == value.value<QColor>()){
+            return;
+        }
+
+        item.value<ColorConfigItem*>()->setValue(value.value<QColor>());
+
+        if(save){
+            iniSettings->setValue(item.value<ColorConfigItem*>()->group, item.value<ColorConfigItem*>()->name, value);
+        }
+
+        if(item.value<ColorConfigItem*>()->restart){
+            emit(this->appRestartSig());
+        }
+
+        emit(this->themeColorChanged(item.value<ColorConfigItem*>()->getValue()));
+    }
+}
+
+
+
+
+
+
+/*
 
 int* RangeConfigItem::range()
 {
@@ -376,6 +725,8 @@ ColorConfigItem::ColorConfigItem(QString group, QString name, QVariant *default_
 {
 
 }
+
+
 
 QConfig::QConfig()
 {
@@ -460,7 +811,7 @@ QMap<QString, QString> *toDict(bool serialize)
     QMap<QString, QString> *items = new QMap<QString, QString>();
 
 }
-
+*/
 
 /*
 ColorConfigItem::ColorConfigItem(QString group, QString name, QVariant *default_, bool restart)
@@ -576,8 +927,14 @@ ColorConfigItem::ColorConfigItem(QString group, QString name, QVariant *default_
     
     bool isDarkTheme()
     {
+        //qconfig->set(QVariant::fromValue<OptionsConfigItem*>(qconfig->themeMode), QVariant::fromValue<QString>(QString("dark")), true, false);
         //TODO:return qconfig.theme == Theme.DARK
-        return false;
+        QString _themeString =  qconfig->get(QVariant::fromValue<OptionsConfigItem*>(qconfig->themeMode)).value<QString>();
+        if(_themeString == QString("dark")){
+            return true;
+        }else{
+            return false;
+        }
     }
     
     
