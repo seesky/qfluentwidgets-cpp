@@ -160,6 +160,12 @@
         "qstackedwidget": "cpp",
         "*.moc": "cpp",
         "qwheelevent": "cpp",
-        "qtreewidget": "cpp"
+        "qtreewidget": "cpp",
+        "qsettings": "cpp",
+        "qsharedpointer": "cpp",
+        "qtextcodec": "cpp",
+        "qcoreapplication": "cpp",
+        "qbuttongroup": "cpp",
+        "qlayout": "cpp"
     }
 }

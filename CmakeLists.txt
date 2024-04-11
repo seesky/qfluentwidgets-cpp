@@ -1330,3 +1330,64 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+file(GLOB SETTINGS_TEST_FILE
+    "qfluentwidgets/test/settings_test/*.h"
+    "qfluentwidgets/test/settings_test/*.cpp"
+)
+
+add_executable(
+  settings_test
+  qfluentwidgets/test/setting_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+  ${SETTINGS_TEST_FILE}
+)
+
+target_link_options(settings_test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  settings_test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)
+
+
+
+
+file(GLOB SETTINGS_TEST_FILE
+    "qfluentwidgets/test/settings_test/*.h"
+    "qfluentwidgets/test/settings_test/*.cpp"
+)
+
+add_executable(
+  test
+  qfluentwidgets/test/test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+  ${SETTINGS_TEST_FILE}
+)
+
+target_link_options(test PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  test
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)

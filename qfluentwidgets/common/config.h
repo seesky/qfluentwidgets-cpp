@@ -16,10 +16,10 @@
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
 
-#include <QSettings>
-#include <QSharedPointer>
-#include <QTextCodec>
-#include <QCoreApplication>
+#include <QtCore/QSettings>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTextCodec>
+#include <QtCore/QCoreApplication>
 
 
 //namespace Qfw{
