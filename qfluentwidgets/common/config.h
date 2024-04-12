@@ -291,7 +291,9 @@ public:
     Theme _theme;
     OptionsConfigItem *themeMode;
     ColorConfigItem *themeColor;
+    OptionsConfigItem *language;
     QList<QString> _themeOptionsList;
+    
 
 private:
     QConfig(QObject *parent);

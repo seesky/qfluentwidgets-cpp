@@ -3,6 +3,7 @@
 #include <QtWidgets/QLabel>
 
 #include "../../components/widgets/scroll_area.h"
+#include "../../components/widgets/info_bar.h"
 #include "../../components/layout/expand_layout.h"
 #include "../../components/settings/setting_card_group.h"
 #include "../../components/settings/setting_card.h"
@@ -16,6 +17,7 @@ public:
     SettingInterface(QWidget *parent);
     void __initWidget();
     void __initLayout();
+    void __connectSignalToSlot();
     void __setQss();
 
     QWidget *scrollWidget;
@@ -29,9 +31,20 @@ public:
     SettingCardGroup *personalGroup;
     SwitchSettingCard *enableAcrylicCard;
     OptionsSettingCard *themeCard;
+    ComboBoxSettingCard *languageCard;
+
+
+    SettingCardGroup *aboutGroup;
+    HyperlinkCard *helpCard;
+    PrimaryPushSettingCard *feedbackCard;
+    PrimaryPushSettingCard *aboutCard;
 
     OptionsConfigItem *onlineSongQuality;
     RangeConfigItem *onlinePageSize;
     OptionsConfigItem *onlineMvQuality;
     OptionsConfigItem *enableAcrylicBackground;
+    OptionsConfigItem *language;
+
+public slots:
+    void __showRestartTooltip();
 };

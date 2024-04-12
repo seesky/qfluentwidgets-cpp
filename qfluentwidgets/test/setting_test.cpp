@@ -8,6 +8,7 @@
 
 #include "../../qfluentwidgets/qframelesswindow/windows/qframe_less_window.h"
 #include "../../qfluentwidgets/common/config.h"
+#include "../../qfluentwidgets/common/translator.h"
 #include "settings_test/setting_interface.h"
 #include "settings_test/setting_config.h"
 
@@ -63,6 +64,27 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     
     QApplication *app = new QApplication(argc, argv);
+
+    QString languageString = qconfig->get(QVariant::fromValue<OptionsConfigItem *>(qconfig->language)).value<QString>();
+    QLocale *locale;
+    if(languageString == "chinese simplified"){
+        locale = new QLocale(QLocale::Chinese, QLocale::China);
+    }else if(languageString == "chinese traditional"){
+        locale = new QLocale(QLocale::Chinese, QLocale::HongKong);
+    }else if(languageString == "english"){
+        locale = new QLocale(QLocale::English);
+    }else{
+        locale = new QLocale();
+    }
+    
+    FluentTranslator *fluentTranslator = new FluentTranslator(locale, nullptr);
+    QTranslator *settingTranslator = new QTranslator();
+    settingTranslator->load(*locale, "settings", ".", "resource/i18n");
+
+    app->installTranslator(fluentTranslator);
+    app->installTranslator(settingTranslator);
+
+   
     Window *w = new Window(nullptr);
     w->show();
     return app->exec();

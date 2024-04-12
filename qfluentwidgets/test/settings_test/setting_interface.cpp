@@ -22,6 +22,9 @@ SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
     QList<QString> enableList = {"true", "false"};
     this->enableAcrylicBackground = new OptionsConfigItem("MainWindow", "EnableAcrylicBackground", "false", enableList, false);
 
+    QList<QString> languageList = {"chinese simplified", "chinese traditional", "english", "auto"};
+    //this->language = new OptionsConfigItem("MainWindow", "Language", "auto", languageList, false);
+
 
     this->onlineMusicGroup = new SettingCardGroup(this->tr("Online Music"), this->scrollWidget);
     FluentIcon *rangeSettingCardIcon = new FluentIcon();
@@ -79,7 +82,47 @@ SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
         this->personalGroup
     );
 
+    FluentIcon *languageCardSettingCardIcon = new FluentIcon();
+    languageCardSettingCardIcon->setIconName(QString("LANGUAGE"));
+    this->languageCard = new ComboBoxSettingCard(
+        QVariant(QVariant::fromValue<OptionsConfigItem*>(qconfig->language)),
+        new QVariant(QVariant::fromValue<FluentIcon>(*languageCardSettingCardIcon)),
+        this->tr("Language"),
+        this->tr("Set your preferred language for UI"),
+        languageList,
+        this->personalGroup
+    );
 
+    this->aboutGroup = new SettingCardGroup(this->tr("About"), this->scrollWidget);
+    FluentIcon *helpCardSettingCardIcon = new FluentIcon();
+    helpCardSettingCardIcon->setIconName(QString("HELP"));
+    this->helpCard = new HyperlinkCard("http://www.github.com", 
+        this->tr("Open help page"),
+        new QVariant(QVariant::fromValue<FluentIcon>(*helpCardSettingCardIcon)),
+        this->tr("Help"),
+        this->tr("Discover new features and learn useful tips about PyQt-Fluent-Widgets"),
+        this->aboutGroup
+        );
+
+    FluentIcon *feedbackCardSettingCardIcon = new FluentIcon();
+    feedbackCardSettingCardIcon->setIconName(QString("FEEDBACK"));
+    this->feedbackCard = new PrimaryPushSettingCard(
+        this->tr("Provide feedback"),
+        new QVariant(QVariant::fromValue<FluentIcon>(*feedbackCardSettingCardIcon)),
+        this->tr("Provide feedback"),
+        this->tr("Help us improve PyQt-Fluent-Widgets by providing feedback"),
+        this->aboutGroup
+    );
+
+    FluentIcon *aboutCardSettingCardIcon = new FluentIcon();
+    aboutCardSettingCardIcon->setIconName(QString("INFO"));
+    this->aboutCard = new PrimaryPushSettingCard(
+        this->tr("Check update"),
+        new QVariant(QVariant::fromValue<FluentIcon>(*aboutCardSettingCardIcon)),
+        this->tr("About"),
+        QString("© Copyright") + QString(" 2024, SeeSky."),
+        this->aboutGroup
+    );
     
     this->__initWidget();
     
@@ -96,6 +139,7 @@ void SettingInterface::__initWidget()
     this->__setQss();
 
     this->__initLayout();
+    this->__connectSignalToSlot();
 }
 
 void SettingInterface::__initLayout()
@@ -108,11 +152,17 @@ void SettingInterface::__initLayout()
 
     this->personalGroup->addSettingCard(this->enableAcrylicCard);
     this->personalGroup->addSettingCard(this->themeCard);
+    this->personalGroup->addSettingCard(this->languageCard);
+
+    this->aboutGroup->addSettingCard(this->helpCard);
+    this->aboutGroup->addSettingCard(this->feedbackCard);
+    this->aboutGroup->addSettingCard(this->aboutCard);
 
     this->expandLayout->setSpacing(28);
     this->expandLayout->setContentsMargins(60, 10, 60, 0);
     this->expandLayout->addWidget(this->personalGroup);
     this->expandLayout->addWidget(this->onlineMusicGroup);
+    this->expandLayout->addWidget(this->aboutGroup);
 }
 
 
@@ -132,4 +182,16 @@ void SettingInterface::__setQss()
     } else {
         qWarning("Cannot open file: %s", qPrintable(file.errorString()));
     }
+}
+
+
+void SettingInterface::__showRestartTooltip()
+{
+    InfoBar::warning("", this->tr("Configuration takes effect after restart"), Qt::Horizontal, true, 1000, InfoBarPosition::TOP_RIGHT, this->window());
+}
+
+
+void SettingInterface::__connectSignalToSlot()
+{
+    connect(qconfig, &QConfig::appRestartSig, this, &SettingInterface::__showRestartTooltip);
 }

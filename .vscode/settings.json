@@ -166,6 +166,8 @@
         "qtextcodec": "cpp",
         "qcoreapplication": "cpp",
         "qbuttongroup": "cpp",
-        "qlayout": "cpp"
+        "qlayout": "cpp",
+        "qtranslator": "cpp",
+        "qlocale": "cpp"
     }
 }

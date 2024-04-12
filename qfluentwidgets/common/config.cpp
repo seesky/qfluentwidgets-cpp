@@ -4,7 +4,7 @@
 #include <vector>
 #include <stdexcept>
 #include <experimental/filesystem>
-#include "json/json.h"
+//#include "json/json.h"
 
 IniSettings* IniSettings::instance = nullptr;
 QConfig* QConfig::instance = nullptr; 
@@ -577,6 +577,8 @@ QConfig::QConfig(QObject *parent) : QObject(parent)
     this->_themeOptionsList = {"light", "dark", "auto"};
     this->themeMode = new OptionsConfigItem(QString("QFluentWidgets"), QString("ThemeMode"), QString("light"), this->_themeOptionsList, false);
     this->themeColor = new ColorConfigItem(QString("QFluentWidgets"), QString("ThemeColor"), QColor("#009faa"), false);
+    QList<QString> languageList = {"chinese simplified", "chinese traditional", "english", "auto"};
+    this->language = new OptionsConfigItem("MainWindow", "Language", "auto", languageList, true);
 }
 
 
