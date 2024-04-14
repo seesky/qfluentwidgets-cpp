@@ -7,6 +7,6 @@ FluentTranslator::FluentTranslator(QLocale *locale, QObject *parent) : QTranslat
 
 void FluentTranslator::load(QLocale *locale)
 {
-    qDebug() << QString("resource/setting_resource/i18n/settings.%1.qm").arg(locale->name());
-    QTranslator::load(QString("resource/setting_resource/i18n/settings.%1.qm").arg(locale->name()));
+    qDebug() << QString("qfluentwidgets/i18n/gallery.%1.qm").arg(locale->name());
+    QTranslator::load(QString("qfluentwidgets/i18n/gallery.%1.qm").arg(locale->name()));
 }

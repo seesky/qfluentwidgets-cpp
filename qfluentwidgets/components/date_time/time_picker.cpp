@@ -175,7 +175,7 @@ bool TimePicker::isSecondVisible()
 }
 
 
-AMTimePicker::AMTimePicker(QWidget *parent, bool showSeconds) : TimePickerBase(parent, showSeconds)
+AMTimePicker::AMTimePicker(QWidget *parent, bool showSeconds = false) : TimePickerBase(parent, showSeconds)
 {
     this->AM = this->tr("AM");
     this->PM = this->tr("PM");

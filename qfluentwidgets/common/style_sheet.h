@@ -61,7 +61,15 @@ const static QMap<QString, QString> FluentStyleSheetMap = {
     {"FOLDER_LIST_DIALOG" , "folder_list_dialog"},
     {"SETTING_CARD_GROUP" , "setting_card_group"},
     {"EXPAND_SETTING_CARD" , "expand_setting_card"},
-    {"NAVIGATION_INTERFACE" , "navigation_interface"}
+    {"NAVIGATION_INTERFACE" , "navigation_interface"},
+    {"LINK_CARD", "link_card"},
+    {"SAMPLE_CARD", "sample_card"},
+    {"HOME_INTERFACE", "home_interface"},
+    {"ICON_INTERFACE", "icon_interface"},
+    {"VIEW_INTERFACE", "view_interface"},
+    {"SETTING_INTERFACE", "setting_interface"},
+    {"GALLERY_INTERFACE", "gallery_interface"},
+    {"NAVIGATION_VIEW_INTERFACE", "navigation_view_interface"},
 };
 class StyleSheetBase;
 class StyleSheetManager : public QObject{
@@ -169,5 +177,7 @@ public:
 private:
 };
 
-
+void updateStyleSheet();
 void setCustomStyleSheet(QWidget *widget, QString lightQss, QString darkQss);
+void setTheme(Theme theme, bool save);
+void toggleTheme(bool save);

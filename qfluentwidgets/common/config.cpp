@@ -924,6 +924,10 @@ ColorConfigItem::ColorConfigItem(QString group, QString name, QVariant *default_
     
     */
 
+
+
+
+
     
     
     bool isDarkTheme()
@@ -938,5 +942,7 @@ ColorConfigItem::ColorConfigItem(QString group, QString name, QVariant *default_
         }
     }
     
+
+
     
 //}

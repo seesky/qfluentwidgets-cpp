@@ -375,10 +375,12 @@ QString CustomStyleSheet::content(Theme theme = Theme::AUTO)
     return this->darkStyleSheet();
 }
 
+/*
 void setTheme(Theme theme, bool save)
 {
     //qconfig.set(qconfig->themeMode(), theme, save);
 }
+*/
 
 QString ThemeColor::name(QString themeColorValue)
 {
@@ -442,4 +444,47 @@ QColor *ThemeColor::themeColor()
     return this->color("");
 }
 
+/*
+void updateStyleSheet(){
+    QList<QWidget*> removes = QList<QWidget*>();
+    QMutableMapIterator<QWidget *, StyleSheetBase *> iter =  styleSheetManager->items();
+    while (iter.hasNext()) {
+        iter.next(); 
+        QWidget *widget = iter.key();
+        StyleSheetBase *styleSheet = iter.value();
+        try {
+            setStyleSheet(widget, QVariant::fromValue<StyleSheetBase>(*styleSheet), qconfig->getTheme(), true);
+        }catch(std::exception& e){
+            removes.append(widget);
+        }
+    }
 
+    for(int i = 0 ; i < removes.length(); i++){
+        styleSheetManager->deregister(removes.at(i));
+    }
+}
+*/
+
+
+void setTheme(Theme theme, bool save)
+{
+    if(theme == Theme::AUTO){
+        qconfig->set(QVariant::fromValue<OptionsConfigItem*>(qconfig->themeMode), QVariant::fromValue<QString>("auto"), save, false);
+        updateStyleSheet();
+        emit(qconfig->themeChangedFinished());
+    }else if(theme == Theme::LIGHT){
+        qconfig->set(QVariant::fromValue<OptionsConfigItem*>(qconfig->themeMode), QVariant::fromValue<QString>("light"), save, false);
+        updateStyleSheet();
+        emit(qconfig->themeChangedFinished());
+    }else if(theme == Theme::DARK){
+        qconfig->set(QVariant::fromValue<OptionsConfigItem*>(qconfig->themeMode), QVariant::fromValue<QString>("dark"), save, false);
+        updateStyleSheet();
+        emit(qconfig->themeChangedFinished());
+    }
+}
+
+void toggleTheme(bool save)
+{
+    Theme theme = isDarkTheme() ? Theme::LIGHT : Theme::DARK;
+    setTheme(theme, save);
+}

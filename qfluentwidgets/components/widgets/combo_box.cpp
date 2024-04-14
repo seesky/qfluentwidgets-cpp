@@ -323,6 +323,11 @@ void ComboBox::_showComboMenu()
         menu->addAction(action);
     }
 
+    if(menu->view->width() < this->width()){
+        menu->view->setMinimumWidth(this->width());
+        menu->adjustSize();
+    }
+
     menu->setMaxVisibleItems(this->maxVisibleItems());
     connect(menu, &ComboBoxMenu::closedSignal, this, &ComboBox::_onDropMenuClosed);
     this->dropMenu = menu;
@@ -437,7 +442,7 @@ EditableComboBox::EditableComboBox(QWidget *parent) : LineEdit(parent)
     this->dropMenu = nullptr;
     this->_placeholderText = QString();
 
-    FluentStyleSheet().apply((QWidget *)this, FluentStyleSheetMap.value("COMBO_BOX"), Theme::AUTO); //特殊关注
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("LINE_EDIT"), Theme::AUTO); //特殊关注
     this->installEventFilter(this);
 
     FluentIcon *icon = new FluentIcon();
@@ -732,6 +737,11 @@ void EditableComboBox::_showComboMenu()
         });
 
         menu->addAction(action);
+    }
+
+    if(menu->view->width() < this->width()){
+        menu->view->setMinimumWidth(this->width());
+        menu->adjustSize();
     }
 
     menu->setMaxVisibleItems(this->maxVisibleItems());

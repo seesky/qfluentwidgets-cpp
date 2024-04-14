@@ -2,6 +2,21 @@
 
 FluentWindowBase::FluentWindowBase(QWidget *parent) : WindowsFramelessWindow(parent)
 {
+    
+    this->isHover = false;
+    this->isPressed = false;
+    //auto obj = qobject_cast<BackgroundAnimationWidget*>(this);
+    BackgroundAnimationWidget* bgaw = new BackgroundAnimationWidget();
+    //this->bgColorObject = new BackgroundColorObject(bgaw);
+    this->bgColorObject = this;
+    this->bgColorObject->_backgroundColor = this->_normalBackgroundColor();
+    this->backgroundColorAni = new QPropertyAnimation(this->bgColorObject, "backgroundColor", this);
+    this->backgroundColorAni->setDuration(120);
+    this->installEventFilter(this);
+
+    connect(qconfig, &QConfig::themeChanged, this, &FluentWindowBase::_updateBackgroundColor);
+    
+    this->_isMicaEnabled = false;
     this->hBoxLayout = new QHBoxLayout(this);
     this->stackedWidget = new StackedWidget(this);
     this->navigationInterface = nullptr;
@@ -13,17 +28,7 @@ FluentWindowBase::FluentWindowBase(QWidget *parent) : WindowsFramelessWindow(par
 
      this->setMicaEffectEnabled(true);
 
-
-    this->isHover = false;
-    this->isPressed = false;
-    //auto obj = qobject_cast<BackgroundAnimationWidget*>(this);
-    BackgroundAnimationWidget* bgaw = new BackgroundAnimationWidget();
-    this->bgColorObject = new BackgroundColorObject(bgaw);
-    this->bgColorObject->_backgroundColor = this->_normalBackgroundColor();
-    this->backgroundColorAni = new QPropertyAnimation(this->bgColorObject, "backgroundColor", this);
-    this->backgroundColorAni->setDuration(120);
-    this->installEventFilter(this);
-    
+    connect(qconfig, &QConfig::themeChangedFinished, this, &FluentWindowBase::_onThemeChangedFinished);
     //TOOD: qconfig.themeChanged.connect(self._updateBackgroundColor)
      //TODO:qconfig.themeChangedFinished.connect(self._onThemeChangedFinished)
 }
@@ -81,7 +86,7 @@ void FluentWindowBase::paintEvent(QPaintEvent *event)
     WindowsFramelessWindow::paintEvent(event);
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(*(this->backgroundColor()));
+    painter.setBrush(this->backgroundColor());
     painter.drawRect(this->rect());
 }
 
@@ -191,6 +196,8 @@ void FluentWindowBase::_updateBackgroundColor()
     }else if(this->isPressed){
         color = this->_pressedBackgroundColor();
     }else if(this->isHover){
+        color = this->_hoverBackgroundColor();
+    }else{
         color = this->_normalBackgroundColor();
     }
 
@@ -200,18 +207,18 @@ void FluentWindowBase::_updateBackgroundColor()
 
 }
 
-QColor *FluentWindowBase::getBackgroundColor()
+QColor FluentWindowBase::getBackgroundColor()
 {
-    return new QColor(this->bgColorObject->getBackgroundColor());
+    return this->bgColorObject->_backgroundColor;
 }
 
 void  FluentWindowBase::setBackgroundColor(QColor color)
 {
-    this->bgColorObject->setBackgroundColor(color);
+    this->bgColorObject->_backgroundColor = QColor(color);
 }
 
 
-QColor *FluentWindowBase::backgroundColor()
+QColor FluentWindowBase::backgroundColor()
 {
     return this->getBackgroundColor();
 }
@@ -295,6 +302,9 @@ NavigationTreeWidget *FluentWindow::addSubInterface(QWidget *_interface, QVarian
     if(parent != nullptr && parent->objectName().isNull()){
         return nullptr;
     }
+
+    _interface->setProperty("isStackedTransparent", isTransparent);
+    this->stackedWidget->addWidget(_interface);
 
     QString routeKey = _interface->objectName();
     NavigationTreeWidget *item = this->navigationInterface->addItem(routeKey, icon, text, 

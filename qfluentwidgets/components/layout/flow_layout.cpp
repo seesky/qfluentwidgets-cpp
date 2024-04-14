@@ -119,13 +119,13 @@ Qt::Orientation FlowLayout::expandingDirections()
 
 
 
-bool FlowLayout::hasHeightForWidth()
+bool FlowLayout::hasHeightForWidth() const
 {
     return true;
 }
 
 
-int FlowLayout::heightForWidth(int width)
+int FlowLayout::heightForWidth(int width) const
 {
     return this->_doLayout(QRect(0, 0, width, 0), false);
 }
@@ -159,7 +159,7 @@ void FlowLayout::setVerticalSpacing(int spacing)
     this->_verticalSpacing = spacing;
 }
 
-int FlowLayout::verticalSpacing()
+int FlowLayout::verticalSpacing() const
 {
     return this->_verticalSpacing;
 }
@@ -169,12 +169,12 @@ void FlowLayout::setHorizontalSpacing(int spacing)
     this->_horizontalSpacing = spacing;
 }
 
-int FlowLayout::horizontalSpacing()
+int FlowLayout::horizontalSpacing() const
 {
     return this->_horizontalSpacing;
 }
 
-int FlowLayout::_doLayout(QRect rect, bool move)
+int FlowLayout::_doLayout(QRect rect, bool move) const
 {
     bool aniRestart = false;
     QMargins margin = this->contentsMargins();

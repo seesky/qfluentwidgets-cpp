@@ -31,8 +31,8 @@
 #include <QtWidgets/QGraphicsDropShadowEffect>
 #include <QtWidgets/QListView>
 #include <QtWidgets/QLabel>
-#include <QSharedPointer>
-#include <QtMath>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QtMath>
 #include <QtGui/QScreen>
 
 #include "../../common/icon.h"

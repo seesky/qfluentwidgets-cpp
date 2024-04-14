@@ -363,7 +363,10 @@ signals:
 
 //static QConfig *qconfig = new QConfig();
 
+
 bool isDarkTheme();
+
+
 
 static IniSettings *iniSettings = IniSettings::getInstance();
 static QConfig *qconfig = QConfig::getInstance();

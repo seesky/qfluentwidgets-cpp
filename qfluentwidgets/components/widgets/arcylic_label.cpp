@@ -31,7 +31,12 @@ void BlurCoverThread::blur(QString imagePath, int blurRadius, std::tuple<int, in
 {
     this->imagePath = imagePath;
     this->blurRadius = blurRadius;
-    this->maxSize = maxSize;
+    if(std::get<0>(maxSize) == 0 || std::get<1>(maxSize) == 0){
+        this->maxSize = std::tuple<int,int>(450,450);
+    }else{
+        this->maxSize = maxSize;
+    }
+    
     this->start();
 }
 
@@ -72,7 +77,7 @@ void AcrylicTextureLabel::paintEvent(QPaintEvent *e)
 }
 
 
-AcrylicLabel::AcrylicLabel(int blurRadius, QColor tintColor, QColor luminosityColor, std::tuple<int,int> maxBlurSize, QWidget *parent) : QLabel(parent)
+AcrylicLabel::AcrylicLabel(int blurRadius, QColor tintColor, QColor luminosityColor, std::tuple<int,int> maxBlurSize = std::tuple<int,int>(0,0), QWidget *parent = nullptr) : QLabel(parent)
 {
     checkAcrylicAvailability();
     this->imagePath = QString();

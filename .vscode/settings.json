@@ -168,6 +168,8 @@
         "qbuttongroup": "cpp",
         "qlayout": "cpp",
         "qtranslator": "cpp",
-        "qlocale": "cpp"
+        "qlocale": "cpp",
+        "qurl": "cpp",
+        "qtmath": "cpp"
     }
 }

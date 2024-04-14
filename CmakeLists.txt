@@ -1391,3 +1391,40 @@ target_link_libraries(
   jsoncpp
   Dwmapi
 )
+
+
+
+file(GLOB GALLERY_TEST_FILE
+    "qfluentwidgets/test/gallery/common/*.h"
+    "qfluentwidgets/test/gallery/common/*.cpp"
+    "qfluentwidgets/test/gallery/components/*.h"
+    "qfluentwidgets/test/gallery/components/*.cpp"
+    "qfluentwidgets/test/gallery/view/*.h"
+    "qfluentwidgets/test/gallery/view/*.cpp"
+    "qfluentwidgets/test/gallery/config/*.h"
+    "qfluentwidgets/test/gallery/config/*.cpp"
+)
+
+add_executable(
+  gallery
+  qfluentwidgets/test/gallery_test.cpp
+  ${HEADER_FILES} 
+  ${SOURCE_FILES}
+  ${GALLERY_TEST_FILE}
+)
+
+target_link_options(gallery PRIVATE "-Wl,--whole-archive")
+
+
+target_link_libraries(
+  gallery
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Svg
+  Qt5::Xml
+  Qt5::Multimedia
+  Qt5::MultimediaWidgets
+  jsoncpp
+  Dwmapi
+)

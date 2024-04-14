@@ -26,14 +26,14 @@
 
 class FluentWindowBase : public WindowsFramelessWindow{
     Q_OBJECT
+    Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor)
 public:
     FluentWindowBase(QWidget *parent);
-    void addSubInterface(QWidget *_interface, QVariant *icon, QString text, NavigationItemPosition position);
+    virtual void addSubInterface(QWidget *_interface, QVariant *icon, QString text, NavigationItemPosition position);
     void switchTo(QWidget *_interface);
     void _updateStackedBackground();
     QColor _normalBackgroundColor();
     void paintEvent(QPaintEvent *event) override;
-    void setMicaEffectEnabled(bool isEnabled);
     bool isMicaEffctEnabled();
 
     QHBoxLayout *hBoxLayout;
@@ -52,20 +52,23 @@ public:
     QColor _pressedBackgroundColor();
     QColor _focusInBackgroundColor();
     QColor _disabledBackgroundColor();
-    void _updateBackgroundColor();
-    QColor *getBackgroundColor();
+    
+    QColor getBackgroundColor();
     void setBackgroundColor(QColor color);
-    QColor *backgroundColor();
+    QColor backgroundColor();
 
     bool isHover;
     bool isPressed;
-    BackgroundColorObject *bgColorObject;
+    //BackgroundColorObject *bgColorObject;
+    FluentWindowBase *bgColorObject;
     QPropertyAnimation *backgroundColorAni;
+    QColor _backgroundColor;
 
 public slots:
     void _onCurrentInterfaceChanged(int index);
     void _onThemeChangedFinished();
-
+    void setMicaEffectEnabled(bool isEnabled);
+    void _updateBackgroundColor();
 };
 
 
@@ -90,7 +93,7 @@ public:
     NavigationTreeWidget *addSubInterface(QWidget *_interface, QVariant *icon, QString text, NavigationItemPosition position, QWidget *parent, bool isTransparent);
     void resizeEvent(QResizeEvent *event);
 
-    NavigationInterface *navigationInterface;
+    //NavigationInterface *navigationInterface;
     QHBoxLayout *widgetLayout;
 };
 

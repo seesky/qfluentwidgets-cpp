@@ -27,16 +27,16 @@ public:
     void removeAllWidgets();
     void takeAllWidgets();
     Qt::Orientation expandingDirections();
-    bool hasHeightForWidth();
-    int heightForWidth(int width);
+    bool hasHeightForWidth() const;
+    int heightForWidth(int width) const;
     void setGeometry(const QRect&) override;
     QSize sizeHint() const override;
     QSize minimumSize() const;
     void setVerticalSpacing(int spacing);
-    int verticalSpacing();
+    int verticalSpacing() const;
     void setHorizontalSpacing(int spacing);
-    int horizontalSpacing();
-    int _doLayout(QRect rect, bool move);
+    int horizontalSpacing() const;
+    int _doLayout(QRect rect, bool move) const;
 
 
     QList<QLayoutItem*> _items;
