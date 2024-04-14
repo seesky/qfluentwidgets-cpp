@@ -305,7 +305,7 @@ ImageLabel::ImageLabel(QPixmap image, QWidget *parent) : QLabel(parent)
     this->image = QImage();
     this->setBorderRadius(0, 0, 0, 0);
     QVariant *imageQVariant = new QVariant(QVariant::fromValue<QPixmap>(image));
-    qDebug() << QString(imageQVariant->typeName());
+    //qDebug() << QString(imageQVariant->typeName());
     this->setImage(imageQVariant);
     this->_postInit();
 }
@@ -330,7 +330,7 @@ void ImageLabel::setImage(QVariant* image)
 {
 
     if(image->canConvert<QString>()){
-        qDebug() << image->value<QString>();
+        //qDebug() << image->value<QString>();
         QImageReader reader(image->value<QString>());
         if(reader.supportsAnimation()){
             QMovie* _m = new QMovie(image->value<QString>());

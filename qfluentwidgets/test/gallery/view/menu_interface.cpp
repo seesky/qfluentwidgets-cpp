@@ -4,44 +4,7 @@ MenuInterface::MenuInterface(QWidget *parent) : GalleryInterface(Translator(null
 {
     this->setObjectName("menuInterface");
 
-    FluentIcon *calendarIcon = new FluentIcon();
-    calendarIcon->setIconName(QString("CALENDAR"));
-    FluentIcon *cameraIcon = new FluentIcon();
-    cameraIcon->setIconName(QString("CAMERA"));
-    FluentIcon *editIcon = new FluentIcon();
-    editIcon->setIconName(QString("EDIT"));
-    FluentIcon *fontIcon = new FluentIcon();
-    fontIcon->setIconName(QString("FONT"));
-    FluentIcon *upIcon = new FluentIcon();
-    upIcon->setIconName(QString("UP"));
-    FluentIcon *downIcon = new FluentIcon();
-    downIcon->setIconName(QString("DOWN"));
-
-    this->createTimeAction = new Action(calendarIcon, this->tr("Create Date"), nullptr);
-    this->createTimeAction->setCheckable(true);
-    this->shootTimeAction = new Action(cameraIcon, this->tr("Shooting Date"), nullptr);
-    this->shootTimeAction->setCheckable(true);
-    this->modifiedTimeAction = new Action(editIcon, this->tr("Modified time"), nullptr);
-    this->modifiedTimeAction->setCheckable(true);
-    this->nameAction = new Action(fontIcon, this->tr("Name"), nullptr);
-    this->nameAction->setCheckable(true);
-    this->actionGroup1 = new QActionGroup(this);
-    this->actionGroup1->addAction(this->createTimeAction);
-    this->actionGroup1->addAction(this->shootTimeAction);
-    this->actionGroup1->addAction(this->modifiedTimeAction);
-    this->actionGroup1->addAction(this->nameAction);
-
-    this->ascendAction = new Action(upIcon, this->tr("Ascending"), nullptr);
-    this->ascendAction->setCheckable(true);
-    this->descendAction = new Action(downIcon, this->tr("Descending"), nullptr);
-    this->descendAction->setCheckable(true);
-    this->actionGroup2 = new QActionGroup(this);
-    this->actionGroup2->addAction(this->ascendAction);
-    this->actionGroup2->addAction(this->descendAction);
-
-    this->shootTimeAction->setChecked(true);
-    this->ascendAction->setChecked(true);
-
+    
     this->button1 = new PushButton(this->tr("Show menu"), nullptr, nullptr);
     connect(this->button1, &PushButton::clicked, this, [this](){
         this->createMenu(this->button1->mapToGlobal(QPoint(this->button1->width() + 5, -100)));
@@ -64,16 +27,21 @@ MenuInterface::MenuInterface(QWidget *parent) : GalleryInterface(Translator(null
         "http://www.github.com", 0
     );
 
+    
+
     this->button2 = new PushButton(this->tr("Show menu"), nullptr, nullptr);
     connect(this->button2, &PushButton::clicked, this, [this](){
         this->createCheckableMenu(this->button2->mapToGlobal(QPoint(this->button2->width() + 5, -100)));
     });
 
+    
     this->addExampleCard(
         this->tr("Checkable menu"),
         this->button2,
         "http://www.github.com", 0
     );
+
+    
 
     this->addExampleCard(
         this->tr("Command bar"),
@@ -100,6 +68,7 @@ MenuInterface::MenuInterface(QWidget *parent) : GalleryInterface(Translator(null
         widget,
         "http://www.github.com", 1
     );
+    
 }
 
 
@@ -176,6 +145,8 @@ void MenuInterface::createCustomWidgetMenu(QPoint pos)
     FluentIcon *settingIcon = new FluentIcon();
     settingIcon->setIconName(QString("SETTING"));
 
+    
+
     menu->addAction(new Action(peopleIcon, this->tr("Manage account profile"), nullptr));
     menu->addAction(new Action(shoppintIcon, this->tr("Payment method"), nullptr));
     menu->addAction(new Action(codeIcon, this->tr("Redemption code and gift card"), nullptr));
@@ -190,14 +161,68 @@ CheckableMenu *MenuInterface::createCheckableMenu(QPoint pos)
 {
     CheckableMenu *menu = new CheckableMenu("", this, MenuIndicatorType::RADIO);
 
-    menu->addAction(this->createTimeAction);
-    menu->addAction(this->shootTimeAction);
-    menu->addAction(this->modifiedTimeAction);
-    menu->addAction(this->nameAction);
+
+    FluentIcon *calendarIcon = new FluentIcon();
+    calendarIcon->setIconName(QString("CALENDAR"));
+    FluentIcon *cameraIcon = new FluentIcon();
+    cameraIcon->setIconName(QString("CAMERA"));
+    FluentIcon *editIcon = new FluentIcon();
+    editIcon->setIconName(QString("EDIT"));
+    FluentIcon *fontIcon = new FluentIcon();
+    fontIcon->setIconName(QString("FONT"));
+    FluentIcon *upIcon = new FluentIcon();
+    upIcon->setIconName(QString("UP"));
+    FluentIcon *downIcon = new FluentIcon();
+    downIcon->setIconName(QString("DOWN"));
+
+
+    Action *createTimeAction;
+    Action *shootTimeAction;
+    Action *modifiedTimeAction;
+    Action *nameAction;
+    QActionGroup *actionGroup1;
+
+    createTimeAction = new Action(calendarIcon, this->tr("Create Date"), nullptr);
+    createTimeAction->setCheckable(true);
+    shootTimeAction = new Action(cameraIcon, this->tr("Shooting Date"), nullptr);
+    shootTimeAction->setCheckable(true);
+    modifiedTimeAction = new Action(editIcon, this->tr("Modified time"), nullptr);
+    modifiedTimeAction->setCheckable(true);
+    nameAction = new Action(fontIcon, this->tr("Name"), nullptr);
+    nameAction->setCheckable(true);
+    actionGroup1 = new QActionGroup(this);
+    actionGroup1->addAction(createTimeAction);
+    actionGroup1->addAction(shootTimeAction);
+    actionGroup1->addAction(modifiedTimeAction);
+    actionGroup1->addAction(nameAction);
+
+    shootTimeAction->setChecked(true);
+    
+
+    menu->addAction(createTimeAction);
+    menu->addAction(shootTimeAction);
+    menu->addAction(modifiedTimeAction);
+    menu->addAction(nameAction);
 
     menu->addSeparator();
-    menu->addAction(this->ascendAction);
-    menu->addAction(this->descendAction);
+
+
+    Action *ascendAction;
+    Action *descendAction;
+    QActionGroup *actionGroup2;
+
+    ascendAction = new Action(upIcon, this->tr("Ascending"), nullptr);
+    ascendAction->setCheckable(true);
+    descendAction = new Action(downIcon, this->tr("Descending"), nullptr);
+    descendAction->setCheckable(true);
+    actionGroup2 = new QActionGroup(this);
+    actionGroup2->addAction(ascendAction);
+    actionGroup2->addAction(descendAction);
+
+    ascendAction->setChecked(true);
+
+    menu->addAction(ascendAction);
+    menu->addAction(descendAction);
 
     if(!pos.isNull()){
         menu->exec(&pos, true, MenuAnimationType::DROP_DOWN);

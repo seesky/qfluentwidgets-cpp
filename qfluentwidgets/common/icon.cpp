@@ -296,14 +296,15 @@ void FluentIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode m
     
     if(_icon->canConvert<Icon>()){
         icon_QIcon = _icon->value<Icon>().fluentIcon->icon(theme);
-        QRect tmp_rect;
+        QRect tmp_rect = rect;
+        //qDebug() << rect.x();
         if(rect.x() == 19){
             tmp_rect = rect.adjusted(-1, 0, 0, 0);
         }
         icon_QIcon->paint(painter, tmp_rect, Qt::AlignCenter, QIcon::Normal, state);
     }else if(_icon->canConvert<FluentIcon>()){
         icon_QIcon = _icon->value<FluentIcon>().icon(theme);
-        QRect tmp_rect;
+        QRect tmp_rect = rect;
         if(rect.x() == 19){
             tmp_rect = rect.adjusted(-1, 0, 0, 0);
         }
@@ -311,7 +312,7 @@ void FluentIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode m
     }else if(_icon->canConvert<QIcon>())
     {
         *icon_QIcon = _icon->value<QIcon>();
-        QRect tmp_rect;
+        QRect tmp_rect = rect;
         if(rect.x() == 19){
             tmp_rect = rect.adjusted(-1, 0, 0, 0);
         }

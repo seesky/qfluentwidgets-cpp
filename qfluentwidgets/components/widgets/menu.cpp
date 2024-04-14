@@ -286,7 +286,7 @@ bool RoundMenu::_hasItemIcon()
     }
 
     QList<RoundMenu *>::iterator _it;
-    qDebug() << this->_subMenus->length();
+    //qDebug() << this->_subMenus->length();
     for (_it = this->_subMenus->begin(); _it != this->_subMenus->end(); ++_it) {
         RoundMenu * value = *_it;
         /*
@@ -375,7 +375,7 @@ QIcon *RoundMenu::_createItemIcon(QVariant *w)
             this->fie = new FluentIconEngine(&qvQIcon, false);
         }
 
-        QIcon *icon = new QIcon(fie);
+        QIcon *icon = new QIcon(this->fie);
         if(hasIcon && ac->icon()->isNull()){
             QPixmap pixmap = QPixmap(this->view->iconSize());
             pixmap.fill(Qt::transparent);
@@ -785,7 +785,7 @@ QListWidgetItem *MenuActionListWidget::takeItem(int row)
 void MenuActionListWidget::adjustSize(QPoint *pos = nullptr, MenuAnimationType aniType = MenuAnimationType::NONE)
 {
     QSize size = QSize();
-    qDebug() << this->count();
+    //qDebug() << this->count();
     for(int i = 0; i < this->count(); i++){
         QListWidgetItem *iiii = this->item(i);
         QSize s = this->item(i)->sizeHint();
@@ -1577,20 +1577,28 @@ void CheckableMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
 {
     ShortcutMenuItemDelegate::paint(painter, option, index);
 
+    
     QVariant action = index.data(Qt::UserRole);
-    if(action.canConvert<QAction *>()){
-        if(action.value<QAction *>()->isChecked()){
-            return;
-        }
+    //qDebug() << action.typeName();
+
+    if(!(action.isValid() && action.value<QAction *>()->isChecked())){
+        return;
     }
+
+    // if(action.canConvert<QAction *>()){
+    //     if(!action.value<QAction *>()->isChecked()){
+    //         return;
+    //     }
+    // }
 
     painter->save();
     this->_drawIndicator(painter, option, index);
     painter->restore();
     
+    
 }
 
-void RadioIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void RadioIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect rect = option.rect;
     int r = 5;
@@ -1608,7 +1616,7 @@ void RadioIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QSt
 }
 
 
-void CheckIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
+void CheckIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect rect = option.rect;
     int s = 11;
@@ -1626,12 +1634,12 @@ void CheckIndicatorMenuItemDelegate::_drawIndicator(QPainter *painter, const QSt
 }
 
 
-QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style)
+QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style, MenuActionListWidget *view)
 {
     if(style == MenuIndicatorType::RADIO){
-        return new QVariant(QVariant::fromValue<RadioIndicatorMenuItemDelegate *>(new RadioIndicatorMenuItemDelegate(nullptr)));
+        return new QVariant(QVariant::fromValue<RadioIndicatorMenuItemDelegate *>(new RadioIndicatorMenuItemDelegate(view)));
     }else if(style == MenuIndicatorType::CHECK){
-        return new QVariant(QVariant::fromValue<CheckIndicatorMenuItemDelegate *>(new CheckIndicatorMenuItemDelegate(nullptr)));
+        return new QVariant(QVariant::fromValue<CheckIndicatorMenuItemDelegate *>(new CheckIndicatorMenuItemDelegate(view)));
     }
     return nullptr;
 }
@@ -1639,7 +1647,7 @@ QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style)
 
 CheckableMenu::CheckableMenu(QString title, QWidget *parent, MenuIndicatorType indicator) : RoundMenu(title, parent)
 {
-    QVariant *itemDelegate = createCheckableMenuItemDelegate(indicator);
+    QVariant *itemDelegate = createCheckableMenuItemDelegate(indicator, this->view);
 
     if(itemDelegate->canConvert<RadioIndicatorMenuItemDelegate *>()){
         this->view->setItemDelegate(itemDelegate->value<RadioIndicatorMenuItemDelegate *>());
@@ -1651,10 +1659,11 @@ CheckableMenu::CheckableMenu(QString title, QWidget *parent, MenuIndicatorType i
     
 }
 
-void CheckableMenu::_adjustItemText(QListWidgetItem *item, QAction *action)
+int CheckableMenu::_adjustItemText(QListWidgetItem *item, QAction *action)
 {
     int w = RoundMenu::_adjustItemText(item, action);
     item->setSizeHint(QSize(w + 26, this->itemHeight));
+    return w + 26;
 }
 
 

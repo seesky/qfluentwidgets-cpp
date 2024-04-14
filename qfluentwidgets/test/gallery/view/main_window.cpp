@@ -33,8 +33,10 @@ void MainWindow::initNavigation()
 {
     Translator *t = new Translator(nullptr);
     
+    
     //add sub interface
     NavigationItemPosition pos = NavigationItemPosition::SCROLL;
+    
     FluentIcon *basicInputInterfaceIcon = new FluentIcon();
     basicInputInterfaceIcon->setIconName(QString("CHECKBOX"));
     this->addSubInterface(

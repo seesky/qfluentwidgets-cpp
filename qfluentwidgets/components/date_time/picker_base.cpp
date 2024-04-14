@@ -146,7 +146,7 @@ QString PickerColumnButton::value()
 
 void PickerColumnButton::setValue(QString v)
 {
-    qDebug() << v;
+    //qDebug() << v;
     this->_value = v;
     if(v.isEmpty()){
         this->setText(this->name());
@@ -163,7 +163,7 @@ QList<QVariant> *PickerColumnButton::items()
 {
     QList<QVariant> *list = new QList<QVariant>();
     for(int i = 0; i < this->_items->length(); i++){
-        qDebug() << this->_items->at(i);
+        //qDebug() << this->_items->at(i);
         list->append(this->_formatter->encode(QVariant::fromValue<QString>(this->_items->at(i))));
     }
     return list;
@@ -423,7 +423,7 @@ void PickerBase::_showPanel()
 void PickerBase::_onConfirmed(QList<QString> *value)
 {
     for(int i = 0; i < value->length(); i++){
-        qDebug() << value->at(i);
+        //qDebug() << value->at(i);
         this->setColumnValue(this, i, value->at(i));
     }
 }

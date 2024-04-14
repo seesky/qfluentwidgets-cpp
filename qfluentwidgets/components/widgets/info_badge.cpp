@@ -92,7 +92,7 @@ void InfoBadge::setCustomBackgroundColor(QVariant *light, QVariant *dark)
         this->lightBackgroundColor = QColor(light->value<QColor>());
         this->darkBackgroundColor = QColor(dark->value<QColor>());
     }else if(light->canConvert<QString>() && dark->canConvert<QString>()){
-        qDebug() << light->value<QString>();
+        //qDebug() << light->value<QString>();
         this->lightBackgroundColor = QColor(light->value<QString>());
         this->darkBackgroundColor = QColor(dark->value<QString>());
     }
@@ -142,7 +142,7 @@ InfoBadge* InfoBadge::make(QVariant *text, QWidget *parent, QString level, QWidg
 {
     InfoBadge *w;
     if(text->canConvert<QString>()){
-        qDebug() << text->value<QString>();
+        //qDebug() << text->value<QString>();
         w = new InfoBadge(text->value<QString>(), parent, level);
     }else if(text->canConvert<int>()){
         w = new InfoBadge(text->value<int>(), parent, level);
@@ -163,7 +163,7 @@ InfoBadge* InfoBadge::make(QVariant *text, QWidget *parent, QString level, QWidg
 
 InfoBadge* InfoBadge::info(QVariant *text, QWidget *parent = nullptr, QWidget *target = nullptr, InfoBadgePosition postion = InfoBadgePosition::TOP_RIGHT)
 {
-    qDebug() << text->typeName();
+    //qDebug() << text->typeName();
     return InfoBadge::make(text, parent, InfoLevel.value(QString("INFOAMTION")), target, postion);   
 }
 
@@ -191,8 +191,8 @@ InfoBadge* InfoBadge::error(QVariant *text, QWidget *parent = nullptr, QWidget *
 
 InfoBadge* InfoBadge::custom(QVariant *text, QColor light, QColor dark, QWidget *parent, QWidget *target, InfoBadgePosition postion)
 {
-    qDebug() << light.isValid();
-    qDebug() << dark.isValid();
+    //qDebug() << light.isValid();
+    //qDebug() << dark.isValid();
     InfoBadge* w = InfoBadge::make(text, parent, InfoLevel.value(QString("INFOAMTION")), target, postion);
     w->setCustomBackgroundColor(new QVariant(QVariant::fromValue<QColor>(light)), new QVariant(QVariant::fromValue<QColor>(dark)));
     return w;

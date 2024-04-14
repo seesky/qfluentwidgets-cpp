@@ -28,7 +28,7 @@ IniSettings* IniSettings::getInstance()
 
 void IniSettings::settings_init(const QString &path)
 {
-    qDebug() << path;
+    //qDebug() << path;
 	m_iniFile = QSharedPointer<QSettings>(new QSettings(path, QSettings::IniFormat));
 	m_iniFile->setIniCodec(QTextCodec::codecForName("UTF-8"));
 }

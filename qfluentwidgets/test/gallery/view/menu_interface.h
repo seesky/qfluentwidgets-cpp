@@ -37,14 +37,9 @@ public:
     CommandBar *createCommandBar();
 
     
-    Action *createTimeAction;
-    Action *shootTimeAction;
-    Action *modifiedTimeAction;
-    Action *nameAction;
-    QActionGroup *actionGroup1;
-    Action *ascendAction;
-    Action *descendAction;
-    QActionGroup *actionGroup2;
+
+
+
     PushButton *button1;
     PushButton *button2;
     PushButton *button3;

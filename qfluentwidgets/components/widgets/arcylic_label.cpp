@@ -3,7 +3,7 @@
 bool checkAcrylicAvailability()
 {
     if(!isAcrylicAvailable){
-        qDebug() << QString("`AcrylicLabel` is not supported in current qfluentwidgets.");
+        //qDebug() << QString("`AcrylicLabel` is not supported in current qfluentwidgets.");
     }
     
     return isAcrylicAvailable;   

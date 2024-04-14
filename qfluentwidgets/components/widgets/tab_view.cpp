@@ -360,7 +360,7 @@ void TabItem::_drawNotSelectedBackground(QPainter *painter)
 
 void TabItem::_drawText(QPainter *painter)
 {
-    qDebug() << this->width();
+    //qDebug() << this->width();
     int tw = this->fontMetrics().width(this->text());
 
     int dw;
@@ -542,7 +542,7 @@ TabItem *TabBar::insertTab(int index, QString routeKey, QString text, QVariant *
 
 void TabBar::removeTab(int index)
 {
-    qDebug() << "index:" << index << " items length:" << this->items.length();
+    //qDebug() << "index:" << index << " items length:" << this->items.length();
     if(!(0 <= index && index < this->items.length())){
         return;
     }
@@ -971,7 +971,7 @@ void TabBar::_swapItem(int index)
     //QList<TabItem *> items = this->items;
     TabItem *swappedItem = this->tabItem(index);
     int x = this->tabRect(this->currentIndex()).x();
-    qDebug() << x;
+    //qDebug() << x;
 
     // 假设 currentIndex() 返回当前选中项的索引
     int currentIdx = currentIndex();
@@ -981,19 +981,19 @@ void TabBar::_swapItem(int index)
     if (currentIdx >= 0 && currentIdx < this->items.size() && otherIdx >= 0 && otherIdx < this->items.size()) {
         // 使用 std::swap 来交换两个元素
         //std::swap(items[currentIdx], items[otherIdx]);
-        qDebug() << "currentIdx:" << currentIdx << "  otherIdx:" << otherIdx; 
+        //qDebug() << "currentIdx:" << currentIdx << "  otherIdx:" << otherIdx; 
 
 
         for(int i = 0; i < this->items.length(); i++){
             TabItem *item = this->items.at(i);
-            qDebug() << item->_routeKey;
+            //qDebug() << item->_routeKey;
         }
 
         this->items.swapItemsAt(currentIdx, otherIdx);
 
         for(int i = 0; i < this->items.length(); i++){
             TabItem *item = this->items.at(i);
-            qDebug() << item->_routeKey;
+            //qDebug() << item->_routeKey;
         }
     }
 

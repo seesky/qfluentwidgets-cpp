@@ -139,7 +139,7 @@ class MenuItemDelegate : public QStyledItemDelegate{
 public:
     MenuItemDelegate(QObject *parent) : QStyledItemDelegate(parent){};
     bool _isSeparator(QModelIndex index) const;
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 private:
 };
 
@@ -196,7 +196,7 @@ public:
     void addWidget(QWidget *widget, bool selectable, SlotForwarder *onClick);
     QListWidgetItem *_createActionItem(QAction *action, QAction *before);
     bool _hasItemIcon();
-    int _adjustItemText(QListWidgetItem *item, QAction *action);
+    virtual int _adjustItemText(QListWidgetItem *item, QAction *action);
     int _longestShortcutWidth();
     QIcon *_createItemIcon(QVariant *w);
     void insertAction(QAction *before, QAction *action);
@@ -490,7 +490,9 @@ class CheckableMenuItemDelegate : public ShortcutMenuItemDelegate{
 public:
     CheckableMenuItemDelegate(QObject *parent) : ShortcutMenuItemDelegate(parent){};
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const{};
+    virtual void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const{
+        //qDebug() << "test";
+    };
 };
 
 
@@ -498,25 +500,25 @@ class RadioIndicatorMenuItemDelegate : public CheckableMenuItemDelegate{
     Q_OBJECT
 public:
     RadioIndicatorMenuItemDelegate(QObject *parent) : CheckableMenuItemDelegate(parent){};
-    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 class CheckIndicatorMenuItemDelegate : public CheckableMenuItemDelegate{
     Q_OBJECT
 public:
     CheckIndicatorMenuItemDelegate(QObject *parent) : CheckableMenuItemDelegate(parent){};
-    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void _drawIndicator(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 
-QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style);
+QVariant *createCheckableMenuItemDelegate(MenuIndicatorType style, MenuActionListWidget *view);
 
 
 class CheckableMenu : public RoundMenu{
     Q_OBJECT
 public:
     CheckableMenu(QString title, QWidget *parent, MenuIndicatorType indicator);
-    void _adjustItemText(QListWidgetItem *item, QAction *action);
+    int _adjustItemText(QListWidgetItem *item, QAction *action) override;
 };
 
 

@@ -57,7 +57,7 @@ bool CommandButton::isIconOnly() const
 
 void CommandButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, QIcon::State state)
 {
-    qDebug() << icon->typeName();
+    //qDebug() << icon->typeName();
 }
 
 QString CommandButton::text() const

@@ -20,7 +20,7 @@ MonthFormatter::MonthFormatter() : PickerColumnFormatter()
 QString MonthFormatter::encode(QVariant value)
 {
     if(value.canConvert<QString>()){
-        qDebug() << value.value<QString>();
+        //qDebug() << value.value<QString>();
         return this->months->at(value.value<QString>().toInt() - 1);
     }else if(value.canConvert<int>()){
         return this->months->at(value.value<int>() - 1);
@@ -269,7 +269,7 @@ void DatePicker::setDate(QDate *date)
     }
 
     this->_date = date;
-    qDebug() << *date;
+    //qDebug() << *date;
     this->setColumnValue(this, this->monthIndex, QString::number(date->month()));
     this->setColumnValue(this, this->dayIndex, QString::number(date->day()));
     this->setColumnValue(this, this->yearIndex, QString::number(date->year()));

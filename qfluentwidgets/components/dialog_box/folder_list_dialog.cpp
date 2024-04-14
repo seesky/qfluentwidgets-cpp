@@ -242,7 +242,7 @@ FolderCard::FolderCard(QString folderPath, QWidget *parent) : ClickableWindow(pa
     this->folderName = QFileInfo(folderPath).fileName();
 
     QString c = getIconColor(Theme::AUTO, false);
-    qDebug() << QString("qfluentwidgets/images/folder_list_dialog/Close_%1.png").arg(c);
+    //qDebug() << QString("qfluentwidgets/images/folder_list_dialog/Close_%1.png").arg(c);
     this->__closeIcon = QPixmap(QString("qfluentwidgets/images/folder_list_dialog/Close_%1.png").arg(c)).scaled(12, 12, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
@@ -281,7 +281,7 @@ void  FolderCard::__drawText(QPainter& painter, int x1, int fontSize1, int x2, i
 AddFolderCard::AddFolderCard(QWidget *parent) : ClickableWindow(parent)
 {
     QString c = getIconColor(Theme::AUTO, false);
-    qDebug() << QString("qfluentwidgets/images/folder_list_dialog/Add_%1.png").arg(c);
+    //qDebug() << QString("qfluentwidgets/images/folder_list_dialog/Add_%1.png").arg(c);
     this->__iconPix = QPixmap(QString("qfluentwidgets/images/folder_list_dialog/Add_%1.png").arg(c)).scaled(22, 22, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 

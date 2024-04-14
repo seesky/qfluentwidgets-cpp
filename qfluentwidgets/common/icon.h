@@ -25,7 +25,6 @@ const static QMap<QString, QString> InfoBarIconMap = {
 };
 
 const static std::map<QString, QString> FluentIconMap = {
-        {"UP", "One"},
         {"UP", "Up"},
         {"ADD", "Add"},
         {"BUS", "Bus"},

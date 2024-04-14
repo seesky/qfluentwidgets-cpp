@@ -265,7 +265,7 @@ void SegmentedToolWidget::clear()
 
 SegmentedToolItem *SegmentedToolWidget::currentItem()
 {
-    qDebug() << this->_currentRouteKey;
+    //qDebug() << this->_currentRouteKey;
     if(this->_currentRouteKey.isNull()){
         return nullptr;
     }
@@ -428,7 +428,7 @@ void SegmentedToggleToolWidget::clear()
 
 SegmentedToggleToolItem *SegmentedToggleToolWidget::currentItem()
 {
-    qDebug() << this->_currentRouteKey;
+    //qDebug() << this->_currentRouteKey;
     if(this->_currentRouteKey.isNull()){
         return nullptr;
     }

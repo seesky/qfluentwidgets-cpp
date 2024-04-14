@@ -136,6 +136,96 @@ public:
 };
 
 
+class Demo1 : public QWidget{
+public:
+
+    QLabel *label;
+
+    Demo1() : QWidget(){
+        this->setLayout(new QHBoxLayout());
+        this->label = new QLabel("Right-click your mouse", this);
+        this->label->setAlignment(Qt::AlignCenter);
+        this->layout()->addWidget(this->label);
+        this->resize(400, 400);
+
+        this->setStyleSheet(QString("Demo{background: white} QLabel{font-size: 20px}"));
+    }
+
+    void contextMenuEvent(QContextMenuEvent *event)
+    {
+        CheckableMenu *menu = new CheckableMenu("", this, MenuIndicatorType::RADIO);
+
+
+        FluentIcon *calendarIcon = new FluentIcon();
+        calendarIcon->setIconName(QString("CALENDAR"));
+        FluentIcon *cameraIcon = new FluentIcon();
+        cameraIcon->setIconName(QString("CAMERA"));
+        FluentIcon *editIcon = new FluentIcon();
+        editIcon->setIconName(QString("EDIT"));
+        FluentIcon *fontIcon = new FluentIcon();
+        fontIcon->setIconName(QString("FONT"));
+        FluentIcon *upIcon = new FluentIcon();
+        upIcon->setIconName(QString("UP"));
+        FluentIcon *downIcon = new FluentIcon();
+        downIcon->setIconName(QString("DOWN"));
+
+
+        Action *createTimeAction;
+        Action *shootTimeAction;
+        Action *modifiedTimeAction;
+        Action *nameAction;
+        QActionGroup *actionGroup1;
+
+        createTimeAction = new Action(calendarIcon, this->tr("Create Date"), nullptr);
+        createTimeAction->setCheckable(true);
+        createTimeAction->setChecked(true);
+        shootTimeAction = new Action(cameraIcon, this->tr("Shooting Date"), nullptr);
+        shootTimeAction->setCheckable(true);
+        modifiedTimeAction = new Action(editIcon, this->tr("Modified time"), nullptr);
+        modifiedTimeAction->setCheckable(true);
+        nameAction = new Action(fontIcon, this->tr("Name"), nullptr);
+        nameAction->setCheckable(true);
+        actionGroup1 = new QActionGroup(this);
+        actionGroup1->addAction(createTimeAction);
+        actionGroup1->addAction(shootTimeAction);
+        actionGroup1->addAction(modifiedTimeAction);
+        actionGroup1->addAction(nameAction);
+
+        shootTimeAction->setChecked(true);
+        
+
+        menu->addAction(createTimeAction);
+        menu->addAction(shootTimeAction);
+        menu->addAction(modifiedTimeAction);
+        menu->addAction(nameAction);
+
+        menu->addSeparator();
+
+
+        Action *ascendAction;
+        Action *descendAction;
+        QActionGroup *actionGroup2;
+
+        ascendAction = new Action(upIcon, this->tr("Ascending"), nullptr);
+        ascendAction->setCheckable(true);
+        descendAction = new Action(downIcon, this->tr("Descending"), nullptr);
+        descendAction->setCheckable(true);
+        actionGroup2 = new QActionGroup(this);
+        actionGroup2->addAction(ascendAction);
+        actionGroup2->addAction(descendAction);
+
+        ascendAction->setChecked(true);
+
+         menu->addAction(ascendAction);
+        menu->addAction(descendAction);
+
+        QPoint p = event->globalPos();
+        menu->exec(&p, true, MenuAnimationType::DROP_DOWN);
+    }
+};
+
+
+
 int main(int argc, char *argv[])
 {
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
@@ -144,6 +234,8 @@ int main(int argc, char *argv[])
     
     QApplication *app = new QApplication(argc, argv);
     Demo *w = new Demo();
-    w->show();
+    w->show(); 
+    Demo1 *w1 = new Demo1();
+    w1->show();
     return app->exec();
 }
