@@ -159,7 +159,7 @@ void MenuInterface::createCustomWidgetMenu(QPoint pos)
 
 CheckableMenu *MenuInterface::createCheckableMenu(QPoint pos)
 {
-    CheckableMenu *menu = new CheckableMenu("", this, MenuIndicatorType::RADIO);
+    CheckableMenu *menu = new CheckableMenu("", this, MenuIndicatorType::CHECK);
 
 
     FluentIcon *calendarIcon = new FluentIcon();

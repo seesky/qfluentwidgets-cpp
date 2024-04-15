@@ -170,6 +170,7 @@
         "qtranslator": "cpp",
         "qlocale": "cpp",
         "qurl": "cpp",
-        "qtmath": "cpp"
+        "qtmath": "cpp",
+        "qscrollbar": "cpp"
     }
 }

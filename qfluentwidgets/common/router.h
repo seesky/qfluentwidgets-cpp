@@ -8,6 +8,8 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QStackedWidget>
 
+#include "../window/stacked_widget.h"
+
 class RouteItem{
 public:
     RouteItem(QStackedWidget *stacked, QString routeKey);

@@ -23,6 +23,7 @@
 #include "layout_interface.h"
 #include "material_interface.h"
 #include "menu_interface.h"
+#include "navigation_view_interface.h"
 
 
 class MainWindow : public FluentWindow{
@@ -41,6 +42,7 @@ public:
     LayoutInterface *layoutInterface;
     MaterialInterface *materialInterface;
     MenuInterface *menuInterface;
+    NavigationViewInterface *navigationViewInterface;
 
 public slots:
     void switchToSample(QString routeKey, int index);

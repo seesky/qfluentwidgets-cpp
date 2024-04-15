@@ -263,7 +263,7 @@ public slots:
     {
         QWidget *widget = this->stackWidget->widget(index);
         this->navigationInterface->setCurrentItem(widget->objectName());
-        qrouter->push(this->stackWidget, widget->objectName());
+        qrouter->push(this->stackWidget, widget->objectName());  
     }
 
 };

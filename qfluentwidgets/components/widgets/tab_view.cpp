@@ -186,7 +186,7 @@ void TabItem::setCloseButtonDisplayMode(TabCloseButtonDisplayMode mode)
     }else if(mode == TabCloseButtonDisplayMode::ALWAYS){
         this->closeButton->show();
     }else{
-        this->closeButton->setVisible(this-isHover || this->isSelected);
+        this->closeButton->setVisible(this->isHover || this->isSelected);
     }
 }
 
@@ -315,18 +315,18 @@ void TabItem::_drawSelectedBackground(QPainter *painter)
 
     painter->strokePath(*path, topBorderColor);
 
-    path = new QPainterPath();
-    path->arcMoveTo(1, h - d - 1, d, d, 255);
-    path->arcTo(1, h - d - 1, d, d, 225, 45);
-    path->lineTo(w - r - 1, h - 1);
-    path->arcTo(w - d - 1, h - d - 1, d, d, 270, 45);
+    QPainterPath *path2 = new QPainterPath();
+    path2->arcMoveTo(1, h - d - 1, d, d, 225);
+    path2->arcTo(1, h - d - 1, d, d, 225, 45);
+    path2->lineTo(w - r - 1, h - 1);
+    path2->arcTo(w - d - 1, h - d - 1, d, d, 270, 45);
 
     QColor bottomBorderColor = topBorderColor;
     if(!isDark){
         bottomBorderColor = QColor(0, 0, 0, 63);
     }
 
-    painter->strokePath(*path, bottomBorderColor);
+    painter->strokePath(*path2, bottomBorderColor);
 
     painter->setPen(Qt::NoPen);
 
@@ -833,6 +833,7 @@ void TabBar::setScrollable(bool scrollable)
 
 void TabBar::setTabMaximumWidth(int width)
 {
+    qDebug() << width;
     if(width == this->_tabMaxWidth){
         return;
     }

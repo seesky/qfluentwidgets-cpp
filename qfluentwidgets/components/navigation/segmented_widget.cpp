@@ -224,7 +224,7 @@ void SegmentedToolWidget::insertWidget(int index, QString routeKey, SegmentedToo
     }
 
     widget->setProperty("routeKey", new QVariant(QVariant::fromValue<QString>(routeKey)));
-    connect(widget, &SegmentedToolItem::itemClicked, this, &Pivot::_onItemClicked);
+    connect(widget, &SegmentedToolItem::itemClicked, this, &SegmentedToolWidget::_onItemClicked);
     if(onClick != nullptr){
         connect(widget, &SegmentedToolItem::itemClicked, this, [onClick](){
             onClick();
@@ -386,7 +386,7 @@ void SegmentedToggleToolWidget::insertWidget(int index, QString routeKey, Segmen
     }
 
     widget->setProperty("routeKey", new QVariant(QVariant::fromValue<QString>(routeKey)));
-    connect(widget, &SegmentedToggleToolItem::itemClicked, this, &Pivot::_onItemClicked);
+    connect(widget, &SegmentedToggleToolItem::itemClicked, this, &SegmentedToggleToolWidget::_onItemClicked);
     if(onClick != nullptr){
         connect(widget, &SegmentedToggleToolItem::itemClicked, this, [onClick](){
             onClick();

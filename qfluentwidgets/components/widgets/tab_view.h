@@ -36,6 +36,8 @@ enum class TabCloseButtonDisplayMode{
     NEVER = 2
 };
 
+Q_DECLARE_METATYPE(TabCloseButtonDisplayMode)
+
 /*
 class TabBar;
 // 定义一个检查索引有效性的函数模板

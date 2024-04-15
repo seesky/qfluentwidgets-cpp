@@ -80,7 +80,7 @@ void StackedHistory::remove(QString routeKey)
 
 
 QString StackedHistory::top()
-{
+{   
     return this->history.last();
 }
 
@@ -93,9 +93,18 @@ void StackedHistory::setDefaultRouteKey(QString routeKey)
 void StackedHistory::goToTop()
 {
     QWidget *w = this->stacked->findChild<QWidget*>(this->top());
-    if((w) != nullptr){
-        this->stacked->setCurrentWidget(w);
+    auto stackedWidget = qobject_cast<StackedWidget*>(this->stacked);
+    if(stackedWidget != nullptr){
+        if((w) != nullptr){
+            stackedWidget->setCurrentWidget(w, false);
+        }
+    }else{
+        if((w) != nullptr){
+            this->stacked->setCurrentWidget(w);
+        }
     }
+
+
 }
 
 Router::Router(QWidget *parent) : QObject(parent)
@@ -127,7 +136,7 @@ void Router::setDefaultRouteKey(QStackedWidget *stacked, QString routeKey)
 void Router::push(QStackedWidget *stacked, QString routeKey)
 {
     RouteItem *item = new RouteItem(stacked, routeKey);
-
+    
     if(!this->stackHistories->contains(stacked)){
         this->stackHistories->insert(stacked, new StackedHistory(stacked));
     }

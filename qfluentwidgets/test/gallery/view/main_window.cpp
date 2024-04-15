@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : FluentWindow(parent)
     this->layoutInterface = new LayoutInterface(this);
     this->materialInterface = new MaterialInterface(this);
     this->menuInterface = new MenuInterface(this);
+    this->navigationViewInterface = new NavigationViewInterface(this);
 
     this->navigationInterface->setAcrylicEnabled(true);
 
@@ -86,7 +87,15 @@ void MainWindow::initNavigation()
         new QVariant(QVariant::fromValue<FluentIcon>(*menuInterfaceIcon)),
         t->material,
         pos, nullptr, false);
-
+    
+    FluentIcon *navigationViewInterfaceIcon = new FluentIcon();
+    navigationViewInterfaceIcon->setIconName(QString("MENU"));
+    this->addSubInterface(
+        this->navigationViewInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*navigationViewInterfaceIcon)),
+        t->navigation,
+        pos, nullptr, false);
+    
 }
 
 
