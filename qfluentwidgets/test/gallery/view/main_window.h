@@ -29,6 +29,7 @@
 #include "text_interface.h"
 #include "view_interface.h"
 #include "home_interface.h"
+#include "setting_interface.h"
 
 
 class MainWindow : public FluentWindow{
@@ -53,6 +54,7 @@ public:
     TextInterface *textInterface;
     ViewInterface *viewInterface;
     HomeInterface *homeInterface;
+    SettingInterface *settingInterface;
 
 public slots:
     void switchToSample(QString routeKey, int index);

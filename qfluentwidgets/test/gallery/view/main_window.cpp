@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : FluentWindow(parent)
     this->textInterface = new TextInterface(this);
     this->viewInterface = new ViewInterface(this);
     this->homeInterface = new HomeInterface(this);
+    this->settingInterface = new SettingInterface(this);
 
     this->navigationInterface->setAcrylicEnabled(true);
 
@@ -149,6 +150,21 @@ void MainWindow::initNavigation()
         t->view,
         pos, nullptr, false);
     
+
+    
+    
+    this->navigationInterface->addWidget(QString("avatar"), new NavigationAvatarWidget(QString("zhiyiYo"), new QVariant(QVariant::fromValue<QString>(QString("resource/shoko.png"))), nullptr), [this](){
+        this->onSupport();
+    }, NavigationItemPosition::BOTTOM, QString(), QString());
+    
+    
+    FluentIcon *settingIcon = new FluentIcon();
+    settingIcon->setIconName(QString("SETTING"));
+    this->addSubInterface(
+        this->settingInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*settingIcon)),
+        this->tr("Settings"),
+        NavigationItemPosition::BOTTOM, nullptr, false);
     
 }
 

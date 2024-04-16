@@ -1,15 +1,11 @@
-#include "setting_interface.h"
 
+#include "setting_interface.h"
 
 SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
 {
     this->scrollWidget = new QWidget();
-
-    
     this->expandLayout = new ExpandLayout(this->scrollWidget);
-
     this->settingLabel = new QLabel(this->tr("Settings"), this);
-
 
     QList<QString> songQuality = {"Standard quality", "Super quality", "Lossless quality"};
     this->onlineSongQuality = new OptionsConfigItem("Online", "SongQuality", SongQuality.value("STANDARD"), songQuality, false);
@@ -23,8 +19,6 @@ SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
     this->enableAcrylicBackground = new OptionsConfigItem("MainWindow", "EnableAcrylicBackground", "false", enableList, false);
 
     QList<QString> languageList = {"chinese simplified", "chinese traditional", "english", "auto"};
-    //this->language = new OptionsConfigItem("MainWindow", "Language", "auto", languageList, false);
-
 
     this->onlineMusicGroup = new SettingCardGroup(this->tr("Online Music"), this->scrollWidget);
     FluentIcon *rangeSettingCardIcon = new FluentIcon();
@@ -70,6 +64,7 @@ SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
         QVariant::fromValue<OptionsConfigItem*>(this->enableAcrylicBackground), 
         this->personalGroup);
 
+    /*
     FluentIcon *themeCardSettingCardIcon = new FluentIcon();
     themeCardSettingCardIcon->setIconName(QString("BRUSH"));
     QList<QString> hemeCardList = {"light", "dark", "auto"};
@@ -81,6 +76,7 @@ SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
         hemeCardList,
         this->personalGroup
     );
+    */
 
     FluentIcon *languageCardSettingCardIcon = new FluentIcon();
     languageCardSettingCardIcon->setIconName(QString("LANGUAGE"));
@@ -123,9 +119,8 @@ SettingInterface::SettingInterface(QWidget *parent) : ScrollArea(parent)
         QString("© Copyright") + QString(" 2024, SeeSky."),
         this->aboutGroup
     );
-    
+
     this->__initWidget();
-    
 }
 
 void SettingInterface::__initWidget()
@@ -137,10 +132,10 @@ void SettingInterface::__initWidget()
     this->setWidgetResizable(true);
     this->setObjectName("settingInterface");
 
-    //this->scrollWidget->setObjectName("scrollWidget");
-    //this->settingLabel->setObjectName("settingLabel");
+    this->scrollWidget->setObjectName("scrollWidget");
+    this->settingLabel->setObjectName("settingLabel");
+    FluentStyleSheet().apply(this, FluentStyleSheetMap.value("SETTING_INTERFACE"), Theme::AUTO);
 
-    this->__setQss();
 
     this->__initLayout();
     this->__connectSignalToSlot();
@@ -148,14 +143,13 @@ void SettingInterface::__initWidget()
 
 void SettingInterface::__initLayout()
 {
-    this->settingLabel->move(60, 63);
-
+    this->settingLabel->move(36, 30);
     this->onlineMusicGroup->addSettingCard(this->onlinePageSizeCard);
     this->onlineMusicGroup->addSettingCard(this->onlineMusicQualityCard);
     this->onlineMusicGroup->addSettingCard(this->onlineMvQualityCard);
 
     this->personalGroup->addSettingCard(this->enableAcrylicCard);
-    this->personalGroup->addSettingCard(this->themeCard);
+    //this->personalGroup->addSettingCard(this->themeCard);
     this->personalGroup->addSettingCard(this->languageCard);
 
     this->aboutGroup->addSettingCard(this->helpCard);
@@ -169,31 +163,10 @@ void SettingInterface::__initLayout()
     this->expandLayout->addWidget(this->aboutGroup);
 }
 
-
-void SettingInterface::__setQss()
-{
-    this->scrollWidget->setObjectName("scrollWidget");
-    this->settingLabel->setObjectName("settingLabel");
-
-    QString color = isDarkTheme() ? QString("dark") : QString("light");
-
-    QFile file(QString("resource/setting_resource/qss/%1/demo.qss").arg(color));
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream stream(&file);
-        QString styleSheet = stream.readAll();
-        this->setStyleSheet(styleSheet);
-        file.close();
-    } else {
-        qWarning("Cannot open file: %s", qPrintable(file.errorString()));
-    }
-}
-
-
 void SettingInterface::__showRestartTooltip()
 {
     InfoBar::warning("", this->tr("Configuration takes effect after restart"), Qt::Horizontal, true, 1000, InfoBarPosition::TOP_RIGHT, this->window());
 }
-
 
 void SettingInterface::__connectSignalToSlot()
 {
