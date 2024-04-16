@@ -95,7 +95,7 @@ PivotInterface::PivotInterface(QWidget *parent) : QWidget(parent)
     this->stackedWidget->setCurrentWidget(this->songInterface);
     this->pivot->setCurrentItem(this->songInterface->objectName());
 
-    //qrouter->setDefaultRouteKey(this->stackedWidget, this->songInterface->objectName());
+    qrouter->setDefaultRouteKey(this->stackedWidget, this->songInterface->objectName());
 }
 
 
@@ -119,17 +119,9 @@ void PivotInterface::onCurrentIndexChanged(int index)
 {
     QWidget *widget = this->stackedWidget->widget(index);
     this->pivot->setCurrentItem(widget->objectName());
-    //qrouter->push(this->stackedWidget, widget->objectName());
+    qrouter->push(this->stackedWidget, widget->objectName());
 }
 
-
-
-// SegmentedInterface::SegmentedInterface(QWidget *parent) : QWidget(parent)
-// {
-//     this->pivot = new SegmentedWidget(this);
-//     this->vBoxLayout->removeWidget(this->pivot);
-//     this->vBoxLayout->insertWidget(0, this->pivot);
-// }
 
 
 SegmentedInterface::SegmentedInterface(QWidget *parent) : QWidget(parent)
@@ -157,7 +149,7 @@ SegmentedInterface::SegmentedInterface(QWidget *parent) : QWidget(parent)
     this->stackedWidget->setCurrentWidget(this->songInterface);
     this->pivot->setCurrentItem(this->songInterface->objectName());
 
-    //qrouter->setDefaultRouteKey(this->stackedWidget, this->songInterface->objectName());
+    qrouter->setDefaultRouteKey(this->stackedWidget, this->songInterface->objectName());
 }
 
 
@@ -181,7 +173,7 @@ void SegmentedInterface::onCurrentIndexChanged(int index)
 {
     QWidget *widget = this->stackedWidget->widget(index);
     this->pivot->setCurrentItem(widget->objectName());
-    //qrouter->push(this->stackedWidget, widget->objectName());
+    qrouter->push(this->stackedWidget, widget->objectName());
 }
 
 
@@ -224,6 +216,7 @@ void TabInterface::__initWidget()
     this->initLayout();
 
     this->shadowEnabledCheckBox->setChecked(true);
+    this->tabMaxWidthSpinBox->setRange(90, 400);
     this->tabMaxWidthSpinBox->setValue(this->tabBar->tabMaximumWidth());
 
     this->closeDisplayModeComboBox->addItem(this->tr("Always"), nullptr, new QVariant(QVariant::fromValue<TabCloseButtonDisplayMode>(TabCloseButtonDisplayMode::ALWAYS)));
@@ -240,7 +233,9 @@ void TabInterface::__initWidget()
 
     this->connectSignalToSlot();
 
-    //qrouter->setDefaultRouteKey(this->stackedWidget, this->songInterface->objectName());
+
+
+    qrouter->setDefaultRouteKey(this->stackedWidget, this->songInterface->objectName());
 }
 
 
@@ -329,13 +324,13 @@ void TabInterface::onCurrentIndexChanged(int index)
     }
 
     this->tabBar->setCurrentTab(widget->objectName());
-    //qrouter->push(this->stackedWidget, widget->objectName());
+    qrouter->push(this->stackedWidget, widget->objectName());
 }
 
 void TabInterface::addTab()
 {
     QString text = QString("硝子酱一级棒卡哇伊×%1").arg(QString::number(this->tabCount));
-    this->addSubInterface(new QLabel(QString("🥰 ").arg(text)), text, text, new QVariant("qfluentwidgets/images/Smiling_with_heart.png"));
+    this->addSubInterface(new QLabel(QString("🥰 %1").arg(text)), text, text, new QVariant("qfluentwidgets/images/Smiling_with_heart.png"));
     this->tabCount += 1;
 }
 

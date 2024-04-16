@@ -12,6 +12,11 @@ MainWindow::MainWindow(QWidget *parent) : FluentWindow(parent)
     this->materialInterface = new MaterialInterface(this);
     this->menuInterface = new MenuInterface(this);
     this->navigationViewInterface = new NavigationViewInterface(this);
+    this->scrollInterface = new ScrollInterface(this);
+    this->statusInfoInterface = new StatusInfoInterface(this);
+    this->textInterface = new TextInterface(this);
+    this->viewInterface = new ViewInterface(this);
+    this->homeInterface = new HomeInterface(this);
 
     this->navigationInterface->setAcrylicEnabled(true);
 
@@ -33,10 +38,19 @@ void MainWindow::connectSignalToSlot()
 void MainWindow::initNavigation()
 {
     Translator *t = new Translator(nullptr);
+    FluentIcon *homeInterfaceIcon = new FluentIcon();
+    homeInterfaceIcon->setIconName(QString("HOME"));
+    this->addSubInterface(
+        this->homeInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*homeInterfaceIcon)),
+        this->tr("Home"),
+        NavigationItemPosition::TOP, nullptr, false);
+    this->navigationInterface->addSeparator(NavigationItemPosition::TOP);
     
     
     //add sub interface
     NavigationItemPosition pos = NavigationItemPosition::SCROLL;
+    
     
     FluentIcon *basicInputInterfaceIcon = new FluentIcon();
     basicInputInterfaceIcon->setIconName(QString("CHECKBOX"));
@@ -89,12 +103,52 @@ void MainWindow::initNavigation()
         pos, nullptr, false);
     
     FluentIcon *navigationViewInterfaceIcon = new FluentIcon();
-    navigationViewInterfaceIcon->setIconName(QString("MENU"));
+    navigationViewInterfaceIcon->setIconName(QString("MENU2"));
     this->addSubInterface(
         this->navigationViewInterface,
         new QVariant(QVariant::fromValue<FluentIcon>(*navigationViewInterfaceIcon)),
         t->navigation,
         pos, nullptr, false);
+    
+
+    FluentIcon *scrollInterfaceIcon = new FluentIcon();
+    scrollInterfaceIcon->setIconName(QString("SCROLL"));
+    this->addSubInterface(
+        this->scrollInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*scrollInterfaceIcon)),
+        t->scroll,
+        pos, nullptr, false);
+
+    FluentIcon *statusInfoInterfaceIcon = new FluentIcon();
+    statusInfoInterfaceIcon->setIconName(QString("CHAT"));
+    this->addSubInterface(
+        this->statusInfoInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*statusInfoInterfaceIcon)),
+        t->statusInfo,
+        pos, nullptr, false);
+    
+    
+    FluentIcon *textInterfaceIcon = new FluentIcon();
+    textInterfaceIcon->setIconName(QString("TEXT"));
+    
+    this->addSubInterface(
+        this->textInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*textInterfaceIcon)),
+        t->text,
+        pos, nullptr, false);
+    
+    
+
+    
+    
+    FluentIcon *viewInterfaceIcon = new FluentIcon();
+    viewInterfaceIcon->setIconName(QString("GRID"));
+    this->addSubInterface(
+        this->viewInterface,
+        new QVariant(QVariant::fromValue<FluentIcon>(*viewInterfaceIcon)),
+        t->view,
+        pos, nullptr, false);
+    
     
 }
 

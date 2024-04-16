@@ -183,7 +183,7 @@ void ProgressBar::paintEvent(QPaintEvent *e)
 }
 
 
-IndeterminateProgressBar::IndeterminateProgressBar(QWidget *parent, bool start) : QProgressBar(parent)
+IndeterminateProgressBar::IndeterminateProgressBar(QWidget *parent, bool start = true) : QProgressBar(parent)
 {
     this->_shortPos = 0;
     this->_longPos = 0;

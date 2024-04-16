@@ -158,9 +158,10 @@ void StateToolTip::__rotateTimerFlowSlot()
 
 QPoint StateToolTip::getSuitablePos()
 {
+    QPoint pos;
     for(int i = 0; i < 10; i++){
         int dy = i * (this->height() + 16);
-        QPoint pos = QPoint(((QWidget*)this->parent())->width() - this->width() - 24, 50 + dy);
+        pos = QPoint(((QWidget*)this->parent())->width() - this->width() - 24, 50 + dy);
         QWidget *widget = ((QWidget*)this->parent())->childAt(pos + QPoint(2, 2));
         auto _widget = qobject_cast<StateToolTip*>(widget);
 
@@ -169,9 +170,8 @@ QPoint StateToolTip::getSuitablePos()
         }else{
             break;
         }
-
-        return pos;
     }
+    return pos;
 }
 
 

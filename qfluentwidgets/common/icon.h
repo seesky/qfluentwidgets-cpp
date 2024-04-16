@@ -21,7 +21,8 @@ const static QMap<QString, QString> InfoBarIconMap = {
     {"INFORMATION", "Info"},
     {"SUCCESS", "Success"},
     {"WARNING", "Warning"},
-    {"ERROR", "Error"}
+    {"ERROR", "Error"},
+    {"UP", "Up"}
 };
 
 const static std::map<QString, QString> FluentIconMap = {
@@ -51,6 +52,7 @@ const static std::map<QString, QString> FluentIconMap = {
         {"LINK", "Link"},
         {"MAIL", "Mail"},
         {"MENU", "Menu"},
+        {"MENU2", "Menu2"},
         {"MUTE", "Mute"},
         {"MORE", "More"},
         {"MOVE", "Move"},
@@ -199,7 +201,9 @@ const static std::map<QString, QString> FluentIconMap = {
         {"CHEVRON_DOWN_MED", "ChevronDownMed"},
         {"CHEVRON_RIGHT_MED", "ChevronRightMed"},
         {"EMOJI_TAB_SYMBOLS", "EmojiTabSymbols"},
-        {"EXPRESSIVE_INPUT_ENTRY", "ExpressiveInputEntry"}
+        {"EXPRESSIVE_INPUT_ENTRY", "ExpressiveInputEntry"},
+        {"TEXT", "Text"},
+        {"GRID", "Grid"}
 };
 
 class SvgIconEngine : public QIconEngine{

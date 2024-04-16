@@ -171,6 +171,7 @@
         "qlocale": "cpp",
         "qurl": "cpp",
         "qtmath": "cpp",
-        "qscrollbar": "cpp"
+        "qscrollbar": "cpp",
+        "qstandardpaths": "cpp"
     }
 }
