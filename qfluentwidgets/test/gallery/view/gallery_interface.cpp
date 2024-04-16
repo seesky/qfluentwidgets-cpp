@@ -32,9 +32,9 @@ ToolBar::ToolBar(QString title, QString subtitle, QWidget *parent) : QWidget(par
     sourceButtonIcon->setIconName(QString("DOCUMENT"));
     this->sourceButton = new PushButton(this->tr("Source"), this, new QVariant(QVariant::fromValue<FluentIcon>(*sourceButtonIcon)));
 
-    FluentIcon *themeButtonIcon = new FluentIcon();
-    themeButtonIcon->setIconName(QString("CONSTRACT"));
-    this->themeButton = new ToolButton(themeButtonIcon, this);
+    // FluentIcon *themeButtonIcon = new FluentIcon();
+    // themeButtonIcon->setIconName(QString("CONSTRACT"));
+    // this->themeButton = new ToolButton(themeButtonIcon, this);
 
     this->separator = new GallerySeparatorWidget(this);
 
@@ -70,22 +70,23 @@ void ToolBar::__initWidget()
     this->buttonLayout->addWidget(this->documentButton, 0, Qt::AlignLeft);
     this->buttonLayout->addWidget(this->sourceButton, 0, Qt::AlignLeft);
     this->buttonLayout->addStretch(1);
-    this->buttonLayout->addWidget(this->themeButton, 0, Qt::AlignRight);
-    this->buttonLayout->addWidget(this->separator, 0, Qt::AlignRight);
+    //this->buttonLayout->addWidget(this->themeButton, 0, Qt::AlignRight);
+    
     this->buttonLayout->addWidget(this->supportButton, 0, Qt::AlignRight);
+    this->buttonLayout->addWidget(this->separator, 0, Qt::AlignRight);
     this->buttonLayout->addWidget(this->feedbackButton, 0, Qt::AlignRight);
     this->buttonLayout->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 
-    this->themeButton->installEventFilter(new ToolTipFilter(this->themeButton, 300, ToolTipPosition::TOP));
+    //this->themeButton->installEventFilter(new ToolTipFilter(this->themeButton, 300, ToolTipPosition::TOP));
     this->supportButton->installEventFilter(new ToolTipFilter(this->supportButton, 300, ToolTipPosition::TOP));
     this->feedbackButton->installEventFilter(new ToolTipFilter(this->feedbackButton, 300, ToolTipPosition::TOP));
-    this->themeButton->setToolTip(this->tr("Toggle theme"));
+    //this->themeButton->setToolTip(this->tr("Toggle theme"));
     this->supportButton->setToolTip(this->tr("Support me"));
     this->feedbackButton->setToolTip(this->tr("Send feedback"));
 
-    connect(this->themeButton, &ToolButton::clicked, this, [](){
-        toggleTheme(true);
-    });
+    // connect(this->themeButton, &ToolButton::clicked, this, [](){
+    //     toggleTheme(true);
+    // });
     connect(this->supportButton, &ToolButton::clicked, signalBus, &SignalBus::supportSignal);
     connect(this->documentButton, &PushButton::clicked, this, [](){
         QDesktopServices::openUrl(QUrl("http://www.github.com"));

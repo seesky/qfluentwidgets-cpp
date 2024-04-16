@@ -33,10 +33,10 @@ ViewInterface::ViewInterface(QWidget *parent) : GalleryInterface(Translator(null
 
     HorizontalFlipView *flipView = new HorizontalFlipView(this);
     QList<QVariant *> flipImageList = QList<QVariant *>();
-    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("resource/shoko1.jpg"))));
-    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("resource/shoko2.jpg"))));
-    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("resource/shoko3.jpg"))));
-    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("resource/shoko4.jpg"))));
+    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/shoko1.jpg"))));
+    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/shoko2.jpg"))));
+    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/shoko3.jpg"))));
+    flipImageList.append(new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/shoko4.jpg"))));
     flipView->addImages(flipImageList);
 
     this->addExampleCard(

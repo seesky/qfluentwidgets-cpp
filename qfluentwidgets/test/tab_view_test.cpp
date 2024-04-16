@@ -130,7 +130,7 @@ public:
         this->hBoxLayout->insertWidget(5, this->tabBar, 1);
         this->hBoxLayout->setStretch(6, 0);
         
-        this->avatar = new TransparentDropDownToolButton(QString("resource/shoko.png"), this);
+        this->avatar = new TransparentDropDownToolButton(QString("qfluentwidgets/iamges/shoko.png"), this);
         this->avatar->setIconSize(QSize(26, 26));
         this->avatar->setFixedHeight(30);
         this->hBoxLayout->insertWidget(7, this->avatar, 0, Qt::AlignRight);
@@ -237,7 +237,7 @@ public:
         this->navigationInterface->setCurrentItem(this->homeInterface->objectName());
 
 
-        this->addTab(QString("Heart"), QString("As long as you love me"), new QVariant(QVariant::fromValue<QString>("resource/Heart.png")));
+        this->addTab(QString("Heart"), QString("As long as you love me"), new QVariant(QVariant::fromValue<QString>("qfluentwidgets/images/Heart.png")));
         connect(this->tabBar, &TabBar::currentChanged, this, &Window::onTabChanged);
         connect(this->tabBar, &TabBar::tabAddRequested, this, &Window::onTabAddRequested);        
 
@@ -247,7 +247,7 @@ public:
 
     void initWindow(){
         this->resize(1100, 750);
-        this->setWindowIcon(QIcon("resource/logo.png"));
+        this->setWindowIcon(QIcon("qfluentwidgets/images/logo.png"));
         this->setWindowTitle(QString("Qt Widgets"));
         this->titleBar->setAttribute(Qt::WA_StyledBackground);
 
@@ -287,7 +287,7 @@ public slots:
     void onTabAddRequested()
     {
         QString text = QString("硝子酱一级棒卡哇伊×%1").arg(this->tabBar->count());
-        this->addTab(text, text, new QVariant(QVariant::fromValue<QString>(QString("resource/Smiling_with_heart.png"))));
+        this->addTab(text, text, new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/Smiling_with_heart.png"))));
     }
 
 };

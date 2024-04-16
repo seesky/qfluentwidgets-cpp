@@ -138,7 +138,7 @@ void DialogInterface::showComplexFlyout()
         QString(this->tr("Julius·Zeppeli")),
         QString(this->tr("Where the tennis ball will land when it touches the net, no one can predict. \nIf that moment comes, I hope the 'goddess' exists. \nIn that case, I would accept it no matter which side the ball falls on.")),
         new QVariant(),
-        new QVariant(QVariant::fromValue<QString>(QString("resource/SBR.jpg"))),
+        new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/SBR.jpg"))),
         false,
         nullptr
     );
@@ -181,7 +181,7 @@ void DialogInterface::showLeftBottomTeachingTip()
         QString("Lesson 5"), 
         this->tr("The shortest shortcut is to take a detour."), 
         new QVariant(), 
-        new QVariant(QVariant::fromValue<QString>(QString("resource/Gyro.jpg"))), 
+        new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/Gyro.jpg"))), 
         true, 
         position, 
         nullptr);

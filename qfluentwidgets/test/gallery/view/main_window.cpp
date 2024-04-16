@@ -153,7 +153,7 @@ void MainWindow::initNavigation()
 
     
     
-    this->navigationInterface->addWidget(QString("avatar"), new NavigationAvatarWidget(QString("zhiyiYo"), new QVariant(QVariant::fromValue<QString>(QString("resource/shoko.png"))), nullptr), [this](){
+    this->navigationInterface->addWidget(QString("avatar"), new NavigationAvatarWidget(QString("zhiyiYo"), new QVariant(QVariant::fromValue<QString>(QString("qfluentwidgets/images/shoko.png"))), nullptr), [this](){
         this->onSupport();
     }, NavigationItemPosition::BOTTOM, QString(), QString());
     
@@ -175,7 +175,7 @@ void MainWindow::initWindow()
 {
     this->resize(960, 780);
     this->setMinimumWidth(760);
-    this->setWindowIcon(QIcon("resource/gallery_resource/images/logo.png"));
+    this->setWindowIcon(QIcon("qfluentwidgets/images/logo.png"));
     this->setWindowTitle("Fluent Widgets");
 
     if(qconfig->get(QVariant::fromValue<OptionsConfigItem*>(galleryConfig->micaEnabled)).value<QString>() == "true"){
