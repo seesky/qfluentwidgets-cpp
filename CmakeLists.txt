@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.14)
 project(qfluentwidgets-cpp  LANGUAGES C CXX)
 
 # 设置编译模式为Debug
-#set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Debug)
 
 # 或者设置编译模式为Release
-set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_AUTOMOC TRUE)
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
@@ -1408,7 +1408,7 @@ file(GLOB GALLERY_TEST_FILE
 )
 
 add_executable(
-  gallery WIN32
+  gallery #WIN32
   qfluentwidgets/test/gallery_test.cpp
   ${HEADER_FILES} 
   ${SOURCE_FILES}

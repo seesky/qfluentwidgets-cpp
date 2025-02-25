@@ -1,5 +1,8 @@
 {
     "files.associations": {
+        "*.page-template": "vue",
+        "*.layout-template": "vue",
+        "*.vue": "vue",
         "chrono": "cpp",
         "random": "cpp",
         "limits": "cpp",
@@ -172,6 +175,7 @@
         "qurl": "cpp",
         "qtmath": "cpp",
         "qscrollbar": "cpp",
-        "qstandardpaths": "cpp"
+        "qstandardpaths": "cpp",
+        "filesystem": "cpp"
     }
 }

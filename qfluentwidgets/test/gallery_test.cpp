@@ -1,4 +1,3 @@
-
 #include <QtCore/Qt>
 #include <QtCore/QTranslator>
 #include <QtWidgets/QApplication>
@@ -21,7 +20,20 @@ int main(int argc, char *argv[])
 
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
+    
+    //qputenv("QT_PLUGIN_PATH", "");
+
     QApplication *app = new QApplication(argc, argv);
+
+    // QString plugins_path = QCoreApplication::applicationDirPath()+"/plugins/";
+    // qputenv("QT_QPA_PLATFORM_PLUGIN_PATH", plugins_path.toUtf8());
+
+    //QApplication::addLibraryPath(QCoreApplication::applicationDirPath()+"/plugins/");
+
+    // QString appDirPath = QCoreApplication::applicationDirPath();
+    // QString pluginsDirPath = appDirPath + "/plugins/platforms";
+    // qDebug() << pluginsDirPath;
+    // app->addLibraryPath(pluginsDirPath);
     
     app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 

@@ -13,8 +13,9 @@ IniSettings::IniSettings()
 {
     this->instance = nullptr;
     QString fileName;
-	fileName = QCoreApplication::applicationDirPath();
-	fileName += QString("qfluentwidgets/config/config.ini");
+	//fileName = QCoreApplication::applicationDirPath();
+	// fileName += QString("qfluentwidgets/config/config.ini");
+    fileName = QString("qfluentwidgets/config/config.ini");
     this->settings_init(fileName);
 }
 
