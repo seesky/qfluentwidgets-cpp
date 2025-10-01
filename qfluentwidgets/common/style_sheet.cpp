@@ -155,9 +155,19 @@ QString getStyleSheet(QVariant *source, Theme theme = Theme::AUTO) //这个函�
     if(source->canConvert<QString>()){
         //qDebug() << source->value<QString>();
 
-        //TODO:这个地方需要实现根据自动获取系统Theme
-        
-        QString path = "qfluentwidgets/qss/" + ThemeOptionsMap.value("LIGHT") + "/" + source->value<QString>() + ".qss";
+        Theme resolvedTheme = theme;
+        if(resolvedTheme == Theme::AUTO){
+            resolvedTheme = qconfig->getTheme();
+        }
+
+        QString themeOptionsName = "LIGHT";
+        if(resolvedTheme == Theme::DARK){
+            themeOptionsName = "DARK";
+        }else if(resolvedTheme == Theme::LIGHT){
+            themeOptionsName = "LIGHT";
+        }
+
+        QString path = "qfluentwidgets/qss/" + ThemeOptionsMap.value(themeOptionsName, ThemeOptionsMap.value("LIGHT")) + "/" + source->value<QString>() + ".qss";
         //qDebug() << path;
         StyleSheetFile *f = new StyleSheetFile(path);
         s = f;
