@@ -95,8 +95,3 @@ qt widgets lib for c++. This code is used for Poleis.Poleis is a remote desktop 
 - **中文路径导致编码问题**：
   - 建议将仓库及 Qt 安装位置放在纯英文路径下，例如 `C:\dev\`。
 
-## reference
-
-If you use it commercially, please support the original author.
-
-https://github.com/zhiyiYo/PyQt-Fluent-Widgets.git
