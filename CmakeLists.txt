@@ -499,29 +499,29 @@ target_link_libraries(
 
 
 
-add_executable(
-  acrylic_combo_box_test
-  qfluentwidgets/test/acrylic_combo_box_test.cpp
-  ${HEADER_FILES} 
-  ${SOURCE_FILES}
+# add_executable(
+#   acrylic_combo_box_test
+#   qfluentwidgets/test/acrylic_combo_box_test.cpp
+#   ${HEADER_FILES} 
+#   ${SOURCE_FILES}
 
-)
+# )
 
-target_link_options(acrylic_combo_box_test PRIVATE "-Wl,--whole-archive")
+# target_link_options(acrylic_combo_box_test PRIVATE "-Wl,--whole-archive")
 
 
-target_link_libraries(
-  acrylic_combo_box_test
-  Qt5::Widgets
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Svg
-  Qt5::Xml
-  jsoncpp  
-  Qt5::Multimedia
-  Qt5::MultimediaWidgets
-  Dwmapi
-)
+# target_link_libraries(
+#   acrylic_combo_box_test
+#   Qt5::Widgets
+#   Qt5::Core
+#   Qt5::Gui
+#   Qt5::Svg
+#   Qt5::Xml
+#   jsoncpp  
+#   Qt5::Multimedia
+#   Qt5::MultimediaWidgets
+#   Dwmapi
+# )
 
 add_executable(
   avatar_widget_test
@@ -1408,7 +1408,7 @@ file(GLOB GALLERY_TEST_FILE
 )
 
 add_executable(
-  gallery #WIN32
+  gallery WIN32
   qfluentwidgets/test/gallery_test.cpp
   ${HEADER_FILES} 
   ${SOURCE_FILES}
