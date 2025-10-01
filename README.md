@@ -82,6 +82,9 @@ qt widgets lib for c++. This code is used for Poleis.Poleis is a remote desktop 
    ./gallery.exe
    ```
 
+## 资源文件
+- **运行程序时需要将resource.rar文件解压到运行程序文件夹，文件夹中包含了程序所需的图片、qss等文件**：
+
 ## 常见问题
 
 - **找不到 Qt5::Widgets 等库**：
