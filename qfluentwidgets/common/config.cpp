@@ -654,28 +654,32 @@ void QConfig::set(QVariant item, QVariant value, bool save, bool copy)
             emit(this->appRestartSig());
         }
     }else if(item.canConvert<OptionsConfigItem*>()){
-        if(item.value<OptionsConfigItem*>()->getValue() == value.value<QString>()){
+        OptionsConfigItem *optionsItem = item.value<OptionsConfigItem*>();
+
+        if(optionsItem->getValue() == value.value<QString>()){
             return;
         }
 
-        item.value<OptionsConfigItem*>()->setValue(value.value<QString>());
+        optionsItem->setValue(value.value<QString>());
 
         if(save){
-            iniSettings->setValue(item.value<OptionsConfigItem*>()->group, item.value<OptionsConfigItem*>()->name, value);
+            iniSettings->setValue(optionsItem->group, optionsItem->name, value);
         }
 
-        if(item.value<OptionsConfigItem*>()->restart){
+        if(optionsItem->restart){
             emit(this->appRestartSig());
         }
 
-        if(item.value<OptionsConfigItem*>()->group == QString("ThemeMode")){
-            if(item.value<OptionsConfigItem*>()->getValue() == QString("auto")){
+        if(optionsItem->name == QString("ThemeMode") || optionsItem == this->themeMode){
+            const QString mode = optionsItem->getValue().toLower();
+
+            if(mode == QStringLiteral("auto")){
                 this->setTheme(Theme::AUTO);
                 emit(this->themeChanged(Theme::AUTO));
-            }else if(item.value<OptionsConfigItem*>()->getValue() == QString("dark")){
+            }else if(mode == QStringLiteral("dark")){
                 this->setTheme(Theme::DARK);
                 emit(this->themeChanged(Theme::DARK));
-            }else if(item.value<OptionsConfigItem*>()->getValue() == QString("light")){
+            }else if(mode == QStringLiteral("light")){
                 this->setTheme(Theme::LIGHT);
                 emit(this->themeChanged(Theme::LIGHT));
             }
