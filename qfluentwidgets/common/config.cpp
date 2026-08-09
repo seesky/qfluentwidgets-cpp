@@ -586,7 +586,7 @@ QConfig::QConfig(QObject *parent) : QObject(parent)
     this->_theme = Theme::LIGHT;
     this->_themeOptionsList = {"light", "dark", "auto"};
     this->themeMode = new OptionsConfigItem(QString("QFluentWidgets"), QString("ThemeMode"), QString("light"), this->_themeOptionsList, false);
-    this->themeColor = new ColorConfigItem(QString("QFluentWidgets"), QString("ThemeColor"), QColor("#009faa"), false);
+    this->themeColor = new ColorConfigItem(QString("QFluentWidgets"), QString("ThemeColor"), QColor("#397EF6"), false);
     QList<QString> languageList = {"chinese simplified", "chinese traditional", "english", "auto"};
     this->language = new OptionsConfigItem("MainWindow", "Language", "auto", languageList, true);
 }
@@ -779,7 +779,7 @@ QConfig::QConfig()
     QVariant defaultModeTheme = QVariant::fromValue<QString>("LIGHT");
     this->themeMode = new OptionsConfigItem(QString("QFluentWidgets"), QString("ThemeMode"), &defaultModeTheme, true);
 
-    QVariant defaultColorTheme = QVariant::fromValue<QString>("009faa");
+    QVariant defaultColorTheme = QVariant::fromValue<QString>("397EF6");
     this->themeColor = new ColorConfigItem("QFluentWidgets", "ThemeColor", &defaultColorTheme, true);
 
 }

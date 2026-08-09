@@ -401,7 +401,14 @@ QColor *ThemeColor::color(QString themeColorValue)
 {
     //QConfig *qconfig = new QConfig();
     //QColor color = (qconfig->get(qconfig->themeColor))->value<QColor>();
-    QColor color = QColor("#009faa");
+    // Keep the Windows Fluent controls aligned with the Android Material theme:
+    // LightColorScheme.primary=#397EF6, DarkColorScheme.primary=#78A6FF.
+    // PRIMARY must remain exact; the remaining names are interaction-state
+    // variants derived below from the active scheme's primary color.
+    QColor color = isDarkTheme() ? QColor("#78A6FF") : QColor("#397EF6");
+    if (themeColorValue.isEmpty() || themeColorValue == "PRIMARY") {
+        return new QColor(color);
+    }
     float h, s, v;
     color.getHsvF(&h, &s, &v);
 
