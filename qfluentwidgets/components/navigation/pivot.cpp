@@ -194,7 +194,7 @@ void Pivot::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.setBrush(ThemeColor().themeColor());
 
     int x = this->currentItem()->width() / 2 - 8 + this->slideAni->value()->value<int>();
     painter.drawRoundedRect(x, this->height() - 3, 16, 3, 1.5, 1.5);

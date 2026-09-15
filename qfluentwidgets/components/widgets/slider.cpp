@@ -54,7 +54,7 @@ void SliderHandle::paintEvent(QPaintEvent *event)
     painter.setBrush(isDark ? QColor(69, 69, 69) : Qt::GlobalColor::white);
     painter.drawEllipse(this->rect().adjusted(1, 1, -1, -1));
 
-    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.setBrush(ThemeColor().themeColor());
     painter.drawEllipse(QPointF(11, 11), this->radius(), this->radius());
     painter.end();
 }
@@ -165,7 +165,7 @@ void Slider::_drawHorizonGroove(QPainter *painter)
         return;
     }
 
-    painter->setBrush(*(ThemeColor().themeColor()));
+    painter->setBrush(ThemeColor().themeColor());
 
     int selfValue = this->value();
     int selfMinimum = this->minimum();
@@ -188,7 +188,7 @@ void Slider::_drawVerticalGroove(QPainter *painter)
         return;
     }
 
-    painter->setBrush(*(ThemeColor().themeColor()));
+    painter->setBrush(ThemeColor().themeColor());
     float ah = (float(this->value()) - float(this->minimum())) / (float(this->maximum()) - float(this->minimum())) * (h - r * 2);
     painter->drawRoundedRect(QRectF(r - 2, r, 4, ah), 2, 2);
 }

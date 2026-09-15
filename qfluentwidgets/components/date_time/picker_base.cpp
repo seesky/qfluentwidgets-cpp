@@ -27,7 +27,7 @@ void ItemMaskWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
 
     painter.setPen(Qt::NoPen);
-    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.setBrush(ThemeColor().themeColor());
     painter.drawRoundedRect(this->rect().adjusted(4, 0, -3, 0), 5, 5);
 
     painter.setPen(isDarkTheme() ? Qt::black : Qt::white);

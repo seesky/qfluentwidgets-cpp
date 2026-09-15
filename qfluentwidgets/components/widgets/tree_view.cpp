@@ -23,7 +23,7 @@ void TreeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     painter->drawRoundedRect(4, option.rect.y() + 2, ((QWidget*)this->parent())->width() - 8, h, 4, 4);
 
     if(option.state & QStyle::State_Selected && ((QTreeView*)this->parent())->horizontalScrollBar()->value() == 0){
-        painter->setBrush(*(ThemeColor().themeColor()));
+        painter->setBrush(ThemeColor().themeColor());
         painter->drawRoundedRect(4, 9 + option.rect.y(), 3, h - 13, 1.5, 1.5);
     }
 

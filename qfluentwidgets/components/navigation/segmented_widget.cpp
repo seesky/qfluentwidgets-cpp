@@ -192,7 +192,7 @@ void SegmentedWidget::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(rect, 5, 5);
 
     painter.setPen(Qt::PenStyle::NoPen);
-    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.setBrush(ThemeColor().themeColor());
 
     int x = this->currentItem()->width() / 2 - 8 + this->slideAni->value()->value<int>();
     painter.drawRoundedRect(QRectF(x, this->height() - 3.5, 16, 3), 1.5, 1.5);
@@ -511,7 +511,7 @@ void SegmentedToggleToolWidget::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::RenderHint::Antialiasing);
 
     painter.setPen(Qt::PenStyle::NoPen);
-    painter.setBrush(*(ThemeColor().themeColor()));
+    painter.setBrush(ThemeColor().themeColor());
 
     SegmentedToggleToolItem * item = this->currentItem();
     painter.drawRoundedRect(QRectF(this->slideAni->value()->value<int>(), 0, item->width(), item->height()), 4, 4);

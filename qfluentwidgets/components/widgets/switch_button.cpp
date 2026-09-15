@@ -75,12 +75,12 @@ QColor Indicator::_backgroudColor()
         }
 
         if(this->isPressed){
-            return *(ThemeColor().color(QString("LIGHT_2")));
+            return ThemeColor().color(QString("LIGHT_2"));
         }else if(this->isHover){
-            return *(ThemeColor().color(QString("LIGHT_1")));
+            return ThemeColor().color(QString("LIGHT_1"));
         }
 
-        return *(ThemeColor().color(QString("PRIMARY")));
+        return ThemeColor().color(QString("PRIMARY"));
     }else{
         if(!this->isEnabled()){
             return QColor(0, 0, 0, 0);

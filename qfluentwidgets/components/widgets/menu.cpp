@@ -1572,7 +1572,7 @@ void IndicatorMenuItemDelegate::paint(QPainter *painter, const QStyleOptionViewI
     painter->save();
     painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
     painter->setPen(Qt::NoPen);
-    painter->setBrush(*(ThemeColor().themeColor()));
+    painter->setBrush(ThemeColor().themeColor());
     painter->drawRoundedRect(6, 11 + option.rect.y(), 3, 15, 1.5, 1.5);
     painter->restore();
 }

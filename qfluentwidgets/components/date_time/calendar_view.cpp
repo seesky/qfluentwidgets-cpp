@@ -82,16 +82,16 @@ void ScrollItemDelegate::_drawBackground(QPainter *painter, QStyleOptionViewItem
     if(index != this->selectedIndex){
         painter->setPen(Qt::NoPen);
     }else{
-        painter->setPen(*(ThemeColor().themeColor()));
+        painter->setPen(ThemeColor().themeColor());
     }
 
     if(index == this->currentIndex){
         if(index == this->pressedIndex){
-            painter->setBrush(*(ThemeColor().color(QString("LIGHT_2"))));
+            painter->setBrush(ThemeColor().color(QString("LIGHT_2")));
         }else if(option.state & QStyle::State_MouseOver){
-            painter->setBrush(*(ThemeColor().color(QString("LIGHT_1"))));
+            painter->setBrush(ThemeColor().color(QString("LIGHT_1")));
         }else{
-            painter->setBrush(*(ThemeColor().themeColor()));
+            painter->setBrush(ThemeColor().themeColor());
         }
     }else{
         int c = isDarkTheme() ? 255 : 0;

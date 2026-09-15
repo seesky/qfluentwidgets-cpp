@@ -148,7 +148,7 @@ void NavigationPushButton::paintEvent(QPaintEvent *event)
         painter.setBrush(QColor(c, c, c, this->isEnter ? 6 : 10));
         painter.drawRoundedRect(this->rect(), 5, 5);
 
-        painter.setBrush(*(ThemeColor().themeColor()));
+        painter.setBrush(ThemeColor().themeColor());
         painter.drawRoundedRect(pl, 10, 3, 16, 1.5, 1.5);
     }else if(this->isEnter && this->isEnabled() && globalRect.contains(QCursor::pos())){
         painter.setBrush(QColor(c, c, c, 10));

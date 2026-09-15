@@ -165,12 +165,12 @@ void IndeterminateProgressRing::stop()
 
 QColor IndeterminateProgressRing::lightBarColor()
 {
-    return this->_lightBarColor.isValid() ? this->_lightBarColor : *(ThemeColor().themeColor());
+    return this->_lightBarColor.isValid() ? this->_lightBarColor : ThemeColor().themeColor();
 }
 
 QColor IndeterminateProgressRing::darkBarColor()
 {
-    return this->_darkBarColor.isValid() ? this->_darkBarColor : *(ThemeColor().themeColor());
+    return this->_darkBarColor.isValid() ? this->_darkBarColor : ThemeColor().themeColor();
 }
 
 void IndeterminateProgressRing::setCustomBarColor(QVariant *light, QVariant *dark)

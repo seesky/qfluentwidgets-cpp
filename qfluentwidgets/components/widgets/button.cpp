@@ -260,9 +260,9 @@ void HyperlinkButton::_drawIcon(QVariant *icon, QPainter *painter, QRect rect, Q
 
     if(icon->canConvert<FluentIcon>() && isEnabled()) 
     {
-        ThemeColor *t = new ThemeColor();
+        ThemeColor t;
         FluentIcon i = icon->value<FluentIcon>();
-        qi = QVariant::fromValue<QIcon>(*(i.icon(Theme::AUTO, *(t->themeColor()))));
+        qi = QVariant::fromValue<QIcon>(*(i.icon(Theme::AUTO, t.themeColor())));
     }else if(!isEnabled()){
         painter->setOpacity(isDarkTheme() ? 0.786 : 0.9);
         if(icon->canConvert<FluentIcon>()){
@@ -1558,11 +1558,11 @@ void PillPushButton::paintEvent(QPaintEvent *event)
         if(!this->isEnabled()){
             bgColor = isDark ? QColor(255, 255, 255, 40) : QColor(0, 0, 0, 55);
         }else if(this->isPressed){
-            bgColor = isDark ? *(ThemeColor().color(QString("DARK_2"))) : *(ThemeColor().color(QString("LIGHT_3")));
+            bgColor = isDark ? ThemeColor().color(QString("DARK_2")) : ThemeColor().color(QString("LIGHT_3"));
         }else if(this->isHover){
-            bgColor = isDark ? *(ThemeColor().color(QString("DARK_1"))) : *(ThemeColor().color(QString("LIGHT_1")));
+            bgColor = isDark ? ThemeColor().color(QString("DARK_1")) : ThemeColor().color(QString("LIGHT_1"));
         }else{
-            bgColor = *(ThemeColor().themeColor());
+            bgColor = ThemeColor().themeColor();
         }
 
         Qt::GlobalColor borderColor =  Qt::transparent;
@@ -1607,11 +1607,11 @@ void PillToolButton::paintEvent(QPaintEvent *event)
         if(!this->isEnabled()){
             bgColor = isDark ? QColor(255, 255, 255, 40) : QColor(0, 0, 0, 55);
         }else if(this->isPressed){
-            bgColor = isDark ? *(ThemeColor().color(QString("DARK_2"))) : *(ThemeColor().color(QString("LIGHT_3")));
+            bgColor = isDark ? ThemeColor().color(QString("DARK_2")) : ThemeColor().color(QString("LIGHT_3"));
         }else if(this->isHover){
-            bgColor = isDark ? *(ThemeColor().color(QString("DARK_1"))) : *(ThemeColor().color(QString("LIGHT_1")));
+            bgColor = isDark ? ThemeColor().color(QString("DARK_1")) : ThemeColor().color(QString("LIGHT_1"));
         }else{
-            bgColor = *(ThemeColor().themeColor());
+            bgColor = ThemeColor().themeColor();
         }
 
         Qt::GlobalColor borderColor =  Qt::transparent;

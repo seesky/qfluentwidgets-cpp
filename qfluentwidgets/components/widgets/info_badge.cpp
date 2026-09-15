@@ -126,7 +126,7 @@ QColor InfoBadge::_backgroundColor()
     }else if(this->level == InfoLevel.value(QString("SUCCESS"))){
         _color = isDark ? QColor(108, 203, 95) : QColor(15, 123, 15);
     }else if(this->level == InfoLevel.value(QString("ATTENTION"))){
-        _color = *(ThemeColor().themeColor());
+        _color = ThemeColor().themeColor();
     }else if(this->level == InfoLevel.value(QString("WARNING"))){
         _color = isDark ? QColor(255, 244, 206) : QColor(157, 93, 0);
     }else{

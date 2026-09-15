@@ -198,7 +198,7 @@ void LineEdit::paintEvent(QPaintEvent *e)
     QPainterPath rectPath = QPainterPath();
     rectPath.addRect(m.left(), h - 10, w, 8);
     QPainterPath _path = path->subtracted(rectPath);
-    painter.fillPath(_path, *(ThemeColor().themeColor()));
+    painter.fillPath(_path, ThemeColor().themeColor());
 }
 
 
@@ -389,7 +389,7 @@ void EditLayer::paintEvent(QPaintEvent *event)
     QPainterPath *rectPath = new QPainterPath();
     rectPath->addRect(m.left(), h - 10, w, 7.5);
     QPainterPath _path = path->subtracted(*rectPath);
-    painter.fillPath(_path, *(ThemeColor().themeColor())); 
+    painter.fillPath(_path, ThemeColor().themeColor()); 
 
 }
 

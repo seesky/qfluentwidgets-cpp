@@ -82,7 +82,7 @@ void NavigationBarPushButton::paintEvent(QPaintEvent *event)
         painter.setBrush(isDarkTheme() ? QColor(255, 255, 255, 42) : Qt::white);
         painter.drawRoundedRect(this->rect(), 5, 5);
 
-        painter.setBrush(*(ThemeColor().themeColor()));
+        painter.setBrush(ThemeColor().themeColor());
 
         if(!this->isPressed){
             painter.drawRoundedRect(0, 16, 4, 24, 2, 2);
@@ -122,7 +122,7 @@ void NavigationBarPushButton::paintEvent(QPaintEvent *event)
 
     if(selectedIcon->canConvert<FluentIcon>() && this->isSelected){
         std::map<QString, QString> attributes;
-        attributes[QString("fill")] = ThemeColor().themeColor()->name();
+        attributes[QString("fill")] = ThemeColor().themeColor().name();
         selectedIcon->value<FluentIcon>().render(&painter, rect, Theme::AUTO, 0, &attributes);
     }else if(this->isSelected){
         MIcon().drawIcon(selectedIcon, &painter, rect, nullptr, QIcon::State::Off);
@@ -131,7 +131,7 @@ void NavigationBarPushButton::paintEvent(QPaintEvent *event)
     }
 
     if(this->isSelected){
-        painter.setPen(*(ThemeColor().themeColor()));
+        painter.setPen(ThemeColor().themeColor());
     }else{
         painter.setPen(isDarkTheme() ? Qt::white : Qt::black);
     }

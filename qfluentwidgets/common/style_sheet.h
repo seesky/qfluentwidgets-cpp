@@ -172,8 +172,11 @@ Q_DECLARE_METATYPE(CustomStyleSheet)
 class QFLUENTWIDGETS_EXPORT ThemeColor{
 public:
     QString name(QString themeColorValue);
-    QColor *color(QString themeColorValue);
-    QColor *themeColor();
+    // Returns by value on purpose: the old `QColor *` API heap-allocated a new
+    // QColor per call and every caller leaked it (the style path calls these for
+    // every widget construction).
+    QColor color(QString themeColorValue);
+    QColor themeColor();
 private:
 };
 

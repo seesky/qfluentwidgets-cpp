@@ -169,7 +169,7 @@ void SpinBox::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -252,7 +252,7 @@ void CompactSpinBox::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -358,7 +358,7 @@ void DoubleSpinBox::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -443,7 +443,7 @@ void CompactDoubleSpinBox::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -551,7 +551,7 @@ void TimeEdit::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -637,7 +637,7 @@ void CompactTimeEdit::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -745,7 +745,7 @@ void DateTimeEdit::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -832,7 +832,7 @@ void CompactDateTimeEdit::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -939,7 +939,7 @@ void DateEdit::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 
@@ -1025,7 +1025,7 @@ void CompactDateEdit::_drawBorderBottom()
     rectPath.addRect(0, h - 10, w, 8);
     path = path.subtracted(rectPath);
 
-    painter.fillPath(path, *(ThemeColor().themeColor()));
+    painter.fillPath(path, ThemeColor().themeColor());
 }
 
 

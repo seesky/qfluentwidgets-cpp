@@ -83,7 +83,7 @@ void TableItemDelegate::_drawIndicator(QPainter *painter, const QStyleOptionView
     int y = option.rect.y();
     int h = option.rect.height();
     int ph = qRound(this->pressedRow == index.row() ? 0.35 * h : 0.257 * h);
-    painter->setBrush(*(ThemeColor().themeColor()));
+    painter->setBrush(ThemeColor().themeColor());
     painter->drawRoundedRect(4, ph + y, 3, h - 2 * ph, 1.5, 1.5);
 }
 

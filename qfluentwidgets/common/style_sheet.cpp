@@ -2,6 +2,7 @@
 #include "config.h"
 #include <regex>
 #include <QFile>
+#include <QHash>
 #include <QWidget>
 #include <QMutableMapIterator>
 #include <math.h>
@@ -102,7 +103,7 @@ QString QssTemplate::safe_substitute(QMap<QString, QString> mapping)
     QString result = QString(this->value);
     QRegularExpression regex(this->delimiter + "(\\w+)");
     QRegularExpressionMatchIterator matchIterator = regex.globalMatch(this->value);
-    ThemeColor *themeColor = new ThemeColor();
+    ThemeColor themeColor;
     while (matchIterator.hasNext()) {
         QRegularExpressionMatch match = matchIterator.next();
         QString capturedText = match.captured(0);
@@ -114,7 +115,7 @@ QString QssTemplate::safe_substitute(QMap<QString, QString> mapping)
         int capturedTextLength = match.capturedLength();
         if(mapping.find(_capturedText) != mapping.end()){
             QRegularExpression regex_(capturedText);
-            result.replace(regex_, themeColor->name(mapping.value(_capturedText)));
+            result.replace(regex_, themeColor.name(mapping.value(_capturedText)));
         }
     }
     return result;
@@ -138,14 +139,26 @@ QString StyleSheetBase::path(Theme theme=Theme::AUTO)
 
 QString getStyleSheetFromFile(QString file)
 {
-    QFile *f = new QFile(file);
+    // Contents are baked into the Qt resource system, so a path maps to one
+    // immutable string for the whole process lifetime. Cache it instead of
+    // re-reading: this used to leak a `new QFile` and a `new QString` (a full
+    // copy of the file) on EVERY call, and the style path runs once per widget
+    // construction — measuring a live client showed ~5 GB of leaked button.qss
+    // copies after a few days of device-list refreshes.
+    static QHash<QString, QString> cache;
+    const auto cached = cache.constFind(file);
+    if (cached != cache.constEnd()) {
+        return cached.value();
+    }
 
-    f->open(QFile::ReadOnly);
-    //QString *qss = new QString(QString::fromUtf8(f->readAll()).replace("\r", "").replace("\n", ""));
-    QString *qss = new QString(QString::fromUtf8(f->readAll()));
-    f->close();
-    //qDebug() << qss;
-    return *qss;
+    QFile f(file);
+    if (!f.open(QFile::ReadOnly)) {
+        return QString();
+    }
+    const QString qss = QString::fromUtf8(f.readAll());
+    f.close();
+    cache.insert(file, qss);
+    return qss;
 }
 
 QString getStyleSheet(QVariant *source, Theme theme = Theme::AUTO) //这个函数有问题，穿过来的source应该是支持多种类型的，由于c++不支持python的Enum结构，所以不能把Enum和Enum 方法直接传值
@@ -393,11 +406,11 @@ void setTheme(Theme theme, bool save)
 
 QString ThemeColor::name(QString themeColorValue)
 {
-    QString name = this->color(themeColorValue)->name();
+    QString name = this->color(themeColorValue).name();
     return name;
 }
 
-QColor *ThemeColor::color(QString themeColorValue)
+QColor ThemeColor::color(QString themeColorValue)
 {
     //QConfig *qconfig = new QConfig();
     //QColor color = (qconfig->get(qconfig->themeColor))->value<QColor>();
@@ -407,7 +420,7 @@ QColor *ThemeColor::color(QString themeColorValue)
     // variants derived below from the active scheme's primary color.
     QColor color = isDarkTheme() ? QColor("#78A6FF") : QColor("#397EF6");
     if (themeColorValue.isEmpty() || themeColorValue == "PRIMARY") {
-        return new QColor(color);
+        return color;
     }
     float h, s, v;
     color.getHsvF(&h, &s, &v);
@@ -451,13 +464,12 @@ QColor *ThemeColor::color(QString themeColorValue)
         }
     }
 
-    QColor *c = new QColor(QColor::fromHsvF(h, qMin(s, 1.00), qMin(v, 1.00)));
-    return c;
+    return QColor(QColor::fromHsvF(h, qMin(s, 1.00), qMin(v, 1.00)));
 }
 
-QColor *ThemeColor::themeColor()
+QColor ThemeColor::themeColor()
 {
-    return this->color("");
+    return this->color(QString());
 }
 
 /*

@@ -56,12 +56,12 @@ void ProgressBar::_onValueChanged(float value)
 
 QColor ProgressBar::lightBarColor()
 {
-    return this->_lightBarColor.isValid() ? this->_lightBarColor : *(ThemeColor().themeColor());
+    return this->_lightBarColor.isValid() ? this->_lightBarColor : ThemeColor().themeColor();
 }
 
 QColor ProgressBar::darkBarColor()
 {
-    return this->_darkBarColor.isValid() ? this->_darkBarColor : *(ThemeColor().themeColor());
+    return this->_darkBarColor.isValid() ? this->_darkBarColor : ThemeColor().themeColor();
 }
 
 void ProgressBar::setCustomBarColor(QVariant *light, QVariant *dark)
@@ -222,7 +222,7 @@ IndeterminateProgressBar::IndeterminateProgressBar(QWidget *parent, bool start =
 
 QColor IndeterminateProgressBar::lightBarColor()
 {
-    return this->_lightBarColor.isValid() ? this->_lightBarColor : *(ThemeColor().themeColor());
+    return this->_lightBarColor.isValid() ? this->_lightBarColor : ThemeColor().themeColor();
 }
 
 
