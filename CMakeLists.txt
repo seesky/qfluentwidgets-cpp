@@ -13,7 +13,7 @@ option(QFLUENTWIDGETS_BUILD_EXAMPLES "Build demo/test executables" OFF)
 option(QFLUENTWIDGETS_BUILD_SHARED "Build qfluentwidgets as a shared library" ON)
 option(QFLUENTWIDGETS_BUILD_MULTIMEDIA "Build qfluentwidgets media player components" ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
@@ -117,6 +117,11 @@ target_compile_definitions(qfluentwidgets
     PRIVATE
         QFLUENTWIDGETS_LIBRARY
 )
+
+if(MSVC)
+    # Qt6 requires /Zc:__cplusplus for correct __cplusplus macro reporting
+    target_compile_options(qfluentwidgets PRIVATE "/Zc:__cplusplus")
+endif()
 
 if(WIN32 AND QFLUENTWIDGETS_BUILD_SHARED)
     target_compile_definitions(qfluentwidgets
